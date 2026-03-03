@@ -2,381 +2,1917 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Fatlin AI - Sincronización FATLA</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0F172A">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2592/2592186.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+     <!-- ═══════════════════════════════════════════
+         index1216m - FranklinMg 03032026
+    ═══════════════════════════════════════════ -->
+     <!-- ═══════════════════════════════════════════
+         PWA — METAETIQUETAS ESENCIALES
+    ═══════════════════════════════════════════ -->
+    <title>Fatlin AI - Adventure</title>
+    <meta name="description" content="Aprende la metodología PACIE jugando. Preguntas generadas con IA desde fuentes oficiales de FATLA.">
+    <meta name="keywords" content="PACIE, FATLA, educación virtual, e-learning, quiz, juego educativo">
+    <meta name="author" content="Fatlin AI">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tema de color (barra de navegación Android / iOS) -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="msapplication-navbutton-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- iOS — comportamiento como app instalada -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Fatlin AI">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- iOS — iconos para pantalla de inicio -->
+    <link rel="apple-touch-icon" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+
+    <!-- Favicon estándar -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-48.png">
+    <link rel="shortcut icon" href="icons/icon-96.png">
+
+    <!-- iOS Splash screens (opcionales pero mejoran la experiencia) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- No indexar por buscadores (app privada de estudio) -->
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Prevenir detección automática de teléfonos/emails en iOS -->
+    <meta name="format-detection" content="telephone=no, email=no">
+
+    <!-- Open Graph (para compartir en WhatsApp/redes con preview) -->
+    <meta property="og:title" content="Fatlin AI - Metodología PACIE">
+    <meta property="og:description" content="Juego educativo con IA. Aprende PACIE nivel por nivel.">
+    <meta property="og:image" content="icons/icon-512.png">
+    <meta property="og:type" content="website">
+
+    <!-- ═══════════════════════════════════════════
+         FUENTE
+    ═══════════════════════════════════════════ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ═══════════════════════════════════════════
+         ESTILOS (idénticos a la versión anterior)
+    ═══════════════════════════════════════════ -->
     <style>
-        body { background-color: #0F172A; margin: 0; font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; }
-        * { -webkit-tap-highlight-color: transparent; }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
-        @keyframes pulse-fast { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
-        .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-pulse-fast { animation: pulse-fast 1s infinite; }
-        .animate-shake { animation: shake 0.2s ease-in-out 0s 2; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #0ea5e9; --primary-dark: #0369a1; --primary-light: #7dd3fc;
+            --success: #22c55e; --danger: #ef4444; --accent: #f59e0b;
+            --bg: linear-gradient(135deg, #075985 0%, #0369a1 100%);
+            --node: 64px;
+        }
+        body { font-family:'Inter',sans-serif; font-size:15px; background:#0c4a6e; overflow:hidden; touch-action:none; color:#1e293b; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased; }
+
+        /* SPLASH */
+        #splash { position:fixed;inset:0;background:var(--bg);z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s;padding:24px; }
+        .logo-float { animation:heroFloat 5s ease-in-out infinite; margin-bottom:1.25rem; }
+        @keyframes heroFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-10px) scale(1.05)} }
+        #splash .brand { color:white;font-weight:700;letter-spacing:.4em;font-size:1.8rem;text-transform:uppercase; }
+        #splash .sub { color:rgba(186,230,253,.6);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;margin-top:.5rem;margin-bottom:2.25rem; }
+        #lang-splash { display:flex;flex-direction:column;gap:14px;width:100%;max-width:300px; }
+        .lang-btn {
+            display:flex;align-items:center;gap:14px;
+            width:100%;padding:16px 22px;border-radius:2rem;
+            border:2px solid rgba(255,255,255,.25);
+            background:rgba(255,255,255,.1);
+            color:white;font-family:'Inter',sans-serif;font-weight:700;
+            cursor:pointer;transition:background .2s,border-color .2s,transform .15s,box-shadow .2s;
+            backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;
+        }
+        .lang-btn:active { transform:scale(.96); }
+        .lang-btn.entering { background:rgba(255,255,255,.28);border-color:white;box-shadow:0 0 0 4px rgba(255,255,255,.15); }
+        .lang-flag { font-size:1.6rem;line-height:1;flex-shrink:0; }
+        .lang-label { display:flex;flex-direction:column;align-items:flex-start;gap:1px; }
+        .lang-label-main { font-size:1.05rem;font-weight:700; }
+        .lang-label-sub  { font-size:.65rem;font-weight:500;opacity:.6;text-transform:uppercase;letter-spacing:.06em; }
+
+        /* UPDATE BANNER */
+        #update-banner { position:fixed;bottom:0;left:0;right:0;background:#1e293b;color:white;padding:12px 20px;display:none;align-items:center;justify-content:space-between;gap:12px;z-index:9000;font-size:.85rem; }
+        #update-banner.show { display:flex; }
+        #btn-update-reload { background:#0ea5e9;color:white;border:none;padding:8px 16px;border-radius:20px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer; }
+        #btn-update-dismiss { background:transparent;color:#94a3b8;border:none;cursor:pointer;font-size:1.2rem; }
+
+        /* AUTH */
+        #auth-screen { position:fixed;inset:0;background:var(--bg);z-index:2000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto; }
+        .auth-card { background:rgba(255,255,255,.98);width:100%;max-width:420px;border-radius:2.5rem;padding:2.25rem 1.75rem;box-shadow:0 25px 60px -12px rgba(0,0,0,.5);text-align:center; }
+        .ifield { width:100%;padding:.95rem;border-radius:1.5rem;border:2px solid #e2e8f0;outline:none;transition:border-color .2s,box-shadow .2s;font-family:'Inter',sans-serif;font-size:1rem;margin-bottom:.75rem; }
+        .ifield:focus { border-color:var(--primary);box-shadow:0 0 0 4px rgba(14,165,233,.12); }
+        .abtn { width:100%;padding:1rem;border-radius:1.5rem;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:.75rem;margin-bottom:.6rem; }
+        .abtn:active { transform:scale(.97); }
+        .abtn.google { background:white;border:2px solid #e2e8f0;color:#334155; }
+        .abtn.email  { background:#f8fafc;color:#475569; }
+        .abtn.guest  { background:#e0f2fe;color:#0369a1;border:2px solid #bae6fd; }
+        .abtn.primary{ background:#0284c7;color:white;box-shadow:0 8px 20px rgba(2,132,199,.3); }
+        .cc { display:flex;align-items:center;cursor:pointer;user-select:none;margin-bottom:.75rem; }
+        .cc input { display:none; }
+        .ck { width:18px;height:18px;border:2px solid #cbd5e1;border-radius:6px;margin-right:10px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0; }
+        .cc input:checked + .ck { background:var(--primary);border-color:var(--primary); }
+        .ck svg { display:none; }
+        .cc input:checked + .ck svg { display:block; }
+
+        /* GAME */
+        #game-container { width:100vw;height:100vh;position:relative;background:#082f49;display:none; }
+        #map-scroll { position:absolute;top:0;left:0;right:0;margin:0 auto;width:100%;max-width:75%;height:12000px;background:radial-gradient(circle at top,#38bdf8,#075985);box-shadow:0 0 100px rgba(0,0,0,.7);transition:transform .6s cubic-bezier(.34,1.2,.64,1);will-change:transform;contain:layout style; }
+        @media(max-width:768px){ #map-scroll{max-width:100%;box-shadow:none;} }
+        #path-svg { position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none; }
+
+        /* HUD */
+        #game-hud { position:fixed;top:0;left:0;right:0;padding:10px 12px 0;z-index:50;display:flex;justify-content:center;pointer-events:none; }
+        .hud-inner { background:rgba(255,255,255,.97);border-radius:0 0 2rem 2rem;padding:10px 14px;box-shadow:0 4px 20px rgba(0,0,0,.2);pointer-events:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:620px;width:100%; }
+        /* safe area iOS notch */
+        .hud-inner { padding-top:max(10px, env(safe-area-inset-top)); }
+        .hstat { display:flex;align-items:center;gap:4px;font-size:.85rem; }
+        .hdiv  { width:1px;height:18px;background:#e2e8f0;flex-shrink:0; }
+        .hbtn  { padding:6px 9px;border-radius:12px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;transition:transform .15s,background .15s;display:flex;align-items:center;gap:4px;font-size:.82rem; }
+        .hbtn:active { transform:scale(.92); }
+        #hud-avatar { width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:border-color .2s,transform .2s;flex-shrink:0; }
+        #hud-avatar:hover { border-color:var(--primary);transform:scale(1.1); }
+        #stat-timer { font-size:10px;font-weight:700;color:#0284c7;background:#e0f2fe;padding:2px 8px;border-radius:20px;display:none; }
+        @media(max-width:480px){ .hud-inner{gap:5px;padding:7px 10px;} }
+
+        /* PROGRESS DOTS */
+        #streak-bar { display:flex;gap:6px;align-items:center; }
+        .streak-dot { width:12px;height:12px;border-radius:50%;border:2px solid #e2e8f0;background:#f1f5f9;transition:all .3s cubic-bezier(.175,.885,.32,1.275); }
+        .streak-dot.filled { background:var(--success);border-color:#16a34a;transform:scale(1.2);box-shadow:0 0 6px rgba(34,197,94,.5); }
+        .streak-dot.flash { animation:dotFlash .4s ease; }
+        @keyframes dotFlash { 0%{transform:scale(1.2)} 50%{transform:scale(1.7)} 100%{transform:scale(1.2)} }
+
+        /* LEVEL NODES */
+        .level-node { position:absolute;width:var(--node);height:var(--node);border-radius:18px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;font-weight:700;color:white;z-index:10;cursor:pointer;font-size:1.1rem;box-shadow:0 8px 0 rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.175,.885,.32,1.275),box-shadow .2s;background:rgba(255,255,255,.2);backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.4);will-change:transform; }
+        @media(max-width:480px){ .level-node{width:56px;height:56px;border-radius:14px;font-size:1rem;} }
+        .level-node.completed { background:var(--success);box-shadow:0 6px 0 #15803d; }
+        .level-node.completed:hover { transform:scale(1.12);background:#16a34a;box-shadow:0 10px 25px rgba(0,0,0,.3),0 0 20px rgba(34,197,94,.5); }
+        .level-node.current { background:white;color:var(--primary-dark);transform:scale(1.15);animation:nodeGlow 2.5s ease-in-out infinite; }
+        @keyframes nodeGlow { 0%,100%{box-shadow:0 10px 25px rgba(0,0,0,.3),0 0 15px rgba(255,255,255,.4)} 50%{box-shadow:0 10px 35px rgba(0,0,0,.4),0 0 45px rgba(255,255,255,.8)} }
+        .level-node.locked { cursor:default;opacity:.45;pointer-events:none; }
+        .lnlabel { font-size:9px;font-weight:700;opacity:.85;line-height:1; }
+
+        /* MODALS */
+        .modal-overlay { position:fixed;inset:0;background:rgba(8,47,73,.9);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto; }
+        .modal-overlay.active { display:flex;animation:fadeIn .2s ease; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .challenge-card { background:white;padding:1.75rem 1.6rem;border-radius:2rem;width:100%;max-width:440px;box-shadow:0 40px 100px rgba(0,0,0,.5);position:relative;padding-top:3.5rem;margin:auto;animation:cardIn .3s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes cardIn { from{transform:scale(.92) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+        .fatlin-mini { position:absolute;top:-36px;left:50%;transform:translateX(-50%);z-index:10; }
+
+        /* SHAKE / GLOW */
+        @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
+        .shake { animation:shake .5s ease; }
+        @keyframes correctGlow { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)} 60%{box-shadow:0 0 0 14px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+        .cglow { animation:correctGlow .6s ease; }
+
+        /* OPTIONS */
+        .opt { width:100%;padding:.95rem 1rem;margin-bottom:.6rem;border:2px solid #f1f5f9;border-radius:1.25rem;font-weight:500;color:#334155;transition:background .15s,border-color .15s,transform .15s;text-align:left;background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.93rem;line-height:1.45;animation:optIn .25s ease forwards;opacity:0;transform:translateY(6px); }
+        @keyframes optIn { to{opacity:1;transform:translateY(0)} }
+        .opt:hover:not(:disabled){ background:#f8fafc;border-color:#cbd5e1; }
+        .opt:active:not(:disabled){ transform:scale(.98); }
+        .opt.vf { text-align:center;font-size:1.1rem; }
+        .opt.correct { background:#f0fdf4!important;border-color:#22c55e!important;color:#15803d!important; }
+        .opt.wrong   { background:#fef2f2!important;border-color:#ef4444!important;color:#dc2626!important; }
+
+        /* FEEDBACK */
+        #feedback-float { position:absolute;left:1rem;right:1rem;bottom:-1rem;background:rgba(239,68,68,.97);padding:1rem;border-radius:1.25rem;color:white;text-align:center;opacity:0;transition:transform .35s cubic-bezier(.175,.885,.32,1.275),opacity .35s;z-index:100;pointer-events:none; }
+        #feedback-float.active { transform:translateY(-20px);opacity:1; }
+        .cbar { height:4px;background:rgba(255,255,255,.25);border-radius:2px;margin-top:8px;overflow:hidden; }
+        .cfill { height:100%;background:rgba(255,255,255,.8);border-radius:2px;transition:width linear; }
+
+        /* AI LOADING */
+        #ai-loading { position:absolute;inset:0;background:rgba(255,255,255,.96);border-radius:2rem;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;gap:.75rem; }
+        #ai-loading.active { display:flex; }
+        .ai-spinner { width:44px;height:44px;border:3px solid #e2e8f0;border-top:3px solid var(--primary);border-radius:50%;animation:spin .8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        #ai-loading p { font-size:.85rem;font-weight:700;color:#64748b; }
+        #ai-loading small { font-size:.7rem;color:#94a3b8;text-align:center;padding:0 1rem; }
+
+        /* REWARD */
+        #modal-reward { position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:4000;display:none;align-items:center;justify-content:center;padding:20px; }
+        #modal-reward.active { display:flex;animation:fadeIn .25s ease; }
+        .reward-card { background:linear-gradient(135deg,#1e3a5f,#0369a1);border-radius:2.5rem;padding:2.5rem 2rem;max-width:380px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);border:2px solid rgba(255,255,255,.2);position:relative;overflow:hidden;animation:cardIn .4s cubic-bezier(.34,1.56,.64,1); }
+        .rstars { font-size:3.5rem;animation:starPop .6s ease; }
+        @keyframes starPop { 0%{transform:scale(0) rotate(-20deg)} 70%{transform:scale(1.3) rotate(5deg)} 100%{transform:scale(1) rotate(0)} }
+        .confetti-dot { position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 2.5s ease-in forwards; }
+        @keyframes cfall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(350px) rotate(720deg);opacity:0} }
+        @keyframes avatarLvl { 0%{transform:scale(1)} 30%{transform:scale(1.6);filter:drop-shadow(0 0 6px gold)} 60%{transform:scale(.9)} 100%{transform:scale(1);filter:none} }
+        .av-lvl { animation:avatarLvl .8s ease; }
+
+        /* RANKING */
+        #modal-ranking { position:fixed;inset:0;background:rgba(8,47,73,.95);backdrop-filter:blur(12px);z-index:3500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-ranking.active { display:flex;animation:fadeIn .2s ease; }
+        .rcard { background:white;border-radius:2rem;padding:1.75rem;max-width:460px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.5); }
+        .rtabs { display:flex;gap:6px;margin-bottom:1.2rem;background:#f8fafc;border-radius:1rem;padding:5px; }
+        .rtab { flex:1;padding:8px 4px;border-radius:.75rem;border:none;font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:background .2s,color .2s;color:#94a3b8;background:transparent; }
+        .rtab.active { background:white;color:#0369a1;box-shadow:0 2px 8px rgba(0,0,0,.08); }
+        .lhdr { background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:1.25rem;padding:1rem 1.25rem;margin-bottom:1rem;text-align:center;color:white; }
+        .ltop5 { background:linear-gradient(135deg,#1e3a5f,#0369a1);border-radius:1.25rem;padding:1rem;margin-bottom:1rem; }
+        .lcnt { background:rgba(255,255,255,.1);border-radius:.75rem;padding:.6rem;margin-top:.6rem;font-size:.75rem;color:rgba(255,255,255,.8);text-align:center; }
+        .rdiv { height:2px;background:linear-gradient(to right,transparent,#f59e0b,transparent);margin:8px 0;border-radius:1px; }
+        .lbadge { display:inline-block;background:#f59e0b;color:white;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle; }
+        .ritem { display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:1rem;transition:background .15s; }
+        .ritem:hover { background:#f8fafc; }
+        .ritem.me { background:#eff6ff;border:2px solid #bfdbfe; }
+        .rbar { height:6px;border-radius:3px;background:#e2e8f0;overflow:hidden;flex:1; }
+        .rbar-fill { height:100%;border-radius:3px;background:var(--primary);transition:width 1s ease; }
+
+        /* ACCOUNT */
+        #modal-account { position:fixed;inset:0;background:rgba(8,47,73,.95);backdrop-filter:blur(12px);z-index:3500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-account.active { display:flex;animation:fadeIn .2s ease; }
+        .accard { background:white;border-radius:2rem;padding:1.75rem;max-width:380px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:center;max-height:92vh;overflow-y:auto; }
+
+        /* AVATAR */
+        #modal-avatar { position:fixed;inset:0;background:rgba(8,47,73,.96);backdrop-filter:blur(12px);z-index:4500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-avatar.active { display:flex;animation:fadeIn .2s ease; }
+        .avcard { background:white;border-radius:2rem;padding:1.75rem;max-width:400px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:center; }
+        .avgrid { display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:1.25rem 0; }
+        .avopt { width:100%;aspect-ratio:1;border-radius:1rem;border:3px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:1.8rem;cursor:pointer;transition:border-color .2s,transform .2s;background:#f8fafc; }
+        .avopt:hover { border-color:var(--primary);background:#eff6ff;transform:scale(1.08); }
+        .avopt.selected { border-color:var(--primary);background:#eff6ff;box-shadow:0 0 0 3px rgba(14,165,233,.25);transform:scale(1.1); }
+
+        /* LOADING DOTS */
+        .ldots { display:flex;gap:6px;justify-content:center;align-items:center;padding:1.5rem 0; }
+        .ldots span { width:10px;height:10px;border-radius:50%;background:var(--primary);animation:db .8s ease infinite; }
+        .ldots span:nth-child(2){animation-delay:.15s} .ldots span:nth-child(3){animation-delay:.3s}
+        @keyframes db { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-8px);opacity:1} }
+
+        /* MISC */
+        #error-msg { position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(239,68,68,.95);color:white;padding:12px 24px;border-radius:20px;font-weight:600;font-size:.9rem;z-index:9999;display:none;max-width:90%;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideUp .3s ease; }
+        @keyframes slideUp { from{transform:translateX(-50%) translateY(20px);opacity:0} to{transform:translateX(-50%) translateY(0);opacity:1} }
+        #scroll-hint { position:fixed;bottom:70px;right:20px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);color:white;border-radius:50px;padding:8px 14px;font-size:.75rem;font-weight:600;z-index:30;opacity:0;transition:opacity .5s;pointer-events:none;display:flex;align-items:center;gap:6px; }
+        #scroll-hint.visible { opacity:1; }
+        .page-footer { position:fixed;bottom:0;left:0;right:0;padding:14px;padding-bottom:max(14px, env(safe-area-inset-bottom));text-align:center;z-index:20;pointer-events:none; }
+        .page-footer p { font-size:9px;color:rgba(255,255,255,.2);font-weight:700;letter-spacing:.2em;text-transform:uppercase; }
+        .wbtn { width:100%;padding:.9rem;border-radius:1.5rem;border:none;font-family:'Inter',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:opacity .15s,transform .15s;margin-bottom:.5rem; }
+        .wbtn:active { transform:scale(.97); }
+        .wbtn.sky { background:#e0f2fe;color:#0369a1; }
+        .wbtn.purple { background:#f3e8ff;color:#7c3aed; }
+        .wbtn.slate { background:#f1f5f9;color:#475569; }
+        .wbtn.red   { background:#fef2f2;color:#dc2626; }
+        .wbtn.primary { background:#0284c7;color:white;box-shadow:0 6px 18px rgba(2,132,199,.25); }
+        #source-badge { font-size:9px;font-weight:700;color:#94a3b8;text-align:center;margin-bottom:.5rem;letter-spacing:.05em;min-height:14px; }
+
+        /* ═══════ MODO GALA ═══════ */
+        :root {
+            --gala-gold: #f59e0b; --gala-gold-light: #fde68a;
+            --gala-bg1: #0f0a1e; --gala-bg2: #1a0a2e;
+            --gala-accent: #a855f7;
+        }
+        body.gala-mode { background: var(--gala-bg1); }
+        body.gala-mode #game-container { background: var(--gala-bg2); }
+        body.gala-mode #map-scroll {
+            background: radial-gradient(circle at top, #4c1d95, #1e0a3c) !important;
+        }
+        body.gala-mode .hud-inner {
+            background: rgba(15,10,30,.97);
+            border-bottom: 2px solid var(--gala-gold);
+        }
+        body.gala-mode .hud-inner * { color: var(--gala-gold-light) !important; }
+        body.gala-mode #stat-lives::before { content: '∞ '; color: var(--gala-gold) !important; }
+        body.gala-mode .level-node.current {
+            background: linear-gradient(135deg, var(--gala-gold), #d97706) !important;
+            color: #1e0a3c !important;
+            animation: galaNodeGlow 2s ease-in-out infinite !important;
+        }
+        @keyframes galaNodeGlow {
+            0%,100%{box-shadow:0 0 20px rgba(245,158,11,.6),0 0 40px rgba(245,158,11,.3)}
+            50%{box-shadow:0 0 40px rgba(245,158,11,1),0 0 80px rgba(245,158,11,.5)}
+        }
+        body.gala-mode .level-node.completed {
+            background: linear-gradient(135deg,#7c3aed,#4c1d95) !important;
+            box-shadow: 0 6px 0 #3b0764 !important;
+        }
+        /* Estrellas de fondo en modo Gala */
+        #gala-stars { position:fixed;inset:0;pointer-events:none;z-index:1;display:none; }
+        body.gala-mode #gala-stars { display:block; }
+        .gala-star { position:absolute;border-radius:50%;background:white;animation:twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+        /* HUD badge Gala */
+        #gala-badge {
+            display:none;font-size:.75rem;font-weight:700;
+            background:linear-gradient(135deg,var(--gala-gold),#d97706);
+            color:#1e0a3c;padding:3px 10px;border-radius:20px;
+            animation:pulse 2s ease infinite;
+        }
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+        body.gala-mode #gala-badge { display:inline-flex;align-items:center;gap:4px; }
+
+        /* ═══════ ESCUDOS & RACHA ═══════ */
+        #stat-shields { display:none;align-items:center;gap:3px;font-size:.85rem; }
+        #stat-shields.visible { display:flex; }
+        #stat-streak { display:none;align-items:center;gap:3px;font-size:.85rem; }
+        #stat-streak.visible { display:flex; }
+        .shield-icon { font-size:.95rem; }
+
+        /* ═══════ MODAL DIPLOMA ═══════ */
+        #modal-diploma {
+            position:fixed;inset:0;background:rgba(0,0,0,.92);
+            backdrop-filter:blur(16px);z-index:5500;
+            display:none;align-items:center;justify-content:center;padding:16px;
+        }
+        #modal-diploma.active { display:flex;animation:fadeIn .3s ease; }
+        .diploma-wrap {
+            background:white;border-radius:2rem;padding:0;
+            max-width:480px;width:100%;
+            box-shadow:0 40px 100px rgba(0,0,0,.7);
+            overflow:hidden;
+        }
+        #diploma-content {
+            background: linear-gradient(160deg,#fffbeb 0%,#fef3c7 40%,#fffbeb 100%);
+            padding:2.5rem 2rem 1.5rem;
+            text-align:center;
+            border:8px solid transparent;
+            background-clip:padding-box;
+            position:relative;
+        }
+        #diploma-content::before {
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(160deg,#f59e0b,#d97706,#92400e,#f59e0b);
+            z-index:-1;margin:-8px;border-radius:2rem;
+        }
+        .diploma-border-inner {
+            border:3px double #d97706;
+            border-radius:1.25rem;
+            padding:1.5rem 1rem;
+        }
+        .diploma-seal {
+            width:80px;height:80px;
+            background:linear-gradient(135deg,#f59e0b,#d97706);
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:2.2rem;
+            margin:0 auto .75rem;
+            box-shadow:0 4px 20px rgba(245,158,11,.5);
+            border:4px solid #92400e;
+        }
+        .diploma-title {
+            font-size:1.05rem;font-weight:800;color:#78350f;
+            text-transform:uppercase;letter-spacing:.2em;margin-bottom:.25rem;
+        }
+        .diploma-subtitle {
+            font-size:.65rem;color:#92400e;font-weight:700;
+            text-transform:uppercase;letter-spacing:.3em;margin-bottom:1rem;
+        }
+        .diploma-certify {
+            font-size:.75rem;color:#78350f;margin-bottom:.5rem;
+        }
+        .diploma-name {
+            font-size:1.6rem;font-weight:800;
+            color:#1e0a3c;margin:.5rem 0;
+            border-bottom:2px solid #d97706;
+            padding-bottom:.5rem;display:inline-block;min-width:200px;
+        }
+        .diploma-level {
+            font-size:1rem;font-weight:700;color:#0369a1;margin:.5rem 0;
+        }
+        .diploma-date {
+            font-size:.7rem;color:#92400e;margin-top:.5rem;
+        }
+        .diploma-logos {
+            display:flex;align-items:center;justify-content:center;
+            gap:1.5rem;margin-top:1rem;padding-top:.75rem;
+            border-top:1px solid #d97706;
+        }
+        .diploma-sig {
+            font-size:.65rem;color:#78350f;font-weight:700;
+            text-transform:uppercase;letter-spacing:.1em;
+        }
+        .diploma-actions {
+            padding:1rem 1.5rem;display:flex;gap:.75rem;
+        }
+
+        /* ═══════ MODAL TIENDA (comprar escudos) ═══════ */
+        #modal-shop {
+            position:fixed;inset:0;background:rgba(8,47,73,.96);
+            backdrop-filter:blur(12px);z-index:3600;
+            display:none;align-items:center;justify-content:center;padding:16px;
+        }
+        #modal-shop.active { display:flex;animation:fadeIn .2s ease; }
+        .shop-card {
+            background:white;border-radius:2rem;padding:1.75rem;
+            max-width:380px;width:100%;
+            box-shadow:0 30px 80px rgba(0,0,0,.5);
+            text-align:center;max-height:92vh;overflow-y:auto;
+        }
+        .shop-item {
+            display:flex;align-items:center;justify-content:space-between;
+            padding:.85rem 1rem;border:2px solid #e2e8f0;
+            border-radius:1.25rem;margin-bottom:.6rem;
+            transition:border-color .15s,background .15s;cursor:pointer;
+        }
+        .shop-item:hover { border-color:var(--primary);background:#f0f9ff; }
+        .shop-item.gala-item:hover { border-color:var(--gala-gold);background:#fffbeb; }
+
+        /* Hud extra items */
+        .hdiv-new { width:1px;height:18px;background:#e2e8f0;flex-shrink:0; }
+
+        /* ═══════ MASCOTA FLOTANTE ═══════ */
+        #fatlin-mascot {
+            position:fixed; bottom:80px; right:16px;
+            width:56px; height:56px;
+            z-index:200; cursor:pointer;
+            filter:drop-shadow(0 4px 12px rgba(14,165,233,.4));
+            animation: mascotFloat 4s ease-in-out infinite;
+            transition: transform .3s, filter .3s;
+            display:none; /* se muestra al iniciar el juego */
+        }
+        #fatlin-mascot svg { width:100%; height:100%; }
+        @media(max-width:480px){ #fatlin-mascot{width:46px;height:46px;bottom:70px;right:10px;} }
+
+        /* Estados de la mascota */
+        @keyframes mascotFloat   { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-8px)} }
+        @keyframes mascotCheer   { 0%{transform:translateY(0) scale(1)} 25%{transform:translateY(-22px) scale(1.35)} 50%{transform:translateY(-10px) scale(1.2) rotate(8deg)} 75%{transform:translateY(-18px) scale(1.3) rotate(-6deg)} 100%{transform:translateY(0) scale(1)} }
+        @keyframes mascotSad     { 0%,100%{transform:translateX(0) scale(1) opacity(1)} 15%{transform:translateX(-7px) scale(.95)} 30%{transform:translateX(7px) scale(.95)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+        @keyframes mascotWin     { 0%{transform:scale(1) rotate(0)}  20%{transform:scale(1.5) rotate(-10deg)} 40%{transform:scale(1.6) rotate(10deg)} 60%{transform:scale(1.4) rotate(-6deg)} 80%{transform:scale(1.3) rotate(4deg)} 100%{transform:scale(1) rotate(0)} }
+        @keyframes mascotSleep   { 0%,100%{transform:translateY(0) rotate(0)}  50%{transform:translateY(-4px) rotate(-8deg)} }
+        @keyframes mascotGalaPulse { 0%,100%{filter:drop-shadow(0 0 8px rgba(251,191,36,.6))} 50%{filter:drop-shadow(0 0 24px rgba(251,191,36,1)) drop-shadow(0 0 48px rgba(251,191,36,.4))} }
+
+        #fatlin-mascot.state-cheer  { animation: mascotCheer 0.9s ease forwards; filter:drop-shadow(0 4px 20px rgba(34,197,94,.7)); }
+        #fatlin-mascot.state-sad    { animation: mascotSad   0.6s ease forwards; filter:drop-shadow(0 4px 12px rgba(239,68,68,.6)); opacity:.7; }
+        #fatlin-mascot.state-win    { animation: mascotWin   1.1s ease forwards; filter:drop-shadow(0 4px 24px rgba(245,158,11,.8)); }
+        #fatlin-mascot.state-sleep  { animation: mascotSleep 3s ease-in-out infinite; opacity:.5; }
+        #fatlin-mascot.state-gala   { animation: mascotGalaPulse 2s ease-in-out infinite !important; }
+
+        /* Burbuja Zzz */
+        #mascot-zzz {
+            position:fixed; bottom:138px; right:12px;
+            font-size:.75rem; font-weight:800; color:#94a3b8;
+            z-index:201; pointer-events:none;
+            opacity:0; transition:opacity .5s;
+            animation: zzzFloat 2s ease-in-out infinite;
+        }
+        #mascot-zzz.visible { opacity:1; }
+        @keyframes zzzFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        /* ═══════ CELEBRACIÓN CADA 5 NIVELES ═══════ */
+        #level5-blast {
+            position:fixed; inset:0; z-index:4800;
+            pointer-events:none; display:none;
+            align-items:center; justify-content:center;
+            flex-direction:column; gap:8px;
+        }
+        #level5-blast.active { display:flex; }
+
+        /* Halo de luz radial */
+        #blast-halo {
+            position:absolute; width:320px; height:320px;
+            border-radius:50%;
+            background:radial-gradient(circle, rgba(56,189,248,.35) 0%, rgba(14,165,233,.15) 40%, transparent 70%);
+            animation: haloExpand .6s cubic-bezier(.2,0,.4,1) forwards;
+        }
+        @keyframes haloExpand { from{transform:scale(0);opacity:1} to{transform:scale(1.8);opacity:0} }
+
+        /* Emblema central de la celebración */
+        #blast-emblem {
+            position:relative; z-index:1;
+            width:120px; height:120px;
+            animation: blastIn .5s cubic-bezier(.34,1.56,.64,1) forwards,
+                       blastOut .4s ease-in 2.1s forwards;
+            filter:drop-shadow(0 8px 32px rgba(14,165,233,.6));
+        }
+        #blast-emblem svg { width:100%; height:100%; }
+        @keyframes blastIn  { from{transform:scale(0) translateY(40px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+        @keyframes blastOut { from{transform:scale(1) translateY(0);opacity:1} to{transform:scale(.6) translateY(-30px);opacity:0} }
+        body.gala-mode #blast-emblem { filter:drop-shadow(0 8px 32px rgba(251,191,36,.8)); }
+
+        /* Texto del nivel celebrado */
+        #blast-text {
+            position:relative; z-index:1;
+            font-family:'Inter',sans-serif; font-weight:800;
+            font-size:1.3rem; color:white;
+            text-shadow:0 2px 16px rgba(0,0,0,.5);
+            animation: blastIn .5s cubic-bezier(.34,1.56,.64,1) .15s both,
+                       blastOut .4s ease-in 2.1s forwards;
+            background:rgba(2,132,199,.75); backdrop-filter:blur(8px);
+            padding:6px 20px; border-radius:30px;
+            border:2px solid rgba(255,255,255,.3);
+        }
+        body.gala-mode #blast-text { background:rgba(180,83,9,.8); border-color:rgba(251,191,36,.5); }
+
+        /* Partículas de la explosión */
+        .blast-particle {
+            position:absolute; border-radius:50%;
+            animation: particleFly 1.2s ease-out forwards;
+        }
+        @keyframes particleFly {
+            from{transform:translate(0,0) scale(1);opacity:1}
+            to{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
+        }
+
+        /* ═══════ REWARD MODAL REDISEÑADO ═══════ */
+        .reward-card {
+            background:linear-gradient(160deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%) !important;
+            border:2px solid rgba(56,189,248,.3) !important;
+        }
+        body.gala-mode .reward-card {
+            background:linear-gradient(160deg,#1a0a2e 0%,#3b1a6e 50%,#1a0a2e 100%) !important;
+            border:2px solid rgba(251,191,36,.4) !important;
+        }
+        /* Contenedor del emblema en el reward */
+        #reward-emblem-wrap {
+            width:96px; height:96px; margin:0 auto 1rem;
+            position:relative;
+        }
+        #reward-emblem-wrap svg { width:100%; height:100%; }
+        #reward-emblem-ring {
+            position:absolute; inset:-8px;
+            border-radius:50%;
+            border:3px solid transparent;
+            border-top-color:var(--primary);
+            border-right-color:var(--primary-light);
+            animation:rewardRingSpin 2s linear infinite;
+        }
+        @keyframes rewardRingSpin { to{transform:rotate(360deg)} }
+        body.gala-mode #reward-emblem-ring {
+            border-top-color:var(--gala-gold);
+            border-right-color:var(--gala-gold-light);
+        }
+        #reward-emblem-glow {
+            position:absolute; inset:-4px; border-radius:50%;
+            animation:rewardGlow 2s ease-in-out infinite;
+        }
+        @keyframes rewardGlow {
+            0%,100%{box-shadow:0 0 20px rgba(14,165,233,.4)}
+            50%{box-shadow:0 0 50px rgba(14,165,233,.8),0 0 80px rgba(14,165,233,.3)}
+        }
+        body.gala-mode #reward-emblem-glow {
+            animation:rewardGlowGala 2s ease-in-out infinite;
+        }
+        @keyframes rewardGlowGala {
+            0%,100%{box-shadow:0 0 20px rgba(251,191,36,.5)}
+            50%{box-shadow:0 0 60px rgba(251,191,36,1),0 0 100px rgba(251,191,36,.4)}
+        }
+
+        /* ═══════ SELECTOR DE IDIOMA (HUD toggle) ═══════ */
+        #hud-lang {
+            display:flex; align-items:center;
+            background:#f1f5f9; border-radius:20px;
+            padding:3px; gap:2px;
+            border:1px solid #e2e8f0;
+        }
+        .hud-lang-opt {
+            padding:3px 8px; border-radius:16px;
+            border:none; background:transparent;
+            font-family:'Inter',sans-serif; font-weight:700;
+            font-size:.72rem; cursor:pointer; color:#94a3b8;
+            transition:background .15s, color .15s;
+            line-height:1.2;
+        }
+        .hud-lang-opt.active {
+            background:white; color:#0369a1;
+            box-shadow:0 1px 4px rgba(0,0,0,.1);
+        }
+        body.gala-mode .hud-lang-opt.active { color:var(--gala-gold); }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+<!-- BANNER DE ACTUALIZACIÓN PWA -->
+<div id="update-banner">
+    <span>🔄 Hay una nueva versión disponible</span>
+    <div style="display:flex;gap:8px">
+        <button id="btn-update-reload">Actualizar</button>
+        <button id="btn-update-dismiss">✕</button>
+    </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        window.FB = { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, getFirestore, doc, setDoc, getDoc };
-    </script>
+<!-- ESTRELLAS GALA -->
+<div id="gala-stars"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+<!-- SPLASH -->
+<div id="splash">
+    <div class="logo-float">
+        <svg width="130" height="130" viewBox="0 0 100 100">
+            <defs><filter id="glow"><feGaussianBlur stdDeviation="1.5" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+            <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+            <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+            <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+            <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+            <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#glow)"><animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/></path>
+            <circle cx="50" cy="38" r="3" fill="white" opacity="0.8"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/></circle>
+        </svg>
+    </div>
+    <p class="brand">Fatlin AI</p>
+    <p class="sub">Metodología PACIE &nbsp;·&nbsp; PACIE Methodology</p>
+    <div id="lang-splash">
+        <button class="lang-btn" id="ls-es" onclick="splashChooseLang('es')">
+            <span class="lang-flag">🇪🇸</span>
+            <span class="lang-label">
+                <span class="lang-label-main">Español</span>
+                <span class="lang-label-sub">Jugar en español</span>
+            </span>
+        </button>
+        <button class="lang-btn" id="ls-en" onclick="splashChooseLang('en')">
+            <span class="lang-flag">🇺🇸</span>
+            <span class="lang-label">
+                <span class="lang-label-main">English</span>
+                <span class="lang-label-sub">Play in English</span>
+            </span>
+        </button>
+    </div>
+</div>
 
-        const APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'fatla-ai-v4';
-        const API_KEY = "AIzaSyAi21LjxkOhHMCMZomPsceqaUIw-hzgXCs"; 
-        const MODEL_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
-        
-        const MAX_LIVES = 5;
-        const REGEN_TIME = 120; 
-        const TOTAL_QUESTIONS_TO_LEVEL_UP = 15;
+<!-- AUTH -->
+<div id="auth-screen">
+    <div class="auth-card">
+        <div style="display:flex;justify-content:center;margin-bottom:1.25rem">
+            <svg width="52" height="52" viewBox="0 0 100 100"><path d="M50 90 L85 75 L50 60 L15 75 Z" fill="#0369a1"/><path d="M50 80 L85 65 L50 50 L15 65 Z" fill="#0284c7"/><path d="M50 70 L85 55 L50 40 L15 55 Z" fill="#0ea5e9"/><path d="M50 60 L85 45 L50 30 L15 45 Z" fill="#38bdf8"/><path d="M50 52 L72 41 L50 30 L28 41 Z" fill="#7dd3fc"/><circle cx="50" cy="41" r="2" fill="white" opacity="0.7"/></svg>
+        </div>
+        <h1 style="font-size:1.9rem;font-weight:800;color:#1e293b;margin-bottom:.25rem">Fatlin AI</h1>
+        <p style="color:#94a3b8;font-size:.85rem;margin-bottom:1.75rem">Gestión Educativa Inteligente</p>
+        <div id="auth-main">
+            <button id="btn-google" class="abtn google"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continuar con Google</button>
+            <button id="btn-show-email" class="abtn email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Correo electrónico</button>
+            <button id="btn-guest" class="abtn guest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Entrar como Invitado</button>
+        </div>
+        <div id="auth-email" style="display:none">
+            <input type="email" id="inp-email" class="ifield" placeholder="Correo">
+            <div style="position:relative"><input type="password" id="inp-pass" class="ifield" placeholder="Contraseña" style="margin-bottom:.5rem"><button id="btn-eye" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:#94a3b8;padding:4px"><svg id="eye-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+            <label class="cc" style="text-align:left;padding-left:.25rem"><input type="checkbox" id="chk-rem"><div class="ck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg></div><span style="font-size:.85rem;font-weight:600;color:#64748b">Recordar credenciales</span></label>
+            <button id="btn-login" class="abtn primary" style="margin-top:.5rem">Entrar / Registrar</button>
+            <button id="btn-back" style="background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.15em;margin-top:.25rem">← Volver</button>
+        </div>
+    </div>
+</div>
 
-        const SYSTEM_PROMPT = `Eres el experto académico de FATLA. Usa metodología PACIE y fatla.org.
-        MODALIDADES DE PREGUNTA:
-        1. Selección Múltiple: 4 opciones.
-        2. Verdadero o Falso: 2 opciones ("Verdadero", "Falso").
-        Alterna entre estas modalidades de forma equilibrada.
-        REGLA DE ORO: No repitas NUNCA preguntas anteriores.
-        Responde SIEMPRE en este formato JSON: {"questions": [{"q": "pregunta", "options": ["opcion1","opcion2"...], "correct": índice_de_la_correcta}]}`;
-
-        const Icon = ({ name, size = 20, className = "", fill = "none" }) => {
-            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name, fill]);
-            return <i data-lucide={name} className={className} style={{ width: size, height: size, display: 'inline-block' }} data-lucide-fill={fill}></i>;
-        };
-
-        const Mascot = ({ isCorrect }) => (
-            <div className="relative w-36 h-36 mx-auto mb-8">
-                <div className={`absolute inset-0 blur-3xl rounded-full transition-all duration-500 ${isCorrect === true ? 'bg-green-500/40' : isCorrect === false ? 'bg-red-500/40' : 'bg-orange-500/20'}`} />
-                <svg viewBox="0 0 200 200" className="w-full h-full relative z-10 animate-float">
-                    <path d="M40 70 Q40 30 100 30 T160 70 L160 130 Q160 170 100 170 T40 130 Z" fill="#1e293b" stroke="#f97316" strokeWidth="3" />
-                    <rect x="60" y="80" width="80" height="40" rx="8" fill="#020617" />
-                    <g className="animate-pulse-fast">
-                        <circle cx="85" cy="100" r="6" fill={isCorrect === false ? "#ef4444" : "#f97316"} />
-                        <circle cx="115" cy="100" r="6" fill={isCorrect === false ? "#ef4444" : "#f97316"} />
-                    </g>
-                </svg>
+<!-- GAME -->
+<div id="game-container">
+    <div id="game-hud">
+        <div class="hud-inner">
+            <div id="hud-avatar" title="Cambiar avatar" data-i18n-title="hud_avatar">🧑</div>
+            <div class="hstat">
+                <span style="font-size:1rem">❤️</span>
+                <span id="stat-lives" style="font-weight:700;color:#334155">5</span>
+                <span id="stat-timer"></span>
             </div>
-        );
+            <div class="hdiv"></div>
+            <div class="hstat"><span style="font-size:1rem">⭐</span><span id="stat-stars" style="font-weight:700;color:#334155">0</span></div>
+            <div class="hdiv"></div>
+            <div id="streak-bar">
+                <div class="streak-dot" id="sd0"></div>
+                <div class="streak-dot" id="sd1"></div>
+                <div class="streak-dot" id="sd2"></div>
+            </div>
+            <div class="hdiv"></div>
+            <div class="hstat"><span style="font-size:1rem">🏆</span><span id="stat-level" style="font-weight:700;color:#334155">Nv.1</span></div>
 
-        function App() {
-            const [user, setUser] = useState(null);
-            const [gameState, setGameState] = useState('landing');
-            const [questions, setQuestions] = useState([]);
-            const [currIdx, setCurrIdx] = useState(0);
-            const [isLoading, setIsLoading] = useState(false);
-            const [feedback, setFeedback] = useState(null); 
-            const [wrongAnswers, setWrongAnswers] = useState([]); 
-            const [timeLeft, setTimeLeft] = useState(0);
-            const [apiError, setApiError] = useState(false);
-            const [retryCount, setRetryCount] = useState(0);
-            
-            const [progress, setProgress] = useState({
-                level: 1, score: 0, lives: MAX_LIVES, questionsCorrectInCurrentLevel: 0, lastLifeLost: null, usedQuestions: []
-            });
-
-            const dbRef = useRef(null);
-            const progressRef = useRef(progress);
-            useEffect(() => { progressRef.current = progress; }, [progress]);
-
-            useEffect(() => {
-                const init = async () => {
-                    if (!window.FB) return;
-                    const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-                    const app = window.FB.initializeApp(config);
-                    const auth = window.FB.getAuth(app);
-                    dbRef.current = window.FB.getFirestore(app);
-                    
-                    window.FB.onAuthStateChanged(auth, async (u) => {
-                        if (u) {
-                            setUser(u);
-                            const docSnap = await window.FB.getDoc(window.FB.doc(dbRef.current, 'artifacts', APP_ID, 'users', u.uid, 'settings', 'progress'));
-                            if (docSnap.exists()) setProgress(docSnap.data());
-                        } else { 
-                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                                await window.FB.signInWithCustomToken(auth, __initial_auth_token);
-                            } else {
-                                await window.FB.signInAnonymously(auth); 
-                            }
-                        }
-                    });
-                };
-                init();
-            }, []);
-
-            useEffect(() => {
-                if (!progress.lastLifeLost || progress.lives >= MAX_LIVES) return;
-                const timer = setInterval(() => {
-                    const elapsed = Math.floor((Date.now() - progress.lastLifeLost) / 1000);
-                    if (elapsed >= REGEN_TIME) {
-                        const newLives = progress.lives + 1;
-                        saveProgress({ lives: newLives, lastLifeLost: newLives < MAX_LIVES ? Date.now() : null });
-                    } else { setTimeLeft(REGEN_TIME - elapsed); }
-                }, 1000);
-                return () => clearInterval(timer);
-            }, [progress.lastLifeLost, progress.lives]);
-
-            const saveProgress = async (updates) => {
-                const newProgress = { ...progressRef.current, ...updates };
-                setProgress(newProgress);
-                if (user && dbRef.current) {
-                    try {
-                        await window.FB.setDoc(window.FB.doc(dbRef.current, 'artifacts', APP_ID, 'users', user.uid, 'settings', 'progress'), newProgress, { merge: true });
-                    } catch (e) { console.warn("Sync error:", e); }
-                }
-            };
-
-            const fetchQuestions = async (lvl) => {
-                setIsLoading(true);
-                setFeedback(null);
-                setWrongAnswers([]);
-                setApiError(false);
-
-                const usedList = progressRef.current.usedQuestions || [];
-                const historyText = usedList.slice(-20).join(" | ");
-                const userPrompt = `Genera 3 preguntas para Módulo ${lvl}. Evita repetir: [${historyText}]. Variedad entre Selección y V/F.`;
-
-                const delays = [1000, 2000, 4000, 8000, 12000];
-                
-                for (let i = 0; i < delays.length; i++) {
-                    setRetryCount(i);
-                    try {
-                        const response = await fetch(`${MODEL_URL}?key=${API_KEY}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: userPrompt }] }],
-                                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-                                generationConfig: { responseMimeType: "application/json", temperature: 0.7 }
-                            })
-                        });
-
-                        if (response.status === 429) throw new Error("RATE_LIMIT");
-                        if (!response.ok) throw new Error("FETCH_ERROR");
-
-                        const data = await response.json();
-                        const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                        if (!rawJson) throw new Error("NO_CONTENT");
-
-                        const parsed = JSON.parse(rawJson);
-                        if (!parsed.questions) throw new Error("INVALID_FORMAT");
-
-                        setQuestions(parsed.questions);
-                        setCurrIdx(0);
-                        setGameState('playing');
-                        setIsLoading(false);
-                        return;
-                    } catch (err) {
-                        console.log(`Intento ${i + 1} fallido. Reintentando...`);
-                        if (i === delays.length - 1) {
-                            setApiError(true);
-                            setIsLoading(false);
-                        } else {
-                            await new Promise(resolve => setTimeout(resolve, delays[i]));
-                        }
-                    }
-                }
-            };
-
-            const handleAnswer = (idx) => {
-                if (feedback || progressRef.current.lives <= 0) return;
-                
-                const currentQuestion = questions[currIdx];
-                const isCorrect = idx === currentQuestion.correct;
-                const newUsed = Array.from(new Set([...(progressRef.current.usedQuestions || []), currentQuestion.q])).slice(-100);
-
-                if (isCorrect) {
-                    setFeedback('correct');
-                    const nextCount = progressRef.current.questionsCorrectInCurrentLevel + 1;
-                    const isLevelUp = nextCount >= TOTAL_QUESTIONS_TO_LEVEL_UP;
-
-                    setTimeout(() => {
-                        const updates = {
-                            score: progressRef.current.score + 25,
-                            questionsCorrectInCurrentLevel: isLevelUp ? 0 : nextCount,
-                            level: isLevelUp ? progressRef.current.level + 1 : progressRef.current.level,
-                            usedQuestions: newUsed
-                        };
-                        saveProgress(updates);
-                        setFeedback(null);
-                        setWrongAnswers([]);
-
-                        if (isLevelUp || (currIdx + 1) >= questions.length) {
-                            fetchQuestions(updates.level);
-                        } else { setCurrIdx(prev => prev + 1); }
-                    }, 1000);
-                } else {
-                    setFeedback('wrong');
-                    setWrongAnswers(prev => [...prev, idx]);
-                    const currentLives = progressRef.current.lives;
-                    const newLives = Math.max(0, currentLives - 1);
-                    
-                    saveProgress({
-                        lives: newLives,
-                        lastLifeLost: currentLives === MAX_LIVES ? Date.now() : progressRef.current.lastLifeLost,
-                        usedQuestions: newUsed
-                    });
-
-                    setTimeout(() => {
-                        setFeedback(null);
-                        if (newLives > 0) {
-                            if ((currIdx + 1) < questions.length) {
-                                setCurrIdx(prev => prev + 1);
-                                setWrongAnswers([]);
-                            } else {
-                                fetchQuestions(progressRef.current.level);
-                            }
-                        }
-                    }, 1000);
-                }
-            };
-
-            if (gameState === 'landing') {
-                return (
-                    <div className="min-h-screen flex flex-col items-center justify-center p-8 text-center bg-[#0F172A] text-white">
-                        <Mascot />
-                        <h1 className="text-5xl font-black mb-2 italic tracking-tighter uppercase">Fatlin <span className="text-orange-500">AI</span></h1>
-                        <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em] mb-12 italic">Sincronización PACIE v4.6</p>
-                        
-                        <div className="grid grid-cols-2 gap-4 w-full max-w-xs mb-10">
-                            <div className="bg-slate-800/40 p-5 rounded-[2rem] border border-white/5 shadow-inner">
-                                <div className="text-orange-500 text-3xl font-black">{progress.level}</div>
-                                <div className="text-[10px] uppercase font-bold text-slate-500 mt-1">Módulo</div>
-                            </div>
-                            <div className="bg-slate-800/40 p-5 rounded-[2rem] border border-white/5 shadow-inner">
-                                <div className="text-green-500 text-3xl font-black">{progress.score}</div>
-                                <div className="text-[10px] uppercase font-bold text-slate-500 mt-1">Puntos</div>
-                            </div>
-                        </div>
-
-                        <button 
-                            disabled={isLoading}
-                            onClick={() => fetchQuestions(progress.level)} 
-                            className="w-full max-w-xs bg-orange-500 py-6 rounded-full font-black text-xl shadow-[0_20px_50px_rgba(249,115,22,0.4)] active:scale-95 transition-all flex items-center justify-center gap-3"
-                        >
-                            {isLoading ? (
-                                <>
-                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    {retryCount > 0 ? `REINTENTANDO (${retryCount})...` : 'CONECTANDO...'}
-                                </>
-                            ) : "EMPEZAR RETO"}
-                        </button>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="min-h-screen bg-[#F8FAFC] flex flex-col">
-                    <header className="bg-white border-b p-5 flex justify-between items-center sticky top-0 z-20 shadow-sm">
-                        <button onClick={() => setGameState('landing')} className="text-slate-400 p-2 bg-slate-50 rounded-xl active:bg-slate-100 transition-colors">
-                            <Icon name="x" size={20} />
-                        </button>
-                        <div className="flex gap-1.5 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-                            {[...Array(MAX_LIVES)].map((_, i) => (
-                                <Icon key={i} name="heart" size={18} fill={i < progress.lives ? "#EF4444" : "none"} className={i < progress.lives ? "text-red-500" : "text-slate-200"} />
-                            ))}
-                        </div>
-                    </header>
-
-                    <main className="flex-1 p-6 max-w-xl mx-auto w-full flex flex-col">
-                        {apiError ? (
-                            <div className="flex-1 flex flex-col items-center justify-center text-center p-4">
-                                <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mb-6">
-                                    <Icon name="wifi-off" size={40} className="text-orange-500" />
-                                </div>
-                                <h2 className="text-2xl font-black text-slate-800 mb-2">IA SATURADA</h2>
-                                <p className="text-slate-500 mb-8 italic text-sm">El experto de FATLA está atendiendo a muchos usuarios. Intenta reconectar.</p>
-                                <button onClick={() => fetchQuestions(progress.level)} className="bg-orange-500 text-white px-10 py-5 rounded-full font-bold shadow-lg active:scale-95 transition-all">REINTENTAR AHORA</button>
-                            </div>
-                        ) : progress.lives <= 0 && feedback !== 'correct' ? (
-                            <div className="flex-1 flex flex-col items-center justify-center text-center animate-in fade-in zoom-in duration-300">
-                                <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mb-6 border border-red-100">
-                                    <Icon name="battery-warning" size={48} className="text-red-500" />
-                                </div>
-                                <h2 className="text-3xl font-black text-slate-800 mb-2 uppercase tracking-tight">Vínculo Perdido</h2>
-                                <p className="text-slate-500 mb-8 text-sm px-4 italic font-medium">Energía académica agotada. Espera la restauración de la señal.</p>
-                                <div className="text-6xl font-black text-slate-900 mb-10 bg-white shadow-xl px-12 py-8 rounded-[3rem] border border-slate-100 font-mono tracking-tighter">
-                                    {Math.floor(timeLeft/60)}:{(timeLeft%60).toString().padStart(2, '0')}
-                                </div>
-                                <button onClick={() => setGameState('landing')} className="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black uppercase tracking-widest shadow-lg active:scale-95 transition-all">Cerrar Sesión</button>
-                            </div>
-                        ) : (
-                            <div className="w-full text-center">
-                                <Mascot isCorrect={feedback === 'correct' ? true : (feedback === 'wrong' || wrongAnswers.length > 0) ? false : null} />
-                                
-                                <div className="mb-10 w-full max-w-sm mx-auto">
-                                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">
-                                        <span>PROGRESO MÓDULO {progress.level}</span>
-                                        <span className="text-orange-500">{progress.questionsCorrectInCurrentLevel} / {TOTAL_QUESTIONS_TO_LEVEL_UP}</span>
-                                    </div>
-                                    <div className="h-2.5 bg-slate-200 rounded-full overflow-hidden shadow-inner border border-slate-300/20">
-                                        <div className="h-full bg-orange-500 transition-all duration-700 ease-out" style={{ width: `${(progress.questionsCorrectInCurrentLevel / TOTAL_QUESTIONS_TO_LEVEL_UP) * 100}%` }} />
-                                    </div>
-                                </div>
-
-                                <h2 className="text-2xl font-black text-slate-800 mb-10 leading-tight min-h-[100px] flex items-center justify-center px-4">
-                                    {isLoading ? (
-                                        <div className="flex flex-col items-center gap-4">
-                                            <div className="w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
-                                            <span className="text-[10px] text-slate-400 uppercase tracking-[0.3em] font-black">Sincronizando Módulo...</span>
-                                        </div>
-                                    ) : questions[currIdx]?.q}
-                                </h2>
-
-                                <div className={`grid gap-3.5 w-full ${questions[currIdx]?.options.length === 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-                                    {!isLoading && questions[currIdx]?.options.map((opt, i) => {
-                                        const isWrong = wrongAnswers.includes(i);
-                                        const isCorrectVisual = feedback === 'correct' && i === questions[currIdx].correct;
-                                        const isTwoOptions = questions[currIdx]?.options.length === 2;
-                                        
-                                        return (
-                                            <button 
-                                                key={`${currIdx}-${i}`} 
-                                                disabled={feedback || isWrong || isLoading} 
-                                                onClick={() => handleAnswer(i)} 
-                                                className={`p-5 text-left rounded-[2rem] border-2 font-bold transition-all flex items-center gap-4 group relative ${
-                                                    isCorrectVisual ? 'bg-green-500 border-green-500 text-white scale-[1.03] shadow-xl z-10' : 
-                                                    isWrong ? 'bg-red-50 border-red-100 text-red-300 opacity-40 animate-shake' : 
-                                                    'bg-white border-slate-100 active:bg-slate-50 active:scale-[0.98]'
-                                                } ${isTwoOptions ? 'justify-center flex-col py-8' : ''}`}
-                                            >
-                                                <div className={`rounded-full flex items-center justify-center text-[10px] font-black border transition-colors ${
-                                                    isCorrectVisual ? 'bg-white/20 border-white text-white' : 
-                                                    isWrong ? 'bg-red-100 border-red-200 text-red-400' : 
-                                                    'bg-slate-50 border-slate-200 text-slate-400'
-                                                } ${isTwoOptions ? 'w-12 h-12 text-base' : 'w-9 h-9'}`}>
-                                                    {isTwoOptions ? (opt.toLowerCase().startsWith('v') ? <Icon name="check" size={20} /> : <Icon name="x" size={20} />) : String.fromCharCode(65 + i)}
-                                                </div>
-                                                <span className={`${isTwoOptions ? 'text-center font-black uppercase tracking-widest text-sm' : 'flex-1 text-sm md:text-base'}`}>{opt}</span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-                    </main>
+            <div class="hdiv hdiv-new"></div>
+            <div id="stat-shields" class="hstat">
+                <span class="shield-icon">🛡️</span>
+                <span id="stat-shields-count" style="font-weight:700;color:#7c3aed">0</span>
+            </div>
+            <div class="hdiv hdiv-new" id="hdiv-streak"></div>
+            <div id="stat-streak" class="hstat">
+                <span style="font-size:1rem">🔥</span>
+                <span id="stat-streak-count" style="font-weight:700;color:#ea580c">0d</span>
+            </div>
+            <div class="hdiv hdiv-new" id="hdiv-gala"></div>
+            <span id="gala-badge">✨ GALA <span id="gala-timer"></span></span>
+            <div class="hdiv"></div>
+            <div class="hstat" style="max-width:80px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span id="stat-user" style="font-size:11px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">...</span></div>
+            <div style="display:flex;gap:4px">
+                <button id="btn-ranking" class="hbtn" style="background:#fef3c7;color:#b45309"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
+                <button id="btn-gocur" class="hbtn" style="background:#e0f2fe;color:#0284c7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
+                <div id="hud-lang">
+                    <button class="hud-lang-opt active" id="hl-es" onclick="setLang('es',this,'hud')">ES</button>
+                    <button class="hud-lang-opt" id="hl-en" onclick="setLang('en',this,'hud')">EN</button>
                 </div>
-            );
-        }
+                <button id="btn-shop" class="hbtn" style="background:#fef3c7;color:#d97706" title="Tienda" data-i18n-title="hud_shop">🛡️</button>
+                <button id="btn-account" class="hbtn" style="background:#f1f5f9;color:#64748b"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            </div>
+        </div>
+    </div>
+    <div id="map-scroll"><svg id="path-svg"></svg><div id="nodes-container"></div></div>
+    <div id="scroll-hint" data-i18n="scroll_hint">🖱️ Rueda del mouse para explorar</div>
+</div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+<!-- MASCOTA FATLIN (visible durante el juego) -->
+<div id="fatlin-mascot" title="Fatlin AI">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg>
+</div>
+<div id="mascot-zzz">Zzz</div>
+
+<!-- CELEBRACIÓN CADA 5 NIVELES -->
+<div id="level5-blast">
+    <div id="blast-halo"></div>
+    <div id="blast-emblem"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg></div>
+    <div id="blast-text" id="blast-level-txt">¡Nivel 5 completado! ⭐</div>
+</div>
+
+<!-- MODAL CHALLENGE -->
+<div id="modal-challenge" class="modal-overlay">
+    <div class="challenge-card" id="ccard">
+        <div class="fatlin-mini">
+            <svg width="64" height="64" viewBox="0 0 100 100" style="filter:drop-shadow(0 5px 10px rgba(0,0,0,.3))"><path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/><path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/><path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/><path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/><path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/><path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc"/><circle cx="50" cy="38" r="3" fill="white"/></svg>
+        </div>
+        <div id="ai-loading">
+            <div class="ai-spinner"></div>
+            <p id="ai-loading-msg" data-i18n="ai_loading">Consultando fuentes PACIE...</p>
+            <small id="ai-loading-sub">Generando preguntas con IA desde fatla.org y pacie.education</small>
+        </div>
+        <div id="feedback-float">
+            <p id="feedback-text" style="font-size:.85rem;font-weight:700"></p>
+            <div style="margin-top:.25rem;font-size:9px;text-transform:uppercase;letter-spacing:.1em;opacity:.7"><span data-i18n="life_lost">Vida perdida · El progreso se mantiene</span></div>
+            <div class="cbar"><div class="cfill" id="cfill" style="width:100%"></div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:.5rem">
+            <div>
+                <p id="clabel" style="font-size:10px;font-weight:700;color:#0284c7;text-transform:uppercase;letter-spacing:.1em" data-i18n="challenge_label">Desafío PACIE</p>
+                <p id="replay-badge" style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;display:none" data-i18n-prefix="replaying">🔄 Repasando nivel <span id="replay-num"></span></p>
+            </div>
+            <div style="text-align:right">
+                <span id="txt-progress" style="font-size:1.1rem;font-weight:700;color:#1e293b">0/3</span>
+                <p style="font-size:9px;color:#94a3b8;margin-top:1px" data-i18n="hits_needed">aciertos necesarios</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:1rem">
+            <div class="streak-dot" id="cd0" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd1" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd2" style="width:16px;height:16px"></div>
+        </div>
+        <div id="question-area">
+            <p id="source-badge"></p>
+            <p id="q-type-badge" style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;text-align:center;margin-bottom:.5rem;display:none" data-i18n="true_false">Verdadero o Falso</p>
+            <h2 id="txt-q" style="font-size:1rem;font-weight:600;color:#1e293b;margin-bottom:1.25rem;line-height:1.55;text-align:center;letter-spacing:-.01em">...</h2>
+            <div id="opts-container"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REWARD — emblema protagonista -->
+<div id="modal-reward">
+    <div class="reward-card" id="rcard">
+        <!-- Emblema central con anillo giratorio -->
+        <div id="reward-emblem-wrap">
+            <div id="reward-emblem-glow"></div>
+            <div id="reward-emblem-ring"></div>
+            <div id="reward-emblem-svg"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg></div>
+        </div>
+        <!-- Título y mensaje -->
+        <h2 style="font-size:1.5rem;font-weight:800;color:white;margin:.25rem 0" id="r-title">¡Increíble!</h2>
+        <p style="color:#7dd3fc;font-size:.85rem;margin-bottom:1.25rem" id="r-msg">Has completado 10 niveles</p>
+        <!-- Badge de insignia -->
+        <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:1.25rem;padding:.85rem 1rem;margin-bottom:1.25rem">
+            <p style="color:white;font-weight:700;font-size:1rem" id="r-badge">🎖️ Explorador PACIE</p>
+            <p style="color:#93c5fd;font-size:.7rem;margin-top:.2rem" id="r-sub" data-i18n="badge_unlocked">Insignia desbloqueada</p>
+        </div>
+        <button id="btn-reward-close" class="wbtn primary" style="font-size:1rem;padding:1rem;border-radius:1.5rem" data-i18n="keep_going">¡Seguir escalando! 🚀</button>
+    </div>
+</div>
+
+<!-- MODAL RANKING -->
+<div id="modal-ranking">
+    <div class="rcard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b" data-i18n="ranking_title">🏆 Ranking</h2>
+            <button id="btn-close-ranking" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="rtabs">
+            <button class="rtab active" id="tab-global" onclick="switchRankTab('global')" data-i18n="tab_global">🌍 Global (Top 25)</button>
+            <button class="rtab" id="tab-liga" onclick="switchRankTab('liga')" data-i18n="tab_league">⚡ Liga Semanal</button>
+        </div>
+        <div id="panel-global"><div id="ranking-list"><div class="ldots"><span></span><span></span><span></span></div></div></div>
+        <div id="panel-liga" style="display:none">
+            <div class="lhdr"><p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;opacity:.8;margin-bottom:.25rem">⚡ Liga Semanal PACIE</p><p style="font-weight:800;font-size:1.1rem" id="liga-week-lbl">Semana actual</p><div class="lcnt"><span id="liga-cnt">Calculando...</span></div></div>
+            <div class="ltop5"><p style="font-size:10px;font-weight:700;color:#fde68a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem">🏅 Clasificados</p><div id="liga-top5"></div></div>
+            <p style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem">📊 Tabla Semanal</p>
+            <div id="liga-full"></div>
+            <div style="margin-top:1rem;background:#fffbeb;border:1px solid #fde68a;border-radius:.75rem;padding:.75rem;text-align:center"><p style="font-size:.75rem;font-weight:700;color:#b45309">Los 5 primeros de cada semana clasifican a la <strong>Liga PACIE</strong> ⚡</p><p style="font-size:.7rem;color:#d97706;margin-top:.25rem">Reinicio cada lunes 00:00</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ACCOUNT -->
+<div id="modal-account">
+    <div class="accard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+            <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b" data-i18n="my_account">Mi Cuenta</h2>
+            <button id="btn-close-account" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div style="background:#f0f9ff;border-radius:1.25rem;padding:1rem;margin-bottom:1.25rem;text-align:left">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <div id="acc-av" style="width:48px;height:48px;background:#bae6fd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;border:2px solid #7dd3fc">🧑</div>
+                <div><p id="acc-name" style="font-weight:700;color:#1e293b;font-size:.9rem">Usuario</p><p id="acc-email" style="color:#94a3b8;font-size:.75rem">—</p></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.75rem">
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-level" style="font-weight:800;color:#0284c7;font-size:1.1rem">1</p><p style="color:#94a3b8;font-size:10px">Nivel</p></div>
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-stars" style="font-weight:800;color:#d97706;font-size:1.1rem">0</p><p style="color:#94a3b8;font-size:10px">Estrellas</p></div>
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-badges" style="font-weight:800;color:#16a34a;font-size:1.1rem">0</p><p style="color:#94a3b8;font-size:10px">Insignias</p></div>
+            </div>
+        </div>
+        <button id="btn-chgav" class="wbtn purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Cambiar Avatar</button>
+        <button id="btn-switch-acc" class="wbtn sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 .49-3.78"/></svg>Cambiar de cuenta</button>
+        <button id="btn-new-acc" class="wbtn slate"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Registrar nueva cuenta</button>
+        <button id="btn-logout" class="wbtn red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+    </div>
+</div>
+
+<!-- MODAL AVATAR -->
+<div id="modal-avatar">
+    <div class="avcard">
+        <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b;margin-bottom:.25rem" data-i18n="pick_avatar">Elige tu Avatar</h2>
+        <p style="color:#94a3b8;font-size:.85rem;margin-bottom:.5rem" data-i18n="avatar_sub">Personaliza tu identidad en el juego</p>
+        <div class="avgrid" id="av-grid"></div>
+        <button id="btn-confirm-av" class="wbtn primary" data-i18n="confirm_avatar">Confirmar Avatar ✓</button>
+    </div>
+</div>
+
+<!-- MODAL DIPLOMA -->
+<div id="modal-diploma">
+    <div class="diploma-wrap">
+        <div id="diploma-content">
+            <div class="diploma-border-inner">
+                <div class="diploma-seal">🏅</div>
+                <p class="diploma-title" data-i18n="diploma_title">Certificado de Logro</p>
+                <p class="diploma-subtitle" data-i18n="diploma_org">Fatlin AI · Metodología PACIE</p>
+                <p class="diploma-certify" data-i18n="diploma_certify">Se certifica que</p>
+                <p class="diploma-name" id="dip-name">Nombre del Usuario</p>
+                <p class="diploma-level" id="dip-level" data-i18n="diploma_level">ha completado 50 niveles de la metodología PACIE</p>
+                <p class="diploma-certify" style="margin-top:.75rem;font-size:.7rem">demostrando dominio en las fases de Presencia, Alcance,<br>Capacitación, Interacción y E-learning</p>
+                <div class="diploma-logos">
+                    <div style="text-align:center">
+                        <svg width="36" height="36" viewBox="0 0 100 100"><path d="M50 90 L85 75 L50 60 L15 75 Z" fill="#0369a1"/><path d="M50 80 L85 65 L50 50 L15 65 Z" fill="#0284c7"/><path d="M50 70 L85 55 L50 40 L15 55 Z" fill="#0ea5e9"/><path d="M50 60 L85 45 L50 30 L15 45 Z" fill="#38bdf8"/><path d="M50 52 L72 41 L50 30 L28 41 Z" fill="#7dd3fc"/></svg>
+                        <p class="diploma-sig">Fatlin AI</p>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.5rem">🎓</div>
+                        <p class="diploma-sig">FATLA · PACIE</p>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.5rem">🌐</div>
+                        <p class="diploma-sig">ASOMTV</p>
+                    </div>
+                </div>
+                <p class="diploma-date" id="dip-date"></p>
+            </div>
+        </div>
+        <div class="diploma-actions">
+            <button id="btn-dip-print" class="wbtn primary" style="margin:0" data-i18n="diploma_print">🖨️ Imprimir / Guardar PDF</button>
+            <button id="btn-dip-close" class="wbtn slate" style="margin:0;flex:0 0 auto;padding:.9rem 1.2rem">✕</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TIENDA -->
+<div id="modal-shop">
+    <div class="shop-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b" data-i18n="shop_title">🛍️ Tienda PACIE</h2>
+            <button id="btn-close-shop" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div style="background:#fef3c7;border-radius:1rem;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+            <span style="font-size:1.2rem">⭐</span>
+            <span style="font-weight:700;color:#92400e" data-i18n="your_stars">Tus estrellas: </span>
+            <span id="shop-stars" style="font-weight:800;color:#d97706;font-size:1.1rem">0</span>
+        </div>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">Escudos de Racha</p>
+        <div class="shop-item" id="shop-buy-1" onclick="buyShields(1,30)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">🛡️</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">1 Escudo</p><p style="font-size:.75rem;color:#64748b">Protege tu racha 1 vez</p></div>
+            </div>
+            <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 30</span>
+        </div>
+        <div class="shop-item" id="shop-buy-3" onclick="buyShields(3,75)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">🛡️🛡️🛡️</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">3 Escudos</p><p style="font-size:.75rem;color:#16a34a">¡Ahorra 15 estrellas!</p></div>
+            </div>
+            <span style="background:#f0fdf4;color:#16a34a;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 75</span>
+        </div>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin:.75rem 0">Modo Gala ✨</p>
+        <div class="shop-item gala-item" id="shop-buy-gala" onclick="buyGala(24,150)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">✨</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 24h</p><p style="font-size:.75rem;color:#64748b">Vidas infinitas + fondo estelar</p></div>
+            </div>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 150</span>
+        </div>
+        <div class="shop-item gala-item" id="shop-buy-gala2" onclick="buyGala(72,350)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">👑</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 72h</p><p style="font-size:.75rem;color:#16a34a">¡El mejor valor!</p></div>
+            </div>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 350</span>
+        </div>
+    </div>
+</div>
+
+<footer class="page-footer"><p data-i18n="footer">Fatlin AI · Metodología PACIE · Preguntas generadas con IA</p></footer>
+<div id="error-msg"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PWA — REGISTRO DEL SERVICE WORKER
+═══════════════════════════════════════════════════════════════ -->
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then(function(reg) {
+                console.log('[PWA] Service Worker registrado, scope:', reg.scope);
+                reg.addEventListener('updatefound', function() {
+                    var newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            document.getElementById('update-banner').classList.add('show');
+                        }
+                    });
+                });
+            })
+            .catch(function(err) { console.warn('[PWA] SW falló:', err); });
+
+        document.getElementById('btn-update-reload').addEventListener('click', function() {
+            navigator.serviceWorker.getRegistration().then(function(reg) {
+                if (reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            });
+        });
+        document.getElementById('btn-update-dismiss').addEventListener('click', function() {
+            document.getElementById('update-banner').classList.remove('show');
+        });
+    });
+}
+window.addEventListener('appinstalled', function() {
+    console.log('[PWA] App instalada en pantalla de inicio');
+});
+</script>
+
+<!-- PATRON DOS LLAVES -->
+<script>
+window._splashLangChosen = null;   // llave 1: usuario eligio idioma
+window._firebaseReady    = false;  // llave 2: Firebase respondio
+
+window._doHideSplash = function() {
+  var s = document.getElementById("splash");
+  if (!s || s.style.display === "none") return;
+  s.style.opacity = "0";
+  setTimeout(function() { s.style.display = "none"; }, 400);
+};
+
+// Avanza solo cuando AMBAS llaves estan abiertas
+window._tryAdvance = function() {
+  if (!window._splashLangChosen) return;
+  if (!window._firebaseReady)    return;
+  window._doHideSplash();
+};
+
+window.splashChooseLang = function(lang) {
+  try {
+    window._splashLangChosen = lang;
+    localStorage.setItem("fatlin_lang", lang);
+    var btn = document.getElementById("ls-" + lang);
+    if (btn) btn.classList.add("entering");
+    var ls = document.getElementById("lang-splash");
+    if (ls) ls.style.opacity = "0.4";
+  } catch(e) {}
+  window._tryAdvance();
+};
+
+(function() {
+  var saved = localStorage.getItem("fatlin_lang");
+  if (saved) window._splashLangChosen = saved;
+  // NO ocultar aqui - esperar a Firebase primero
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LÓGICA PRINCIPAL DEL JUEGO
+═══════════════════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { apiKey:"AIzaSyAByrBFOD9-Ji93nT3s31As_xN0tWS5_QE", authDomain:"fatlin.firebaseapp.com", projectId:"fatlin", storageBucket:"fatlin.appspot.com", messagingSenderId:"88080333098", appId:"1:88080333098:web:6a981dfc448b9ea670c653" };
+
+// ═══════════════════════════════════════════════════════════════
+// SISTEMA DE INTERNACIONALIZACIÓN (i18n)
+// ═══════════════════════════════════════════════════════════════
+const LANG = {
+  es: {
+    tap_continue:    'Toca para continuar',
+    subtitle:        'Metodología PACIE',
+    auth_tagline:    'Gestión Educativa Inteligente',
+    btn_google:      'Continuar con Google',
+    btn_email:       'Correo electrónico',
+    btn_guest:       'Entrar como Invitado',
+    ph_email:        'Correo',
+    ph_pass:         'Contraseña',
+    remember_me:     'Recordar credenciales',
+    btn_login:       'Entrar / Registrar',
+    btn_back:        '← Volver',
+    hud_avatar:      'Cambiar avatar',
+    hud_shop:        'Tienda',
+    challenge_label: 'Desafío PACIE',
+    replaying:       '🔄 Repasando nivel',
+    hits_needed:     'aciertos necesarios',
+    true_false:      'Verdadero o Falso',
+    life_lost:       'Vida perdida · El progreso se mantiene',
+    ai_loading:      'Consultando fuentes PACIE...',
+    ai_loading_sub:  'Buscando en fatla.org, pacie.education...',
+    tf_true:         '✅ Verdadero',
+    tf_false:        '❌ Falso',
+    badge_unlocked:  'Insignia desbloqueada',
+    keep_going:      '¡Seguir escalando! 🚀',
+    ranking_title:   '🏆 Ranking',
+    tab_global:      '🌍 Global (Top 25)',
+    tab_league:      '⚡ Liga Semanal',
+    league_week:     '⚡ Liga Semanal PACIE',
+    league_top:      '🏅 Clasificados',
+    league_table:    '📊 Tabla Semanal',
+    league_promo:    'Los 5 primeros de cada semana clasifican a la <strong>Liga PACIE</strong> ⚡',
+    league_reset:    'Reinicio cada lunes 00:00',
+    my_account:      'Mi Cuenta',
+    change_avatar:   'Cambiar Avatar',
+    switch_account:  'Cambiar de cuenta',
+    new_account:     'Registrar nueva cuenta',
+    logout:          'Cerrar sesión',
+    anon_session:    'Sesión anónima',
+    guest_label:     'Invitado',
+    confirm_logout:  '¿Cerrar sesión?',
+    confirm_switch:  '¿Cambiar de cuenta?',
+    pick_avatar:     'Elige tu Avatar',
+    avatar_sub:      'Personaliza tu identidad en el juego',
+    confirm_avatar:  'Confirmar Avatar ✓',
+    stat_level:      'Nivel',
+    stat_stars:      'Estrellas',
+    stat_badges:     'Insignias',
+    diploma_title:   'Certificado de Logro',
+    diploma_org:     'Fatlin AI · Metodología PACIE',
+    diploma_certify: 'Se certifica que',
+    diploma_level:   'ha completado {N} niveles de la metodología PACIE',
+    diploma_skills:  'demostrando dominio en las fases de Presencia, Alcance,<br>Capacitación, Interacción y E-learning',
+    diploma_issued:  'Emitido el',
+    diploma_print:   '🖨️ Imprimir / Guardar PDF',
+    shop_title:      '🛍️ Tienda PACIE',
+    your_stars:      'Tus estrellas: ',
+    shield_1_name:   '1 Escudo',
+    shield_1_desc:   'Protege tu racha 1 vez',
+    shield_3_name:   '3 Escudos',
+    shield_3_desc:   '¡Ahorra 15 estrellas!',
+    gala_24_name:    'Modo Gala 24h',
+    gala_24_desc:    'Vidas infinitas + fondo estelar',
+    gala_72_name:    'Modo Gala 72h',
+    gala_72_desc:    '¡El mejor valor!',
+    no_lives:        'No tienes vidas. Espera 5 min por vida.',
+    no_stars_need:   'Necesitas {N} ⭐ (tienes {M})',
+    shield_bought:   '🛡️ {N} escudo{S} comprado{S}. Total: {T}',
+    gala_activated:  '✨ ¡Modo Gala activado por {N}h! Vidas infinitas 🚀',
+    gala_ended:      'Modo Gala finalizado. ¡Sigue ganando estrellas!',
+    streak_saved:    '🛡️ Escudo usado — ¡Racha salvada! ({N} restantes)',
+    streak_lost:     '💔 Racha perdida. ¡Compra escudos para protegerla!',
+    streak_active:   '🔥 ¡{N} días seguidos! Racha activa',
+    scroll_hint:     '🖱️ Rueda del mouse para explorar',
+    footer:          'Fatlin AI · Metodología PACIE · Preguntas generadas con IA',
+    node_replay:     '¡Repasar!',
+    blast_msgs: {5:'¡Despegando! ⭐',10:'¡Imparable! 🔥',15:'¡Crack total! 💎',
+      20:'¡Élite PACIE! 🏆',25:'¡A mitad de camino! 🚀',30:'¡Extraordinario! ⚡',
+      35:'¡Eres una leyenda! 👑',40:'¡La Lira te espera! 🎭',45:'¡Ya casi! ✨',
+      50:'¡DIPLOMA GANADO! 🎓',55:'¡Imparable! 🌟',60:'¡MAESTRO ABSOLUTO! 👑'},
+    rewards:[
+      {emoji:'🌱',title:'¡Primer gran paso!',badge:'🎖️ Semilla PACIE',msg:'10 niveles conquistados.'},
+      {emoji:'⚡',title:'¡Imparable!',badge:'🥉 Explorador PACIE',msg:'20 niveles dominados.'},
+      {emoji:'🔥',title:'¡En llamas!',badge:'🥈 Navegante PACIE',msg:'30 niveles superados.'},
+      {emoji:'💎',title:'¡Élite!',badge:'🥇 Maestro PACIE',msg:'40 niveles vencidos.'},
+      {emoji:'🚀',title:'¡Leyenda viva!',badge:'🏆 Leyenda PACIE',msg:'50 niveles conquistados.'},
+      {emoji:'👑',title:'¡Máximo Honor!',badge:'👑 Rey PACIE',msg:'¡60 niveles! La máxima leyenda.'},
+    ],
+  },
+
+  en: {
+    tap_continue:    'Tap to continue',
+    subtitle:        'PACIE Methodology',
+    auth_tagline:    'Intelligent Educational Management',
+    btn_google:      'Continue with Google',
+    btn_email:       'Email address',
+    btn_guest:       'Enter as Guest',
+    ph_email:        'Email',
+    ph_pass:         'Password',
+    remember_me:     'Remember credentials',
+    btn_login:       'Sign in / Register',
+    btn_back:        '← Back',
+    hud_avatar:      'Change avatar',
+    hud_shop:        'Shop',
+    challenge_label: 'PACIE Challenge',
+    replaying:       '🔄 Reviewing level',
+    hits_needed:     'correct answers needed',
+    true_false:      'True or False',
+    life_lost:       'Life lost · Progress is kept',
+    ai_loading:      'Consulting PACIE sources...',
+    ai_loading_sub:  'Searching fatla.org, pacie.education...',
+    tf_true:         '✅ True',
+    tf_false:        '❌ False',
+    badge_unlocked:  'Badge unlocked',
+    keep_going:      'Keep climbing! 🚀',
+    ranking_title:   '🏆 Ranking',
+    tab_global:      '🌍 Global (Top 25)',
+    tab_league:      '⚡ Weekly League',
+    league_week:     '⚡ PACIE Weekly League',
+    league_top:      '🏅 Qualifiers',
+    league_table:    '📊 Weekly Table',
+    league_promo:    'The top 5 each week qualify for the <strong>PACIE League</strong> ⚡',
+    league_reset:    'Resets every Monday 00:00',
+    my_account:      'My Account',
+    change_avatar:   'Change Avatar',
+    switch_account:  'Switch account',
+    new_account:     'Register new account',
+    logout:          'Sign out',
+    anon_session:    'Anonymous session',
+    guest_label:     'Guest',
+    confirm_logout:  'Sign out?',
+    confirm_switch:  'Switch account?',
+    pick_avatar:     'Choose your Avatar',
+    avatar_sub:      'Customize your identity in the game',
+    confirm_avatar:  'Confirm Avatar ✓',
+    stat_level:      'Level',
+    stat_stars:      'Stars',
+    stat_badges:     'Badges',
+    diploma_title:   'Certificate of Achievement',
+    diploma_org:     'Fatlin AI · PACIE Methodology',
+    diploma_certify: 'This certifies that',
+    diploma_level:   'has completed {N} levels of the PACIE methodology',
+    diploma_skills:  'demonstrating mastery of the Presence, Scope,<br>Training, Interaction and E-learning phases',
+    diploma_issued:  'Issued on',
+    diploma_print:   '🖨️ Print / Save PDF',
+    shop_title:      '🛍️ PACIE Shop',
+    your_stars:      'Your stars: ',
+    shield_1_name:   '1 Shield',
+    shield_1_desc:   'Protects your streak once',
+    shield_3_name:   '3 Shields',
+    shield_3_desc:   'Save 15 stars!',
+    gala_24_name:    'Gala Mode 24h',
+    gala_24_desc:    'Infinite lives + starry background',
+    gala_72_name:    'Gala Mode 72h',
+    gala_72_desc:    'Best value!',
+    no_lives:        'No lives left. Wait 5 min per life.',
+    no_stars_need:   'You need {N} ⭐ (you have {M})',
+    shield_bought:   '🛡️ {N} shield{S} purchased. Total: {T}',
+    gala_activated:  '✨ Gala Mode activated for {N}h! Infinite lives 🚀',
+    gala_ended:      'Gala Mode ended. Keep earning stars!',
+    streak_saved:    '🛡️ Shield used — Streak saved! ({N} remaining)',
+    streak_lost:     '💔 Streak lost. Buy shields to protect it!',
+    streak_active:   '🔥 {N} days in a row! Streak active',
+    scroll_hint:     '🖱️ Mouse wheel to explore',
+    footer:          'Fatlin AI · PACIE Methodology · AI-generated questions',
+    node_replay:     'Review!',
+    blast_msgs:{5:'Taking off! ⭐',10:'Unstoppable! 🔥',15:'Total boss! 💎',
+      20:'PACIE Elite! 🏆',25:'Halfway there! 🚀',30:'Extraordinary! ⚡',
+      35:"You're a legend! 👑",40:'The Golden Lyre awaits! 🎭',45:'Almost there! ✨',
+      50:'DIPLOMA EARNED! 🎓',55:'Unstoppable! 🌟',60:'ABSOLUTE MASTER! 👑'},
+    rewards:[
+      {emoji:'🌱',title:'First big step!',badge:'🎖️ PACIE Seed',msg:'10 levels conquered.'},
+      {emoji:'⚡',title:'Unstoppable!',badge:'🥉 PACIE Explorer',msg:'20 levels mastered.'},
+      {emoji:'🔥',title:'On fire!',badge:'🥈 PACIE Navigator',msg:'30 levels surpassed.'},
+      {emoji:'💎',title:'Elite!',badge:'🥇 PACIE Master',msg:'40 levels conquered.'},
+      {emoji:'🚀',title:'Living legend!',badge:'🏆 PACIE Legend',msg:'50 levels conquered.'},
+      {emoji:'👑',title:'Maximum Honor!',badge:'👑 PACIE King',msg:'60 levels! The ultimate legend.'},
+    ],
+  }
+};
+
+// ── Estado del idioma ────────────────────────────────────────────
+// Tomar el idioma elegido en el splash (ya guardado en localStorage)
+let currentLang = localStorage.getItem('fatlin_lang') || (navigator.language?.startsWith('en') ? 'en' : 'es');
+
+function t(key, vars={}){
+  const d = LANG[currentLang] || LANG['es'];
+  let str = d[key] || LANG['es'][key] || key;
+  Object.entries(vars).forEach(([k,v])=>{ str = str.replaceAll(`{${k}}`, v); });
+  return str;
+}
+
+function applyLang(){
+  const d = LANG[currentLang] || LANG['es'];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(d[key] !== undefined) el.innerHTML = d[key];
+  });
+  const emailInput = document.getElementById('inp-email');
+  const passInput  = document.getElementById('inp-pass');
+  if(emailInput) emailInput.placeholder = t('ph_email');
+  if(passInput)  passInput.placeholder  = t('ph_pass');
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-title');
+    if(d[key]) el.title = d[key];
+  });
+  [
+    ['btn-google',     'btn_google'],
+    ['btn-show-email', 'btn_email'],
+    ['btn-guest',      'btn_guest'],
+    ['btn-login',      'btn_login'],
+    ['btn-back',       'btn_back'],
+    ['btn-logout',     'logout'],
+    ['btn-switch-acc', 'switch_account'],
+    ['btn-new-acc',    'new_account'],
+    ['btn-chgav',      'change_avatar'],
+    ['btn-confirm-av', 'confirm_avatar'],
+    ['btn-reward-close','keep_going'],
+    ['btn-dip-print',  'diploma_print'],
+    ['tab-global',     'tab_global'],
+    ['tab-liga',       'tab_league'],
+  ].forEach(([id, key])=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const svg = el.querySelector('svg');
+    if(svg){
+      const nodes = Array.from(el.childNodes);
+      const textNode = nodes.find(n=>n.nodeType===3 && n.textContent.trim());
+      if(textNode) textNode.textContent = t(key);
+      else el.appendChild(document.createTextNode(t(key)));
+    } else {
+      el.innerHTML = d[key] || el.innerHTML;
+    }
+  });
+  ['hl-es','hl-en'].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(btn) btn.classList.toggle('active', id.endsWith(currentLang));
+  });
+  if(typeof REWARDS !== 'undefined'){
+    const rw = d.rewards || LANG['es'].rewards;
+    for(let i=0;i<REWARDS.length;i++) Object.assign(REWARDS[i], rw[i]||{});
+  }
+  currentBlastMsgs = d.blast_msgs || LANG['es'].blast_msgs;
+}
+
+window.setLang = function(lang, btnEl, source='splash'){
+  const prev = currentLang;
+  currentLang = lang;
+  localStorage.setItem('fatlin_lang', lang);
+  applyLang();
+  const gameActive = typeof game !== 'undefined' && game && game.user;
+  if(prev !== lang){
+    clearQuestionCache();
+    if(gameActive) setTimeout(()=>prefetchAhead(game.level - 1, 3), 500);
+  }
+  if(source !== 'silent' && gameActive){
+    const msg = lang === 'en' ? '🇺🇸 English activated' : '🇪🇸 Español activado';
+    showToast(msg, '#0284c7');
+  }
+};
+
+let currentBlastMsgs = LANG[currentLang].blast_msgs;
+
+const APP_ID = 'fatlin-ai-v1';
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app, "fatlindb");
+try { enableIndexedDbPersistence(db); } catch(e) {}
+
+const CLAUDE_ENDPOINT = 'https://api.anthropic.com/v1/messages';
+
+const PACIE_SOURCES = [
+    "https://www.fatla.org",
+    "https://www.pacie.education/portal/",
+    "https://www.asomtv.org",
+    "https://becas.fatla.org/mod/page/view.php?id=33",
+    "https://becas.fatla.org/mod/page/view.php?id=34",
+    "https://becas.fatla.org/mod/page/view.php?id=3"
+];
+
+const LEVEL_TOPICS = [
+    { range:[1,5],   topic:"fundamentos básicos de la metodología PACIE, qué es y sus 5 fases" },
+    { range:[6,10],  topic:"fase Presencia de PACIE: imagen, motivación visual e impacto en el estudiante" },
+    { range:[11,15], topic:"fase Alcance de PACIE: objetivos, estándares y competencias académicas" },
+    { range:[16,20], topic:"fase Capacitación de PACIE: preparación docente y manejo tecnológico" },
+    { range:[21,25], topic:"fase Interacción de PACIE: aprendizaje colaborativo, foros, wikis y trabajo grupal" },
+    { range:[26,30], topic:"fase E-learning de PACIE: plataformas LMS, madurez pedagógica y sostenibilidad" },
+    { range:[31,35], topic:"origen y contexto histórico de PACIE, Dr. Freddy Álvarez y FATLA" },
+    { range:[36,40], topic:"diferencias entre educación virtual y presencial según la metodología PACIE" },
+    { range:[41,45], topic:"herramientas tecnológicas recomendadas por PACIE para entornos virtuales" },
+    { range:[46,50], topic:"evaluación y seguimiento en PACIE: tutor, roles y acompañamiento" },
+    { range:[51,55], topic:"PACIE aplicado en proyectos reales de FATLA y ASOMTV" },
+    { range:[56,60], topic:"integración completa de PACIE: desde Presencia hasta E-learning en casos prácticos" },
+];
+
+function getTopicForLevel(level) {
+    for (const t of LEVEL_TOPICS) {
+        if (level >= t.range[0] && level <= t.range[1]) return t.topic;
+    }
+    return "metodología PACIE completa";
+}
+
+const questionCache = {};
+const CACHE_MEM_TTL  = 2  * 60 * 60 * 1000;
+const CACHE_LS_TTL   = 24 * 60 * 60 * 1000;
+
+function _lsKey(level){ return `fatlin_q_${currentLang}_${level}`; }
+
+function getCachedQuestions(level){
+  const m = questionCache[level];
+  if(m && Date.now() - m.generatedAt < CACHE_MEM_TTL) return m.questions;
+  if(m) delete questionCache[level];
+  try {
+    const raw = localStorage.getItem(_lsKey(level));
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Date.now() - parsed.generatedAt < CACHE_LS_TTL){
+        questionCache[level] = parsed;
+        return parsed.questions;
+      }
+      localStorage.removeItem(_lsKey(level));
+    }
+  } catch(e){}
+  return null;
+}
+
+function setCachedQuestions(level, questions){
+  const entry = { questions, generatedAt: Date.now() };
+  questionCache[level] = entry;
+  try { localStorage.setItem(_lsKey(level), JSON.stringify(entry)); } catch(e){}
+}
+
+function clearQuestionCache(){
+  Object.keys(questionCache).forEach(k => delete questionCache[k]);
+  try {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('fatlin_q_'))
+      .forEach(k => localStorage.removeItem(k));
+  } catch(e){}
+}
+
+let _prefetchInProgress = new Set();
+
+async function prefetchLevel(level){
+  if(level < 1 || level > TOTAL) return;
+  if(getCachedQuestions(level)) return;
+  if(_prefetchInProgress.has(level)) return;
+  _prefetchInProgress.add(level);
+  try {
+    const qs = await generateQuestionsWithClaude(level);
+    setCachedQuestions(level, qs);
+    console.log(`[Prefetch] Nivel ${level} listo (${currentLang})`);
+  } catch(e){
+    console.warn(`[Prefetch] Nivel ${level} falló:`, e.message);
+  } finally {
+    _prefetchInProgress.delete(level);
+  }
+}
+
+function prefetchAhead(fromLevel, count=2){
+  for(let i = 1; i <= count; i++){
+    const lvl = fromLevel + i;
+    if(lvl <= TOTAL) prefetchLevel(lvl);
+  }
+}
+
+async function generateQuestionsWithClaude(level) {
+    const topic = getTopicForLevel(level);
+    const sourcesStr = PACIE_SOURCES.join(', ');
+    const expert = isExpertLevel(level);
+    const systemPrompt = expert
+      ? `Actúa como el Jurado de la Quinta Vergara y experto Master en Metodología PACIE. Evalúas si el usuario merece la Lira de Oro. Fuentes oficiales: ${sourcesStr}. Usa web_search. RESPONDE SOLO EN JSON VÁLIDO sin markdown ni backticks.`
+      : `Eres un experto en la metodología PACIE desarrollada por FATLA. Tu única fuente son: ${sourcesStr}. Usa web_search para consultar esas fuentes. RESPONDE ÚNICAMENTE EN JSON VÁLIDO.`;
+    const userPrompt = expert
+      ? `Nivel EXPERTO sobre "PACIE aplicado". Genera 6 preguntas de ELITE (3 mc + 3 tf) para nivel ${level}. Tema: ${topic}.
+REGLAS: Crea mini-escenarios reales (2-3 lineas). Prohibido preguntar definiciones basicas. Distractores tecnicamente plausibles pero incorrectos segun PACIE. Tono profesional de premiacion.
+RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"[Escenario real]","a":"...","o":["...","...","...","..."],"j":"Correcto. [explicacion con fase PACIE especifica]","source":"fatla.org"}]}`
+      : `Busca sobre "${topic}" en las fuentes FATLA/PACIE. Genera 6 preguntas (3 mc + 3 tf) para nivel ${level}.
+RESPONDE SOLO con: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"}]}
+Reglas: en mc "a" debe estar en "o"; en tf "a" es "Verdadero" o "Falso".`;
+
+    const isProxy = !CLAUDE_ENDPOINT.includes('anthropic.com');
+    const bodyPayload = {
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        system: systemPrompt,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{ role: "user", content: userPrompt }]
+    };
+    let firebaseToken = "";
+    try {
+        const currentUser = auth.currentUser;
+        if (currentUser) firebaseToken = await currentUser.getIdToken();
+    } catch(tokenErr) {}
+    const fetchOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firebaseToken}` },
+        body: JSON.stringify(bodyPayload)
+    };
+    const response = await fetch(CLAUDE_ENDPOINT, fetchOptions);
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    const fullText = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    let parsed;
+    try { const clean=fullText.replace(/```json|```/g,"").trim(); const m=clean.match(/\{[\s\S]*\}/); if(!m) throw new Error("No JSON"); parsed=JSON.parse(m[0]); } catch(e){ throw new Error("Parse error: "+e.message); }
+    if(!parsed.questions||!Array.isArray(parsed.questions)||!parsed.questions.length) throw new Error("Invalid structure");
+    const valid=parsed.questions.filter(q=>{if(!q.q||!q.a||!q.o||!Array.isArray(q.o))return false;if(q.type==='mc'&&!q.o.includes(q.a))return false;if(q.type==='tf'&&!['Verdadero','Falso','True','False'].includes(q.a))return false;return true;});
+    if(valid.length<3) throw new Error("Too few valid questions");
+    return valid;
+}
+
+const FALLBACK_QUESTIONS = [
+    {type:"mc",q:"¿Qué significa la P en la metodología PACIE?",a:"Presencia",o:["Presencia","Proceso","Planificación","Pedagógico"],j:"La P de PACIE corresponde a Presencia, primera fase del modelo.",source:"fatla.org"},
+    {type:"mc",q:"¿Cuántas fases tiene la metodología PACIE?",a:"5 fases",o:["3 fases","5 fases","7 fases","4 fases"],j:"PACIE: Presencia, Alcance, Capacitación, Interacción y E-learning.",source:"fatla.org"},
+    {type:"mc",q:"¿En qué país fue creada la metodología PACIE?",a:"Ecuador",o:["México","Ecuador","Colombia","Argentina"],j:"PACIE fue desarrollada en Ecuador por el Dr. Freddy Álvarez de FATLA.",source:"pacie.education"},
+    {type:"tf",q:"La metodología PACIE fue desarrollada por FATLA para mejorar la educación virtual.",a:"Verdadero",o:["Verdadero","Falso"],j:"FATLA creó PACIE para innovar en la educación virtual latinoamericana.",source:"fatla.org"},
+    {type:"tf",q:"En PACIE, la fase de Interacción se enfoca en el trabajo individual.",a:"Falso",o:["Verdadero","Falso"],j:"La Interacción promueve el trabajo colaborativo y aprendizaje social.",source:"pacie.education"},
+    {type:"tf",q:"El Alcance en PACIE define los objetivos y competencias del proceso educativo.",a:"Verdadero",o:["Verdadero","Falso"],j:"El Alcance establece los estándares y metas académicas del proceso.",source:"fatla.org"},
+];
+
+const AVATARS=["🦁","🐯","🦊","🐺","🦅","🦋","🐬","🦄","🐉","🤖","👨‍🚀","🧙","🧜","🥷","🧑‍💻","🦸","🧚","🦩","🐸","🎭"];
+const REWARDS=[
+    {emoji:"🌱",title:"¡Primer gran paso!",badge:"🎖️ Semilla PACIE",msg:"10 niveles conquistados."},
+    {emoji:"⚡",title:"¡Imparable!",badge:"🥉 Explorador PACIE",msg:"20 niveles dominados."},
+    {emoji:"🔥",title:"¡En llamas!",badge:"🥈 Navegante PACIE",msg:"30 niveles superados."},
+    {emoji:"💎",title:"¡Élite!",badge:"🥇 Maestro PACIE",msg:"40 niveles vencidos."},
+    {emoji:"🚀",title:"¡Leyenda viva!",badge:"🏆 Leyenda PACIE",msg:"50 niveles conquistados."},
+    {emoji:"👑",title:"¡Máximo Honor!",badge:"👑 Rey PACIE",msg:"¡60 niveles! La máxima leyenda."},
+];
+let selectedAvatar="🧑",tempAvatar="🧑";
+
+let game={
+  user:null, level:1, playingLevel:1, stars:0, lives:5,
+  lastDeathTime:null, correctCount:0, targetCorrect:3,
+  isProcessing:false, currentQ:null, levelQuestions:[], qIndex:0,
+  badges:0, lastRewardAt:0,
+  shields:0, streakDays:0, lastPlayDate:null,
+  diplomasEarned:0, infiniteLivesUntil:null
+};
+
+function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4500);}
+function playBell(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[[1046.5,0],[1318.5,0],[1568,.15],[2093,.3]].forEach(([f,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(f,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);g.gain.setValueAtTime(.4,ctx.currentTime+d);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d+1.1);o.start(ctx.currentTime+d);o.stop(ctx.currentTime+d+1.1);});}catch(e){}}
+function playClick(ok=true){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(ok?880:280,ctx.currentTime);g.gain.setValueAtTime(.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.18);}catch(e){}}
+
+function updateProgressUI(){for(let i=0;i<3;i++){document.getElementById(`sd${i}`).classList.toggle('filled',i<game.correctCount);document.getElementById(`cd${i}`).classList.toggle('filled',i<game.correctCount);}document.getElementById('txt-progress').innerText=`${game.correctCount}/3`;}
+function flashProgressDot(idx){const d=document.getElementById(`cd${idx}`);if(!d)return;d.classList.remove('flash');void d.offsetWidth;d.classList.add('flash');setTimeout(()=>d.classList.remove('flash'),500);}
+
+applyLang();
+
+// -- onAuthStateChanged: segunda llave del patron dos-llaves
+// La pantalla destino se muestra ANTES de ocultar el splash.
+// Asi nunca hay pantalla negra intermedia.
+onAuthStateChanged(auth,async(user)=>{
+  if(user){
+    game.user=user;
+    await loadProgress();
+    document.getElementById("auth-screen").style.display="none";
+    document.getElementById("game-container").style.display="block";
+    renderMap(); updateHUD(); mascotShow(); resetMascotIdleTimer();
+    setTimeout(()=>prefetchAhead(game.level-1,3),1500);
+    setTimeout(()=>{centerCamera(true);if(!("ontouchstart" in window)){const h=document.getElementById("scroll-hint");h.classList.add("visible");setTimeout(()=>h.classList.remove("visible"),4000);}},200);
+    window._firebaseReady=true;
+    window._tryAdvance();
+  } else {
+    document.getElementById("auth-screen").style.display="flex";
+    window._firebaseReady=true;
+    window._tryAdvance();
+  }
+});
+
+
+async function loadProgress(){
+  let cloudData = null;
+  let cloudOk = false;
+  try {
+    const snap = await getDoc(doc(db,`artifacts/${APP_ID}/users/${game.user.uid}/progress/current`));
+    if(snap.exists()){ cloudData = snap.data(); cloudOk = true; }
+  } catch(e) { console.warn('[Progress] Firestore falló:',e.code, e.message); }
+
+  let localData = null;
+  try {
+    const raw = localStorage.getItem(`fatlin_save_${game.user.uid}`);
+    if(raw) localData = JSON.parse(raw);
+  } catch(e) {}
+
+  if(!cloudData && !localData){
+    game.level = 1; game.stars = 0; game.lives = 5;
+    game.lastDeathTime = null; game.badges = 0; game.lastRewardAt = 0;
+    selectedAvatar = "🧑"; tempAvatar = "🧑";
+  } else if(cloudOk && cloudData && !localData){
+    game.level       = cloudData.level       || 1;
+    game.stars       = cloudData.stars       || 0;
+    game.lives       = typeof cloudData.lives === 'number' ? cloudData.lives : 5;
+    game.lastDeathTime = cloudData.lastDeathTime || null;
+    game.badges      = cloudData.badges      || 0;
+    game.lastRewardAt= cloudData.lastRewardAt|| 0;
+    selectedAvatar   = cloudData.avatar      || "🧑";
+    tempAvatar       = selectedAvatar;
+    game.shields     = cloudData.shields     || 0;
+    game.streakDays  = cloudData.streakDays  || 0;
+    game.lastPlayDate= cloudData.lastPlayDate|| null;
+    game.diplomasEarned = cloudData.diplomasEarned || 0;
+    game.infiniteLivesUntil = cloudData.infiniteLivesUntil || null;
+  } else if(!cloudOk && localData){
+    game.level       = localData.level       || 1;
+    game.stars       = localData.stars       || 0;
+    game.lives       = typeof localData.lives === 'number' ? localData.lives : 5;
+    game.lastDeathTime = localData.lastDeathTime || null;
+    game.badges      = localData.badges      || 0;
+    game.lastRewardAt= localData.lastRewardAt|| 0;
+    selectedAvatar   = localData.avatar      || "🧑";
+    tempAvatar       = selectedAvatar;
+    game.shields     = localData.shields     || 0;
+    game.streakDays  = localData.streakDays  || 0;
+    game.lastPlayDate= localData.lastPlayDate|| null;
+    game.diplomasEarned = localData.diplomasEarned || 0;
+    game.infiniteLivesUntil = localData.infiniteLivesUntil || null;
+  } else {
+    const cloudLevel  = cloudData?.level  || 1;
+    const localLevel  = localData?.level  || 1;
+    const cloudStars  = cloudData?.stars  || 0;
+    const localStars  = localData?.stars  || 0;
+    const cloudTime   = cloudData?.updatedAt || 0;
+    const localTime   = localData?.updatedAt || 0;
+    const newerSource = cloudTime >= localTime ? cloudData : localData;
+    game.level  = Math.max(cloudLevel, localLevel);
+    game.stars  = Math.max(cloudStars, localStars);
+    game.lives         = typeof newerSource.lives === 'number' ? newerSource.lives : 5;
+    game.lastDeathTime = newerSource.lastDeathTime || null;
+    game.badges        = newerSource.badges        || 0;
+    game.lastRewardAt  = newerSource.lastRewardAt  || 0;
+    selectedAvatar     = newerSource.avatar        || "🧑";
+    tempAvatar         = selectedAvatar;
+    game.shields       = newerSource.shields       || 0;
+    game.streakDays    = newerSource.streakDays    || 0;
+    game.lastPlayDate  = newerSource.lastPlayDate  || null;
+    game.diplomasEarned = Math.max(cloudData?.diplomasEarned||0, localData?.diplomasEarned||0);
+    game.infiniteLivesUntil = Math.max(cloudData?.infiniteLivesUntil||0, localData?.infiniteLivesUntil||0) || null;
+    if(localLevel > cloudLevel) setTimeout(()=>saveProgress(), 1000);
+  }
+
+  game.playingLevel = game.level;
+  applyLang();
+  checkDailyStreak();
+}
+
+async function saveProgress(){if(!game.user)return;const payload={
+    level:game.level, stars:game.stars, lives:game.lives,
+    lastDeathTime:game.lastDeathTime, badges:game.badges,
+    lastRewardAt:game.lastRewardAt, updatedAt:Date.now(),
+    avatar:selectedAvatar,
+    displayName:game.user.displayName||game.user.email?.split('@')[0]||'Invitado',
+    shields:game.shields, streakDays:game.streakDays,
+    lastPlayDate:game.lastPlayDate, diplomasEarned:game.diplomasEarned,
+    infiniteLivesUntil:game.infiniteLivesUntil
+  };localStorage.setItem(`fatlin_save_${game.user.uid}`,JSON.stringify(payload));try{await setDoc(doc(db,`artifacts/${APP_ID}/users/${game.user.uid}/progress/current`),payload,{merge:true});const now=Date.now(),ws=getWeekStart();await setDoc(doc(db,`fatlin_ranking_${APP_ID}`,game.user.uid),{displayName:payload.displayName,level:game.level,stars:game.stars,avatar:selectedAvatar,updatedAt:now},{merge:true});await setDoc(doc(db,`fatlin_weekly_${APP_ID}`,`${ws}_${game.user.uid}`),{displayName:payload.displayName,level:game.level,stars:game.stars,avatar:selectedAvatar,weekStart:ws,uid:game.user.uid,updatedAt:now},{merge:true});}catch(e){}}
+
+function mascotShow(){ document.getElementById('fatlin-mascot').style.display='block'; }
+function mascotSetState(state, duration=0){
+  const m = document.getElementById('fatlin-mascot');
+  const z = document.getElementById('mascot-zzz');
+  m.className = '';
+  m.style.display = 'block';
+  z.classList.remove('visible');
+  if(state === 'sleep'){ m.classList.add('state-sleep'); z.classList.add('visible'); return; }
+  m.classList.add(`state-${state}`);
+  if(duration > 0) setTimeout(()=>{ m.className=''; m.style.animation='mascotFloat 4s ease-in-out infinite'; }, duration);
+}
+let _idleTimer = null;
+function resetMascotIdleTimer(){
+  clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(()=>mascotSetState('sleep'), 90000);
+}
+document.getElementById('fatlin-mascot').onclick = ()=>{ mascotSetState('cheer',1200); resetMascotIdleTimer(); };
+
+function updateMascotSvg(isGala){ /* SVG stays same for both modes */ }
+function updateRewardEmblem(){ /* uses static SVG already in DOM */ }
+
+function triggerLevel5Blast(level){
+  const blast = document.getElementById('level5-blast');
+  const txt   = document.getElementById('blast-text');
+  const msg   = currentBlastMsgs[level] || `¡Nivel ${level}! ⭐`;
+  txt.textContent = msg;
+  // Generar partículas
+  blast.querySelectorAll('.blast-particle').forEach(p=>p.remove());
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  const cols = isGala
+    ? ['#fbbf24','#f59e0b','#fde68a','#d97706','#a855f7']
+    : ['#38bdf8','#7dd3fc','#f59e0b','#22c55e','#f472b6'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div'); p.className='blast-particle';
+    const angle=(i/20)*Math.PI*2, dist=80+Math.random()*120;
+    p.style.cssText=`width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;background:${cols[i%cols.length]};left:50%;top:50%;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-delay:${Math.random()*.3}s;animation-duration:${.8+Math.random()*.5}s`;
+    blast.appendChild(p);
+  }
+  blast.classList.add('active');
+  mascotSetState('win', 2500); resetMascotIdleTimer();
+  setTimeout(()=>blast.classList.remove('active'), 2700);
+}
+
+function initGameUI(){
+  applyLang();
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('game-container').style.display='block';
+  renderMap(); updateHUD(); mascotShow(); resetMascotIdleTimer();
+  setTimeout(()=>prefetchAhead(game.level - 1, 3), 1500);
+  setTimeout(()=>{centerCamera(true);window.hideSplash();if(!('ontouchstart' in window)){const h=document.getElementById('scroll-hint');h.classList.add('visible');setTimeout(()=>h.classList.remove('visible'),4000);}},200);
+}
+
+function checkLivesRegen(){
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  if(isGala){ document.getElementById('stat-timer').style.display='none'; updateHUD(); return; }
+  if(game.lives<5&&game.lastDeathTime){const e=Date.now()-game.lastDeathTime,f=5*60*1000;if(e>=f){game.lives++;game.lastDeathTime=game.lives<5?(game.lastDeathTime+f):null;saveProgress();updateHUD();}}const ti=document.getElementById('stat-timer');if(game.lives<5&&game.lastDeathTime){ti.style.display='inline';const r=5*60*1000-(Date.now()-game.lastDeathTime);if(r>0){const m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);ti.innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}}else ti.style.display='none';}
+setInterval(checkLivesRegen,1000);
+
+const TOTAL=60,SPACING=180;
+function renderMap(){const nc=document.getElementById('nodes-container'),sv=document.getElementById('path-svg');nc.innerHTML='';sv.innerHTML='';const W=document.getElementById('map-scroll').offsetWidth;let d='';for(let i=1;i<=TOTAL;i++){const y=200+(i-1)*SPACING,x=(W/2)+Math.sin(i*.7)*(W*.25);d+=(i===1?'M':'L')+` ${x} ${y}`;const n=document.createElement('div');if(i<game.level){n.className='level-node completed';n.innerHTML=`<span class="lnlabel">${i}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>`;if(i%10===0)n.innerHTML+=`<span style="position:absolute;top:-10px;right:-8px;font-size:13px">🏅</span>`;}else if(i===game.level){n.className='level-node current';n.innerHTML=`<span class="lnlabel">Nv.${i}</span>⭐`;}else{n.className='level-node locked';n.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" opacity=".4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;}n.style.left=`${x-32}px`;n.style.top=`${y-32}px`;const ci=i;n.onclick=()=>{if(ci<=game.level&&!game.isProcessing){game.playingLevel=ci;startChallenge();}};nc.appendChild(n);}const p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("d",d);p.setAttribute("stroke","rgba(255,255,255,0.1)");p.setAttribute("stroke-width","8");p.setAttribute("stroke-linecap","round");p.setAttribute("fill","none");sv.appendChild(p);}
+
+async function startChallenge(){
+  if(game.lives<=0){showError(t("no_lives"));return;}
+  game.correctCount=0; updateProgressUI(); game.isProcessing=true;
+  const badge=document.getElementById('replay-badge'),num=document.getElementById('replay-num'),lbl=document.getElementById('clabel');
+  if(game.playingLevel<game.level){ badge.style.display='block'; num.innerText=game.playingLevel; lbl.style.display='none'; }
+  else { badge.style.display='none'; lbl.style.display='block'; }
+  document.getElementById('modal-challenge').classList.add('active');
+  const aiLoad = document.getElementById('ai-loading');
+  let questions = getCachedQuestions(game.playingLevel);
+  if(questions){
+    aiLoad.classList.remove('active');
+    game.levelQuestions = [...questions].sort(()=>Math.random()-.5);
+    game.qIndex = 0;
+    game.isProcessing = false;
+    showNextQuestion();
+    prefetchAhead(game.playingLevel, 2);
+  } else {
+    const fallback = [...FALLBACK_QUESTIONS].sort(()=>Math.random()-.5);
+    game.levelQuestions = fallback;
+    game.qIndex = 0;
+    aiLoad.classList.remove('active');
+    game.isProcessing = false;
+    showNextQuestion();
+    const sub = document.getElementById('source-badge');
+    if(sub) sub.innerText = currentLang==='en' ? '⏳ Loading fresh questions...' : '⏳ Cargando preguntas personalizadas...';
+    generateQuestionsWithClaude(game.playingLevel)
+      .then(qs => {
+        setCachedQuestions(game.playingLevel, qs);
+        if(!game.isProcessing){
+          const remaining = game.targetCorrect - game.correctCount;
+          if(remaining === game.targetCorrect){
+            game.levelQuestions = [...qs].sort(()=>Math.random()-.5);
+            game.qIndex = 0;
+            showNextQuestion();
+            if(sub) sub.innerText = '';
+          } else {
+            if(sub) sub.innerText = currentLang==='en' ? '✅ Fresh questions ready for next visit' : '✅ Preguntas listas para la próxima visita';
+            setTimeout(()=>{ if(sub) sub.innerText=''; }, 3000);
+          }
+        }
+      })
+      .catch(err => {
+        setCachedQuestions(game.playingLevel, fallback);
+        if(sub) sub.innerText = '';
+      });
+    prefetchAhead(game.playingLevel, 2);
+  }
+}
+
+function showNextQuestion(){if(game.qIndex>=game.levelQuestions.length){game.levelQuestions=[...game.levelQuestions].sort(()=>Math.random()-.5);game.qIndex=0;}game.currentQ=game.levelQuestions[game.qIndex++];const area=document.getElementById('question-area');area.style.opacity='0';area.style.transform='translateY(8px)';requestAnimationFrame(()=>{document.getElementById('txt-q').innerText=game.currentQ.q;document.getElementById('source-badge').innerText=game.currentQ.source?`📚 Fuente: ${game.currentQ.source}`:'';const tb=document.getElementById('q-type-badge');tb.style.display=game.currentQ.type==='tf'?'block':'none';renderOptions();area.style.transition='opacity .25s ease, transform .25s ease';area.style.opacity='1';area.style.transform='translateY(0)';updateProgressUI();});}
+
+function renderOptions(){const c=document.getElementById('opts-container');c.innerHTML='';const isTF=game.currentQ.type==='tf';const opts=isTF?[...game.currentQ.o]:[...game.currentQ.o].sort(()=>Math.random()-.5);opts.forEach((opt,idx)=>{const b=document.createElement('button');b.className=`opt${isTF?' vf':''}`;b.style.animationDelay=`${idx*60}ms`;b.textContent=isTF?(opt==='Verdadero'?t('tf_true'):t('tf_false')):opt;b.onclick=()=>{if(game.isProcessing)return;opt===game.currentQ.a?handleCorrect(b):handleWrong(b);};c.appendChild(b);});}
+
+function handleCorrect(btn){btn.classList.add('correct','cglow');game.correctCount++;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){game.level++;playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/10)*10;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%10===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}}
+
+function handleWrong(btn){
+  btn.classList.add('wrong');game.isProcessing=true;
+  mascotSetState('sad', 700); resetMascotIdleTimer();
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  if(!isGala) game.lives--;if(!game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});document.getElementById('feedback-text').innerText=game.currentQ.j;document.getElementById('feedback-float').classList.add('active');const fill=document.getElementById('cfill');fill.style.transition='none';fill.style.width='100%';requestAnimationFrame(()=>{fill.style.transition='width 2.5s linear';fill.style.width='0%';});setTimeout(()=>{document.getElementById('feedback-float').classList.remove('active');card.classList.remove('shake');game.isProcessing=false;if(game.lives<=0){document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;updateProgressUI();showError(t("no_lives"));renderMap();centerCamera();}else{showNextQuestion();}},2500);}
+
+function showReward(milestone){
+  const idx=Math.min(Math.floor(milestone/10)-1,REWARDS.length-1),r=REWARDS[idx];
+  document.getElementById('r-title').innerText=r.title;
+  document.getElementById('r-msg').innerText=r.msg;
+  document.getElementById('r-badge').innerText=r.badge;
+  const card=document.getElementById('rcard');
+  card.querySelectorAll('.confetti-dot').forEach(d=>d.remove());
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  const cols=isGala?['#fbbf24','#f59e0b','#fde68a','#d97706','#a855f7','white']:['#38bdf8','#f59e0b','#22c55e','#f472b6','#a78bfa','#fb923c'];
+  for(let i=0;i<28;i++){const d=document.createElement('div');d.className='confetti-dot';d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*1}s;width:${4+Math.random()*7}px;height:${4+Math.random()*7}px`;card.appendChild(d);}
+  mascotSetState('win', 2000); resetMascotIdleTimer();
+  document.getElementById('modal-reward').classList.add('active');
+}
+document.getElementById('btn-reward-close').onclick=()=>document.getElementById('modal-reward').classList.remove('active');
+
+function getWeekStart(){const n=new Date(),d=n.getUTCDay(),df=d===0?6:d-1,m=new Date(n);m.setUTCDate(n.getUTCDate()-df);m.setUTCHours(0,0,0,0);return m.getTime();}
+function getWeekCountdown(){const n=new Date(),d=n.getUTCDay(),df=d===0?0:7-d,nx=new Date(n);nx.setUTCDate(n.getUTCDate()+df+1);nx.setUTCHours(0,0,0,0);const ms=nx-n,dd=Math.floor(ms/86400000),h=Math.floor((ms%86400000)/3600000),mm=Math.floor((ms%3600000)/60000);return`Reinicia en ${dd}d ${h}h ${mm}m`;}
+function getWeekLabel(){const ws=new Date(getWeekStart()),o={day:'numeric',month:'long'};return`${ws.toLocaleDateString('es-ES',o)} – ${new Date(ws.getTime()+6*86400000).toLocaleDateString('es-ES',o)}`;}
+function buildRankItem(p,idx,isMe,maxL,showL=false){const medals=['🥇','🥈','🥉'];const medal=medals[idx]!=null?medals[idx]:`<span style="font-size:.8rem;color:#94a3b8;font-weight:700">${idx+1}</span>`;const lb=(showL&&idx<5)?'<span class="lbadge">⚡ Liga</span>':'';const item=document.createElement('div');item.className=`ritem${isMe?' me':''}`;item.innerHTML=`<div style="font-size:1.4rem;width:32px;text-align:center">${medal}</div><div style="font-size:1.3rem;margin-right:6px;flex-shrink:0">${p.avatar||'🧑'}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;color:#1e293b;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">${p.displayName||'Jugador'}${isMe?' <span style="color:#0ea5e9">(Tú)</span>':''}${lb}</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${p.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:${Math.round((p.level/maxL)*100)}%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${p.stars||0} pts</span></div>`;return item;}
+function buildErrFallback(el){el.innerHTML=`<div style="text-align:center;padding:1rem"><p style="color:#94a3b8;font-size:.85rem;margin-bottom:.5rem">Sin conexión o sin datos.</p><div class="ritem me"><div style="font-size:1.4rem;width:32px;text-align:center">🏆</div><div style="font-size:1.3rem;margin-right:6px">${selectedAvatar}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="font-weight:700;color:#1e293b;font-size:.85rem">Tú (local)</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${game.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:100%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${game.stars} pts</span></div></div></div>`;}
+window.switchRankTab=function(tab){document.getElementById('tab-global').classList.toggle('active',tab==='global');document.getElementById('tab-liga').classList.toggle('active',tab==='liga');document.getElementById('panel-global').style.display=tab==='global'?'':'none';document.getElementById('panel-liga').style.display=tab==='liga'?'':'none';if(tab==='liga')loadLigaData();};
+async function loadGlobalRanking(){const list=document.getElementById('ranking-list');list.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';try{let pl=[];try{const q=query(collection(db,`fatlin_ranking_${APP_ID}`),orderBy('level','desc'),limit(25));const s=await getDocs(q);s.forEach(d=>pl.push({id:d.id,...d.data()}));}catch(e){const s=await getDocs(collection(db,`fatlin_ranking_${APP_ID}`));s.forEach(d=>pl.push({id:d.id,...d.data()}));pl.sort((a,b)=>(b.level||0)-(a.level||0)||(b.stars||0)-(a.stars||0));pl=pl.slice(0,25);}if(!pl.length){list.innerHTML='<p style="text-align:center;color:#94a3b8;padding:2rem;font-size:.85rem">¡Sé el primero!</p>';return;}list.innerHTML='';const ml=Math.max(...pl.map(p=>p.level||1));pl.forEach((p,i)=>{const isMe=game.user&&p.id===game.user.uid;if(i===4&&pl.length>5){const d=document.createElement('div');d.className='rdiv';list.appendChild(d);}list.appendChild(buildRankItem(p,i,isMe,ml,true));});const inL=pl.some(p=>game.user&&p.id===game.user.uid);if(!inL&&game.user){const sep=document.createElement('p');sep.style.cssText='font-size:10px;color:#94a3b8;text-align:center;margin:.5rem 0;font-weight:700;text-transform:uppercase;letter-spacing:.1em';sep.innerText='— Tu posición —';list.appendChild(sep);list.appendChild(buildRankItem({id:game.user.uid,displayName:game.user.displayName||game.user.email?.split('@')[0]||'Tú',level:game.level,stars:game.stars,avatar:selectedAvatar},999,true,ml,false));}}catch(e){buildErrFallback(list);}}
+async function loadLigaData(){document.getElementById('liga-week-lbl').innerText=getWeekLabel();document.getElementById('liga-cnt').innerText=getWeekCountdown();const t5=document.getElementById('liga-top5'),fu=document.getElementById('liga-full');t5.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';fu.innerHTML='';try{const ws=getWeekStart();let pl=[];try{const q=query(collection(db,`fatlin_weekly_${APP_ID}`),orderBy('stars','desc'),limit(50));const s=await getDocs(q);s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}catch(e){const s=await getDocs(collection(db,`fatlin_weekly_${APP_ID}`));s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}pl.sort((a,b)=>(b.stars||0)-(a.stars||0)||(b.level||0)-(a.level||0));pl=pl.slice(0,25);if(!pl.length){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Nadie ha jugado.</p>';fu.innerHTML='';return;}t5.innerHTML='';const medals=['🥇','🥈','🥉','🏅','🏅'];pl.slice(0,5).forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1)';item.innerHTML=`<span style="font-size:1.3rem;width:28px;text-align:center">${medals[i]}</span><span style="font-size:1.2rem">${p.avatar||'🧑'}</span><div style="flex:1;min-width:0"><p style="color:white;font-weight:700;font-size:.85rem;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.displayName||'Jugador'}${isMe?' (Tú)':''}</p><p style="color:rgba(255,255,255,.6);font-size:.7rem;margin:0">⭐ ${p.stars||0} pts · Nv.${p.level}</p></div>`;t5.appendChild(item);});fu.innerHTML='';const ms=Math.max(...pl.map(p=>p.stars||1));pl.forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;fu.appendChild(buildRankItem({id:p.uid,displayName:p.displayName,level:p.level,stars:p.stars,avatar:p.avatar},i,isMe,ms,false));});}catch(e){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Error.</p>';buildErrFallback(fu);}}
+setInterval(()=>{const el=document.getElementById('liga-cnt');if(el&&document.getElementById('panel-liga').style.display!=='none')el.innerText=getWeekCountdown();},60000);
+document.getElementById('btn-ranking').onclick=async()=>{document.getElementById('modal-ranking').classList.add('active');document.getElementById('tab-global').classList.add('active');document.getElementById('tab-liga').classList.remove('active');document.getElementById('panel-global').style.display='';document.getElementById('panel-liga').style.display='none';await loadGlobalRanking();};
+document.getElementById('btn-close-ranking').onclick=()=>document.getElementById('modal-ranking').classList.remove('active');
+
+function openAccountModal(){document.getElementById('acc-name').innerText=game.user?.displayName||game.user?.email?.split('@')[0]||'Invitado';document.getElementById('acc-email').innerText=game.user?.email||(game.user?.isAnonymous?'Sesión anónima':'—');document.getElementById('acc-level').innerText=game.level;document.getElementById('acc-stars').innerText=game.stars;document.getElementById('acc-badges').innerText=game.badges;document.getElementById('acc-av').innerText=selectedAvatar;document.getElementById('modal-account').classList.add('active');}
+document.getElementById('btn-account').onclick=openAccountModal;
+document.getElementById('btn-close-account').onclick=()=>document.getElementById('modal-account').classList.remove('active');
+document.getElementById('btn-chgav').onclick=()=>{document.getElementById('modal-account').classList.remove('active');openAvatarPicker();};
+document.getElementById('btn-logout').onclick=async()=>{if(confirm(t("confirm_logout"))){try{await signOut(auth);}catch(e){}game.user=null;document.getElementById('modal-account').classList.remove('active');document.getElementById('game-container').style.display='none';showAuthUI();}};
+document.getElementById('btn-switch-acc').onclick=async()=>{if(confirm(t("confirm_switch"))){try{await signOut(auth);}catch(e){}game.user=null;showAuthUI();}};
+document.getElementById('btn-new-acc').onclick=()=>{try{signOut(auth).catch(()=>{});}catch(e){}game.user=null;showAuthUI('email');};
+
+function openAvatarPicker(){const g=document.getElementById('av-grid');g.innerHTML='';tempAvatar=selectedAvatar;AVATARS.forEach(av=>{const b=document.createElement('div');b.className=`avopt${av===selectedAvatar?' selected':''}`;b.innerText=av;b.onclick=()=>{document.querySelectorAll('.avopt').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');tempAvatar=av;};g.appendChild(b);});document.getElementById('modal-avatar').classList.add('active');}
+document.getElementById('hud-avatar').onclick=openAvatarPicker;
+document.getElementById('btn-confirm-av').onclick=()=>{selectedAvatar=tempAvatar;document.getElementById('hud-avatar').innerText=selectedAvatar;document.getElementById('modal-avatar').classList.remove('active');saveProgress();updateHUD();};
+
+function updateHUD(){
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  document.getElementById('stat-stars').innerText = game.stars;
+  document.getElementById('stat-lives').innerText = isGala ? '∞' : game.lives;
+  document.getElementById('stat-level').innerText = `Nv.${game.level}`;
+  document.getElementById('stat-user').innerText = game.user?.displayName||game.user?.email?.split('@')[0]||"Invitado";
+  document.getElementById('hud-avatar').innerText = selectedAvatar;
+  const shEl = document.getElementById('stat-shields');
+  shEl.classList.toggle('visible', game.shields > 0);
+  document.getElementById('stat-shields-count').innerText = game.shields;
+  const stEl = document.getElementById('stat-streak');
+  stEl.classList.toggle('visible', game.streakDays > 1);
+  document.getElementById('stat-streak-count').innerText = `${game.streakDays}d`;
+  document.body.classList.toggle('gala-mode', !!isGala);
+  if(isGala){
+    const rem = game.infiniteLivesUntil - Date.now();
+    const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000);
+    document.getElementById('gala-timer').innerText = `${h}h${m}m`;
+  }
+  updateGalaStars(!!isGala);
+  updateProgressUI();
+}
+
+function updateGalaStars(show){
+  const el = document.getElementById('gala-stars');
+  if(show && !el.childElementCount){
+    for(let i=0;i<60;i++){
+      const s=document.createElement('div');s.className='gala-star';
+      const sz=1+Math.random()*2;
+      s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+      el.appendChild(s);
+    }
+  } else if(!show){ el.innerHTML=''; }
+}
+
+const MAP=document.getElementById('map-scroll');
+function getMapY(){const m=MAP.style.transform.match(/translateY\((-?\d+\.?\d*)px\)/);return m?parseFloat(m[1]):0;}
+function clampY(y){return Math.min(window.innerHeight/2,Math.max(-(12000-window.innerHeight+200),y));}
+function centerCamera(instant=false){const ty=-((game.level-1)*SPACING)+(window.innerHeight/2)-200;if(instant){MAP.style.transition='none';MAP.style.transform=`translateY(${ty}px)`;setTimeout(()=>{MAP.style.transition='';},50);}else MAP.style.transform=`translateY(${ty}px)`;}
+document.getElementById('btn-gocur').onclick=()=>centerCamera();
+document.getElementById('game-container').addEventListener('wheel',(e)=>{e.preventDefault();const dy=e.deltaY*(e.deltaMode===1?30:1);MAP.style.transition='transform 0.15s ease-out';MAP.style.transform=`translateY(${clampY(getMapY()-dy)}px)`;},{passive:false});
+let tsy=0,moy=0,lty=0,vel=0,raf=null;
+MAP.addEventListener('touchstart',(e)=>{if(raf){cancelAnimationFrame(raf);raf=null;}tsy=e.touches[0].clientY;lty=tsy;moy=getMapY();MAP.style.transition='none';vel=0;},{passive:true});
+MAP.addEventListener('touchmove',(e)=>{const dy=e.touches[0].clientY-tsy;vel=e.touches[0].clientY-lty;lty=e.touches[0].clientY;MAP.style.transform=`translateY(${clampY(moy+dy)}px)`;},{passive:true});
+MAP.addEventListener('touchend',()=>{let cy=getMapY(),v=vel*1.5;function in_(){v*=.91;if(Math.abs(v)<.4){MAP.style.transition='';return;}cy=clampY(cy+v);MAP.style.transform=`translateY(${cy}px)`;raf=requestAnimationFrame(in_);}MAP.style.transition='none';raf=requestAnimationFrame(in_);});
+
+function showAuthUI(mode='main'){document.getElementById('game-container').style.display='none';document.getElementById('auth-screen').style.display='flex';document.getElementById('auth-email').style.display=mode==='email'?'block':'none';document.getElementById('auth-main').style.display=mode==='email'?'none':'block';const se=localStorage.getItem('fatlin_rem_email'),sp=localStorage.getItem('fatlin_rem_pass');if(se){document.getElementById('inp-email').value=se;document.getElementById('inp-pass').value=sp||'';document.getElementById('chk-rem').checked=true;}else{document.getElementById('inp-email').value='';document.getElementById('inp-pass').value='';document.getElementById('chk-rem').checked=false;}}
+let eyeVisible=false;
+document.getElementById('btn-eye').onclick=()=>{eyeVisible=!eyeVisible;const i=document.getElementById('inp-pass');const ic=document.getElementById('eye-ico');i.type=eyeVisible?'text':'password';ic.innerHTML=eyeVisible?`<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`:`<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;};
+document.getElementById('btn-show-email').onclick=()=>{document.getElementById('auth-main').style.display='none';document.getElementById('auth-email').style.display='block';};
+document.getElementById('btn-back').onclick=()=>{document.getElementById('auth-email').style.display='none';document.getElementById('auth-main').style.display='block';};
+document.getElementById('btn-google').onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){showError("Error al iniciar sesión con Google");}};
+document.getElementById('btn-guest').onclick=async()=>{try{await signInAnonymously(auth);}catch(e){showError("Error al iniciar como invitado");}};
+document.getElementById('btn-login').onclick=async()=>{const email=document.getElementById('inp-email').value.trim(),pass=document.getElementById('inp-pass').value,rem=document.getElementById('chk-rem').checked;if(!email||pass.length<6){showError("Correo inválido o contraseña < 6 chars.");return;}if(rem){localStorage.setItem('fatlin_rem_email',email);localStorage.setItem('fatlin_rem_pass',pass);}else{localStorage.removeItem('fatlin_rem_email');localStorage.removeItem('fatlin_rem_pass');}try{await signInWithEmailAndPassword(auth,email,pass);}catch(e){try{await createUserWithEmailAndPassword(auth,email,pass);}catch(err){showError("Error al registrar o iniciar sesión.");}}};
+
+function getTodayStart(){const n=new Date();n.setHours(0,0,0,0);return n.getTime();}
+function checkDailyStreak(){
+  const today = getTodayStart();
+  const yesterday = today - 86400000;
+  const last = game.lastPlayDate || 0;
+  if(last === today){ return; }
+  else if(last === yesterday){ game.streakDays++; game.lastPlayDate = today; if(game.streakDays > 1) showToast(t('streak_active',{N:game.streakDays}),'#ea580c'); }
+  else if(last < yesterday && last > 0){
+    if(game.shields > 0){ game.shields--; game.streakDays = Math.max(1, game.streakDays); game.lastPlayDate = today; showToast(t('streak_saved',{N:game.shields}),'#7c3aed'); saveProgress(); }
+    else { game.streakDays = 1; game.lastPlayDate = today; if(last > 0) showToast(t('streak_lost'),'#dc2626'); }
+  } else { game.streakDays = 1; game.lastPlayDate = today; }
+  saveProgress(); updateHUD();
+}
+
+function showToast(msg, color='#0369a1'){
+  const el = document.getElementById('error-msg');
+  el.style.background = color;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(()=>el.style.display='none', 3500);
+}
+
+function checkMilestones(newLevel){
+  const justCompleted = newLevel - 1;
+  if(justCompleted > 0 && justCompleted % 5 === 0){
+    setTimeout(()=>triggerLevel5Blast(justCompleted), justCompleted % 10 === 0 ? 300 : 0);
+  }
+  if(newLevel > 1 && (newLevel-1) % 50 === 0){
+    const diplomaLevel = newLevel - 1;
+    game.diplomasEarned++;
+    saveProgress();
+    setTimeout(()=>generateDiploma(diplomaLevel), 1800);
+  }
+}
+
+function generateDiploma(completedLevel){
+  const name = game.user?.displayName || game.user?.email?.split('@')[0] || 'Estudiante';
+  const date = new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'});
+  const sealEmojis = {50:'🥇', 100:'💎', 150:'🚀', 200:'👑'};
+  const seal = sealEmojis[completedLevel] || '🏅';
+  document.getElementById('dip-name').innerText = name;
+  document.getElementById('dip-level').innerText = t('diploma_level').replace('{N}', completedLevel);
+  document.getElementById('dip-date').innerText = `${t('diploma_issued')} ${date} · Fatlin AI v1`;
+  document.querySelector('.diploma-seal').innerText = seal;
+  document.getElementById('modal-diploma').classList.add('active');
+}
+
+document.getElementById('btn-dip-close').onclick = () => document.getElementById('modal-diploma').classList.remove('active');
+document.getElementById('btn-dip-print').onclick = () => {
+  const el = document.getElementById('diploma-content');
+  const w = window.open('','_blank','width=600,height=700');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Diploma Fatlin AI</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head><body style="font-family:Inter,sans-serif;background:#fffbeb;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">${el.outerHTML}<script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+  w.document.close();
+};
+
+document.getElementById('btn-shop').onclick = () => {
+  document.getElementById('shop-stars').innerText = game.stars;
+  document.getElementById('modal-shop').classList.add('active');
+};
+document.getElementById('btn-close-shop').onclick = () => document.getElementById('modal-shop').classList.remove('active');
+
+window.buyShields = function(qty, cost){
+  if(game.stars < cost){ showToast(`Necesitas ${cost} ⭐ (tienes ${game.stars})`,'#dc2626'); return; }
+  game.stars -= cost; game.shields += qty;
+  saveProgress(); updateHUD();
+  document.getElementById('shop-stars').innerText = game.stars;
+  showToast(`🛡️ ${qty} escudo${qty>1?'s':''} comprado${qty>1?'s':''}. Total: ${game.shields}`,'#7c3aed');
+};
+
+window.buyGala = function(hours, cost){
+  if(game.stars < cost){ showToast(`Necesitas ${cost} ⭐ (tienes ${game.stars})`,'#dc2626'); return; }
+  game.stars -= cost;
+  const now = Date.now();
+  const base = (game.infiniteLivesUntil && game.infiniteLivesUntil > now) ? game.infiniteLivesUntil : now;
+  game.infiniteLivesUntil = base + hours * 3600000;
+  game.lives = 5;
+  saveProgress(); updateHUD();
+  document.getElementById('shop-stars').innerText = game.stars;
+  document.getElementById('modal-shop').classList.remove('active');
+  showToast(t('gala_activated',{N:hours}),'#d97706');
+  mascotSetState('gala');
+};
+
+setInterval(()=>{
+  if(game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now()) updateHUD();
+  else if(game.infiniteLivesUntil && game.infiniteLivesUntil <= Date.now()){
+    game.infiniteLivesUntil = null;
+    game.lives = Math.min(game.lives, 5);
+    saveProgress(); updateHUD();
+    mascotSetState('cheer', 800);
+    showToast(t('gala_ended'),'#0369a1');
+  }
+}, 60000);
+
+function isExpertLevel(level){ return level >= 40 && level <= 50; }
+
+window.onresize=()=>{if(game.user){renderMap();centerCamera();}};
+</script>
 </body>
 </html>
-
