@@ -257,6 +257,49 @@
         .shield-9  { --liga-glow:#f687b3; }
         .shield-10 { --liga-glow:#ffd700; }
 
+        /* ── ONBOARDING ─────────────────────────────────────────── */
+        #modal-onboarding { position:fixed;inset:0;background:rgba(5,20,45,.97);backdrop-filter:blur(16px);z-index:7000;display:none;align-items:center;justify-content:center;padding:20px; }
+        #modal-onboarding.active { display:flex;animation:fadeIn .3s ease; }
+        .ob-card { background:linear-gradient(160deg,#0c2a4a,#0f3460);border-radius:2rem;padding:2rem 1.75rem;max-width:380px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative;overflow:hidden; }
+        .ob-card::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% -30%,rgba(99,179,237,.12) 0%,transparent 70%);pointer-events:none; }
+        .ob-logo { font-size:4rem;margin-bottom:.5rem;animation:shieldFloat 3s ease-in-out infinite; }
+        .ob-title { font-size:1.25rem;font-weight:900;color:#e2e8f0;margin:.5rem 0 .25rem;line-height:1.25; }
+        .ob-subtitle { font-size:.82rem;color:rgba(186,230,253,.75);margin-bottom:1.25rem;line-height:1.5; }
+        .ob-body { font-size:.83rem;color:rgba(226,232,240,.85);line-height:1.6;margin-bottom:1.5rem; }
+        .ob-dots { display:flex;justify-content:center;gap:6px;margin-bottom:1.25rem; }
+        .ob-dot { width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .3s; }
+        .ob-dot.active { background:#63b3ed;width:24px;border-radius:4px; }
+        .ob-btn { width:100%;padding:14px;border-radius:1rem;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1rem;background:linear-gradient(135deg,#0ea5e9,#6366f1);color:white;box-shadow:0 4px 20px rgba(14,165,233,.4);transition:transform .15s,box-shadow .15s; }
+        .ob-btn:hover { transform:translateY(-2px);box-shadow:0 8px 28px rgba(14,165,233,.5); }
+        .ob-btn:active { transform:translateY(0); }
+        .ob-skip { background:none;border:none;color:rgba(255,255,255,.3);font-size:.72rem;cursor:pointer;margin-top:.75rem;font-family:inherit;text-decoration:underline; }
+        .ob-liga-table { width:100%;border-collapse:collapse;font-size:.72rem;margin:.75rem 0 1rem; }
+        .ob-liga-table th { color:rgba(186,230,253,.6);font-weight:700;text-align:left;padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.08); }
+        .ob-liga-table td { color:rgba(226,232,240,.8);padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.04); }
+        .ob-liga-table tr:last-child td { border-bottom:none; }
+        .ob-highlight { background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);border-radius:.75rem;padding:.75rem;margin:.75rem 0;font-size:.8rem;color:#34d399; }
+
+        /* ── TIP DE LIGA (globo mascot) ──────────────────────────── */
+        #liga-tip-bubble { position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0c2a4a,#1e3a5f);border:1px solid rgba(99,179,237,.4);border-radius:1.25rem;padding:.85rem 1.1rem;max-width:320px;width:90%;z-index:2500;display:none;box-shadow:0 8px 30px rgba(0,0,0,.4);animation:slideUp .35s ease; }
+        #liga-tip-bubble.visible { display:block; }
+        .tip-header { display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem; }
+        .tip-icon { font-size:1.2rem; }
+        .tip-label { font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#63b3ed; }
+        .tip-text { font-size:.8rem;color:rgba(226,232,240,.9);line-height:1.5; }
+        .tip-close { position:absolute;top:.5rem;right:.65rem;background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:1rem;padding:2px; }
+
+        /* ── MODAL ASCENSO DE LIGA ───────────────────────────────── */
+        #modal-liga-up { position:fixed;inset:0;background:rgba(5,20,45,.95);backdrop-filter:blur(16px);z-index:6500;display:none;align-items:center;justify-content:center;padding:20px; }
+        #modal-liga-up.active { display:flex;animation:fadeIn .3s ease; }
+        .ligaup-card { background:linear-gradient(160deg,#0c2a4a,#0f3460);border-radius:2rem;padding:2rem 1.75rem;max-width:360px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative;overflow:hidden; }
+        .ligaup-shield { font-size:4rem;filter:drop-shadow(0 0 20px var(--liga-glow,#63b3ed));animation:shieldFloat 2s ease-in-out infinite;display:block;margin:0 auto .75rem; }
+        .ligaup-badge { display:inline-block;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.4);color:#34d399;font-size:.72rem;font-weight:800;padding:4px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem; }
+        .ligaup-name { font-size:1.3rem;font-weight:900;color:#fff;margin-bottom:.25rem; }
+        .ligaup-sub { font-size:.8rem;color:rgba(186,230,253,.6);font-style:italic;margin-bottom:1rem; }
+        .ligaup-rule { background:rgba(255,255,255,.05);border-radius:.75rem;padding:.65rem .9rem;font-size:.78rem;color:rgba(226,232,240,.8);margin-bottom:.75rem;text-align:left;line-height:1.5; }
+        .ligaup-tip { background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:.75rem;padding:.65rem .9rem;font-size:.78rem;color:#fbbf24;margin-bottom:1.25rem;text-align:left;line-height:1.5; }
+        .ligaup-btn { width:100%;padding:13px;border-radius:1rem;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:.95rem;background:linear-gradient(135deg,#34d399,#0ea5e9);color:white;box-shadow:0 4px 20px rgba(52,211,153,.3); }
+
         /* ACCOUNT */
         #modal-account { position:fixed;inset:0;background:rgba(8,47,73,.95);backdrop-filter:blur(12px);z-index:3500;display:none;align-items:center;justify-content:center;padding:16px; }
         #modal-account.active { display:flex;animation:fadeIn .2s ease; }
@@ -758,6 +801,74 @@
         </div>
     </div>
 </div>
+
+<!-- ── MODAL ONBOARDING (nuevos jugadores) ───────────────────── -->
+<div id="modal-onboarding">
+  <div class="ob-card">
+    <div id="ob-screen-1">
+      <div class="ob-logo">🤖</div>
+      <div class="ob-title">¡Bienvenido a tu evolución como Tutor!</div>
+      <div class="ob-subtitle">Fatlin AI · Metodología PACIE<br>Avalado por Planeta FATLA y ASOMTV</div>
+      <div class="ob-body">Has ingresado al ecosistema de <strong style="color:#63b3ed">Fatlin AI</strong>. Aquí, tu conocimiento sobre la Metodología PACIE se pondrá a prueba en un entorno de alto rendimiento.<br><br>¿Estás listo para alcanzar la <strong style="color:#34d399">excelencia digital</strong>?</div>
+      <div class="ob-dots"><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+      <button class="ob-btn" onclick="obNext(2)">¡Comenzar mi evolución! →</button>
+    </div>
+    <div id="ob-screen-2" style="display:none">
+      <div class="ob-logo">❤️</div>
+      <div class="ob-title">El Camino del Experto es Preciso</div>
+      <div class="ob-subtitle">Vidas y Precisión</div>
+      <div class="ob-body">Tienes <strong style="color:#f87171">5 Vidas</strong> para avanzar. En Fatlin AI premiamos la seguridad:<br><br>Si cometes <strong style="color:#fbbf24">2 errores consecutivos</strong>, el sistema reiniciará tu nivel actual para asegurar que el concepto quede grabado en tu ADN pedagógico.<br><br><em style="color:rgba(186,230,253,.7)">¡El error es aprendizaje, pero la persistencia es maestría!</em></div>
+      <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div></div>
+      <button class="ob-btn" onclick="obNext(3)">Entendido, ¡adelante! →</button>
+    </div>
+    <div id="ob-screen-3" style="display:none">
+      <div class="ob-logo">🏆</div>
+      <div class="ob-title">Escala hasta el Círculo de Eminencias</div>
+      <div class="ob-subtitle">Ranking y las 10 Ligas Exponenciales</div>
+      <div class="ob-body" style="text-align:left">Cada acierto suma puntos. Mantente en el <strong style="color:#34d399">Top de Corte</strong> para ascender cada semana:</div>
+      <table class="ob-liga-table">
+        <tr><th>#</th><th>Liga</th><th>Ascenso</th></tr>
+        <tr><td>1</td><td>🌱 Aspirantes</td><td>Top 20</td></tr>
+        <tr><td>2</td><td>📚 Tutores</td><td>Top 15</td></tr>
+        <tr><td>3</td><td>🎯 Especialistas</td><td>Top 12</td></tr>
+        <tr><td>4</td><td>🏗️ Arquitectos</td><td>Top 10</td></tr>
+        <tr><td>5</td><td>🎓 Mentores</td><td>Top 8</td></tr>
+        <tr><td>6</td><td>⚡ Maestros</td><td>Top 6</td></tr>
+        <tr><td>7</td><td>🔬 Tecnopedagogos</td><td>Top 5</td></tr>
+        <tr><td>8</td><td>🌍 Consultores OMVT</td><td>Top 4</td></tr>
+        <tr><td>9</td><td>🧠 Sabios FATLA</td><td>Top 3</td></tr>
+        <tr><td>10</td><td>👑 Eminencias</td><td>Top 3</td></tr>
+      </table>
+      <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div></div>
+      <button class="ob-btn" onclick="obFinish()">¡Que comience la batalla! ⚔️</button>
+      <button class="ob-skip" onclick="obFinish()">Omitir introducción</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL ASCENSO DE LIGA ──────────────────────────────────── -->
+<div id="modal-liga-up">
+  <div class="ligaup-card">
+    <span class="ligaup-badge">⬆ ¡Ascendiste de Liga!</span>
+    <div id="lu-shield" class="ligaup-shield">🛡️</div>
+    <div id="lu-name" class="ligaup-name">Liga 2</div>
+    <div id="lu-sub" class="ligaup-sub">Subtítulo</div>
+    <div class="ligaup-rule" id="lu-rule">📋 Reglas de la liga</div>
+    <div class="ligaup-tip" id="lu-tip">💡 Consejo de Fatlin AI</div>
+    <button class="ligaup-btn" onclick="closeLigaUp()">¡Acepto el desafío! 🚀</button>
+  </div>
+</div>
+
+<!-- ── TIP BUBBLE (globo de texto del mascot) ─────────────────── -->
+<div id="liga-tip-bubble">
+  <button class="tip-close" onclick="document.getElementById('liga-tip-bubble').classList.remove('visible')">✕</button>
+  <div class="tip-header">
+    <span class="tip-icon">🤖</span>
+    <span class="tip-label">Tip de Fatlin AI</span>
+  </div>
+  <div class="tip-text" id="liga-tip-text">Texto del tip</div>
+</div>
+
 
 <!-- GAME -->
 <div id="game-container">
@@ -1284,7 +1395,7 @@ const LANG = {
     gala_24_desc:    'Vidas infinitas + fondo estelar',
     gala_72_name:    'Modo Gala 72h',
     gala_72_desc:    '¡El mejor valor!',
-    no_lives:        'No tienes vidas. Espera 10 min por vida.',
+    no_lives:        'No tienes vidas. Espera 3 horas por vida.',
     no_stars_need:   'Necesitas {N} ⭐ (tienes {M})',
     shield_bought:   '🛡️ {N} escudo{S} comprado{S}. Total: {T}',
     gala_activated:  '✨ ¡Modo Gala activado por {N}h! Vidas infinitas 🚀',
@@ -1379,7 +1490,7 @@ const LANG = {
     gala_24_desc:    'Infinite lives + starry background',
     gala_72_name:    'Gala Mode 72h',
     gala_72_desc:    'Best value!',
-    no_lives:        'No lives left. Wait 10 min per life.',
+    no_lives:        'No lives left. Wait 3 hours per life.',
     no_stars_need:   'You need {N} ⭐ (you have {M})',
     shield_bought:   '🛡️ {N} shield{S} purchased. Total: {T}',
     gala_activated:  '✨ Gala Mode activated for {N}h! Infinite lives 🚀',
@@ -1765,7 +1876,8 @@ let game=window.game={
   badges:0, lastRewardAt:0,
   shields:0, streakDays:0, lastPlayDate:null,
   diplomasEarned:0, infiniteLivesUntil:null,
-  ligaLevel:1, lastLigaWeek:null
+  ligaLevel:1, lastLigaWeek:null,
+  _pendingLigaTip:null
 };
 
 function showToast(msg,color='#0ea5e9',duration=3500){const t=document.getElementById('error-msg');if(!t)return;t.style.background=color;t.style.color='#fff';t.textContent=msg;t.style.display='block';setTimeout(()=>{t.style.display='none';t.style.background='';t.style.color='';},duration);}
@@ -1966,6 +2078,11 @@ function initGameUI(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('game-container').style.display='block';
   renderMap(); updateHUD(); mascotShow(); resetMascotIdleTimer(); startRestTimer();
+  // Mostrar onboarding si es jugador nuevo (nivel 1, nunca visto)
+  if(game.level === 1) {
+    const shown = showOnboarding();
+    if(shown) { game.isProcessing = true; return; } // esperar a obFinish
+  }
   setTimeout(async()=>{ try{ const u=game.user||auth.currentUser; if(u){ await u.getIdToken(); prefetchAhead(game.level-1,3); } }catch(e){} }, 6000);
   setTimeout(()=>{centerCamera(true);window.hideSplash();if(!('ontouchstart' in window)){const h=document.getElementById('scroll-hint');h.classList.add('visible');setTimeout(()=>h.classList.remove('visible'),4000);}},200);
 }
@@ -1974,7 +2091,7 @@ function checkLivesRegen(){
   const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
   if(isGala){ document.getElementById('stat-timer').style.display='none'; updateHUD(); return; }
   if(game.lives<5&&game.lastDeathTime){
-    const REGEN_MS = 10*60*1000; // 10 minutos por vida
+    const REGEN_MS = 10*60*60*1000; // 3 horas por vida
     const elapsed = Date.now()-game.lastDeathTime;
     const livesRegened = Math.floor(elapsed / REGEN_MS);
     if(livesRegened > 0){
@@ -1991,7 +2108,7 @@ function checkLivesRegen(){
   }
   const ti=document.getElementById('stat-timer');
   if(game.lives<5&&game.lastDeathTime){
-    const REGEN_MS = 10*60*1000;
+    const REGEN_MS = 10*60*60*1000;
     ti.style.display='inline';
     const r = REGEN_MS - (Date.now()-game.lastDeathTime);
     if(r>0){const m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);ti.innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
@@ -2013,6 +2130,11 @@ function renderMap(){const nc=document.getElementById('nodes-container'),sv=docu
 async function startChallenge(){
   if(game.lives<=0){showError(t("no_lives"));return;}
   game.correctCount=0; game.consecutiveErrors=0; game._seenQs=new Set(); updateProgressUI(); game.isProcessing=true;
+  // Mostrar tip de liga si acaba de ascender
+  if(game._pendingLigaTip){
+    showLigaTip(game._pendingLigaTip);
+    game._pendingLigaTip = null;
+  }
   const badge=document.getElementById('replay-badge'),num=document.getElementById('replay-num'),lbl=document.getElementById('clabel');
   if(game.playingLevel<game.level){ badge.style.display='block'; num.innerText=game.playingLevel; lbl.style.display='none'; }
   else { badge.style.display='none'; lbl.style.display='block'; }
@@ -2188,6 +2310,99 @@ function generateDiplomaLiga(liga){
 }
 
 // ══════════════════════════════════════════════════════════════════
+//  ONBOARDING — nuevos jugadores
+// ══════════════════════════════════════════════════════════════════
+window.obNext = function(screen) {
+  document.getElementById('ob-screen-1').style.display = 'none';
+  document.getElementById('ob-screen-2').style.display = 'none';
+  document.getElementById('ob-screen-3').style.display = 'none';
+  document.getElementById('ob-screen-' + screen).style.display = 'block';
+};
+
+window.obFinish = function() {
+  document.getElementById('modal-onboarding').classList.remove('active');
+  // Marcar que ya vio el onboarding
+  try { localStorage.setItem('fatlin_onboarding_done', '1'); } catch(e) {}
+  // Esperar 2 seg y mostrar el mapa/juego
+  setTimeout(() => {
+    renderMap();
+    centerCamera();
+    game.isProcessing = false;
+  }, 2000);
+};
+
+function showOnboarding() {
+  const done = localStorage.getItem('fatlin_onboarding_done');
+  if(done) return false;
+  document.getElementById('ob-screen-1').style.display = 'block';
+  document.getElementById('ob-screen-2').style.display = 'none';
+  document.getElementById('ob-screen-3').style.display = 'none';
+  document.getElementById('modal-onboarding').classList.add('active');
+  return true;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  MODAL ASCENSO DE LIGA
+// ══════════════════════════════════════════════════════════════════
+function showLigaUp(liga) {
+  const TIPS_LIGA = [
+    null, // índice 0 no se usa
+    'Estás comenzando tu viaje. Responde con confianza y acumula estrellas cada semana para ascender.',
+    'Las herramientas básicas son tu fundamento. La constancia diaria supera al talento ocasional.',
+    'La Presencia digital lo es todo. Cada pregunta correcta consolida tu huella en PACIE.',
+    'Planifica antes de responder. Los Arquitectos construyen sobre certezas, no suposiciones.',
+    'Enseñar a otros consolida tu propio conocimiento. ¡Tú ya eres referencia para alguien!',
+    'La Interacción es el corazón de PACIE. Aquí cada segundo de precisión cuenta.',
+    '⚠️ Liga Élite: 2 errores seguidos descuentan puntos de tu ranking. Piensa antes de responder.',
+    '⚠️ Reconocimiento global: el margen de error es mínimo. Cada punto puede ser la diferencia.',
+    '⚠️ Solo los mejores del planeta llegan aquí. La perfección ya no es opción, es requisito.',
+    '👑 Eres parte del 0.1% más alto. Cada respuesta es historia. Cada error, una oportunidad perdida.',
+  ];
+
+  const RULES_LIGA = [
+    null,
+    'Top 20 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 15 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 12 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 10 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 8 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 6 ascienden cada semana · 2 errores seguidos = reinicio del nivel',
+    'Top 5 ascienden · 2 errores seguidos = reinicio + penalización de -20 pts',
+    'Top 4 ascienden · 2 errores seguidos = reinicio + penalización de -40 pts',
+    'Top 3 ascienden · 2 errores seguidos = reinicio + penalización de -75 pts',
+    'Solo Top 3 entran · Penalización máxima por errores consecutivos (-120 pts)',
+  ];
+
+  document.getElementById('lu-shield').textContent = liga.escudo;
+  document.getElementById('lu-shield').className = 'ligaup-shield ' + liga.escudoClass;
+  document.getElementById('lu-name').textContent = 'Liga ' + liga.idx + ' · ' + liga.nombre;
+  document.getElementById('lu-sub').textContent = liga.sub;
+  document.getElementById('lu-rule').innerHTML = '📋 ' + (RULES_LIGA[liga.idx] || '');
+  document.getElementById('lu-tip').innerHTML = '🤖 <strong>Consejo de Fatlin AI:</strong> ' + (TIPS_LIGA[liga.idx] || '');
+  document.getElementById('modal-liga-up').classList.add('active');
+  // Marcar que hay tip pendiente para mostrar antes de la primera pregunta
+  game._pendingLigaTip = TIPS_LIGA[liga.idx];
+}
+
+window.closeLigaUp = function() {
+  document.getElementById('modal-liga-up').classList.remove('active');
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  TIP BUBBLE — globo de texto antes de la primera pregunta
+// ══════════════════════════════════════════════════════════════════
+function showLigaTip(text) {
+  const bubble = document.getElementById('liga-tip-bubble');
+  const tipText = document.getElementById('liga-tip-text');
+  if(!bubble || !text) return;
+  tipText.textContent = text;
+  bubble.classList.add('visible');
+  // Auto-ocultar después de 5 segundos
+  setTimeout(() => bubble.classList.remove('visible'), 5000);
+}
+
+
+// ══════════════════════════════════════════════════════════════════
 //  SISTEMA DE LIGAS — Promoción semanal + UI 3 zonas
 // ══════════════════════════════════════════════════════════════════
 
@@ -2229,8 +2444,10 @@ async function checkLigaPromocion(){
       await saveProgress();
       const nuevaLiga = LIGAS[game.ligaLevel-1];
       setTimeout(()=>{
-        showToast('🎉 ¡Ascendiste a '+nuevaLiga.nombre+'!', '#34d399', 5000);
-        setTimeout(()=>generateDiplomaLiga(nuevaLiga), 1200);
+        // Mostrar modal de ascenso con reglas y consejo
+        showLigaUp(nuevaLiga);
+        // Diploma después de que cierre el modal
+        setTimeout(()=>generateDiplomaLiga(nuevaLiga), 3000);
       }, 800);
     } else {
       // Se queda en la misma liga
