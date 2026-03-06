@@ -1283,8 +1283,27 @@ window.addEventListener('appinstalled', function() {
      para que el onclick inline del HTML pueda encontrarla.
 ═══════════════════════════════════════════════════════════════ -->
 <script>
-// ── Estado mínimo necesario antes de que cargue el módulo ──────
+// ── Estado mínimo — corre ANTES del módulo Firebase ────────────
 window._splashLangChosen = null;
+window._splashHidden = false;
+
+// Función central: ocultar splash y mostrar auth-screen
+window._showAuth = function() {
+  if (window._splashHidden) return;
+  window._splashHidden = true;
+  if (window._authWatchdog) { clearTimeout(window._authWatchdog); window._authWatchdog = null; }
+  var splash = document.getElementById('splash');
+  if (splash) {
+    splash.style.transition = 'opacity .4s';
+    splash.style.opacity = '0';
+    setTimeout(function() { splash.style.display = 'none'; }, 420);
+  }
+  // Mostrar auth-screen después del fade
+  setTimeout(function() {
+    var as = document.getElementById('auth-screen');
+    if (as) as.style.display = 'flex';
+  }, 430);
+};
 
 window.splashChooseLang = function(lang) {
   try {
@@ -1293,26 +1312,30 @@ window.splashChooseLang = function(lang) {
     var btn = document.getElementById('ls-' + lang);
     if (btn) btn.classList.add('entering');
   } catch(e) {}
-  // Mostrar spinner mientras Firebase responde
+  // Spinner visual
   var ls = document.getElementById('lang-splash');
-  if(ls){ ls.innerHTML = '<div style="color:rgba(186,230,253,.7);font-size:.85rem;margin-top:1.5rem;text-align:center"><div style="font-size:2rem;display:inline-block;animation:spin 1s linear infinite">⏳</div><br><span style="letter-spacing:.05em">Conectando...</span></div>'; }
-  // WATCHDOG: si Firebase no responde en 6s, forzar auth-screen
+  if (ls) {
+    ls.innerHTML = '<div style="margin-top:1.5rem;text-align:center;color:rgba(186,230,253,.8);font-size:.85rem">'
+      + '<div style="font-size:2rem;display:inline-block;animation:splashSpin 1s linear infinite">⏳</div>'
+      + '<br>Conectando...</div>';
+  }
+  // WATCHDOG: si Firebase no responde en 5s, forzar auth-screen
   window._authWatchdog = setTimeout(function() {
-    if(window._splashHidden) return; // ya resolvió
-    console.warn('[FATLIN] Firebase tardó demasiado — forzando auth-screen');
-    var splash = document.getElementById('splash');
-    if(splash){ splash.style.opacity='0'; setTimeout(function(){ splash.style.display='none'; },400); }
-    window._splashHidden = true;
-    var as = document.getElementById('auth-screen');
-    if(as) as.style.display = 'flex';
-  }, 6000);
+    console.warn('[Fatlin] Firebase timeout — mostrando login');
+    window._showAuth();
+  }, 5000);
 };
 
-// Auto-skip splash si el idioma ya estaba guardado
-// Solo marcamos el flag — el splash lo oculta onAuthStateChanged
+// Si idioma ya guardado: saltar splash inmediatamente con watchdog
 (function() {
   var saved = localStorage.getItem('fatlin_lang');
-  if (saved) { window._splashLangChosen = saved; }
+  if (saved) {
+    window._splashLangChosen = saved;
+    // Ocultar splash rápido y activar watchdog por si Firebase tarda
+    window._authWatchdog = setTimeout(function() {
+      window._showAuth();
+    }, 3000);
+  }
 })();
 </script>
 
@@ -1906,39 +1929,31 @@ function dbg(msg){
 }
 
 onAuthStateChanged(auth, async(user) => {
-  // Cancelar watchdog — Firebase respondió a tiempo
+  // Cancelar watchdog y ocultar splash
   if(window._authWatchdog){ clearTimeout(window._authWatchdog); window._authWatchdog=null; }
-  if(window._splashHidden){ 
-    // El watchdog ya actuó — solo manejar sesión
-    if(user){
-      game.user = user;
-      try{ await loadProgress(); }catch(e){}
-      window._gameRef = game;
-      initGameUI();
+
+  if(!window._splashHidden){
+    window._splashHidden = true;
+    const splash = document.getElementById('splash');
+    if(splash){
+      splash.style.transition='opacity .4s';
+      splash.style.opacity='0';
+      setTimeout(()=>{ splash.style.display='none'; },420);
     }
-    return;
   }
-
-  dbg('Firebase OK · ' + (user ? (user.email||user.uid) : 'sin sesión'));
-
-  // Ocultar splash
-  const splash = document.getElementById('splash');
-  if(splash){
-    splash.style.transition = 'opacity .4s ease';
-    splash.style.opacity = '0';
-    setTimeout(()=>{ splash.style.display='none'; }, 420);
-  }
-  window._splashHidden = true;
 
   if(user){
     game.user = user;
-    try{ await loadProgress(); }catch(e){ dbg('loadProgress error: '+e.message); }
+    try{ await loadProgress(); }catch(e){ console.warn('loadProgress:',e.message); }
     window._gameRef = game;
-    initGameUI();
+    // Si auth-screen visible, ocultarla antes de initGameUI
+    const as = document.getElementById('auth-screen');
+    if(as) as.style.display='none';
+    setTimeout(()=>initGameUI(), 100);
   } else {
     setTimeout(()=>{
       const as = document.getElementById('auth-screen');
-      if(as) as.style.display = 'flex';
+      if(as) as.style.display='flex';
     }, 450);
   }
 });
