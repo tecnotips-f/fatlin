@@ -1,0 +1,2531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- ═══════════════════════════════════════════
+         PWA — METAETIQUETAS ESENCIALES
+    ═══════════════════════════════════════════ -->
+    <title>Fatlin AI - Adventure</title>
+    <meta name="description" content="Aprende la metodología PACIE jugando. Preguntas generadas con IA desde fuentes oficiales de FATLA.">
+    <meta name="keywords" content="PACIE, FATLA, educación virtual, e-learning, quiz, juego educativo">
+    <meta name="author" content="Fatlin AI">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tema de color (barra de navegación Android / iOS) -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="msapplication-navbutton-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- iOS — comportamiento como app instalada -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Fatlin AI">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- iOS — iconos para pantalla de inicio -->
+    <link rel="apple-touch-icon" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+
+    <!-- Favicon estándar -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-48.png">
+    <link rel="shortcut icon" href="icons/icon-96.png">
+
+    <!-- iOS Splash screens (opcionales pero mejoran la experiencia) -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!-- No indexar por buscadores (app privada de estudio) -->
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Prevenir detección automática de teléfonos/emails en iOS -->
+    <meta name="format-detection" content="telephone=no, email=no">
+
+    <!-- Open Graph (para compartir en WhatsApp/redes con preview) -->
+    <meta property="og:title" content="Fatlin AI - Metodología PACIE">
+    <meta property="og:description" content="Juego educativo con IA. Aprende PACIE nivel por nivel.">
+    <meta property="og:image" content="icons/icon-512.png">
+    <meta property="og:type" content="website">
+
+    <!-- ═══════════════════════════════════════════
+         FUENTE
+    ═══════════════════════════════════════════ -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ═══════════════════════════════════════════
+         ESTILOS (idénticos a la versión anterior)
+    ═══════════════════════════════════════════ -->
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #0ea5e9; --primary-dark: #0369a1; --primary-light: #7dd3fc;
+            --success: #22c55e; --danger: #ef4444; --accent: #f59e0b;
+            --bg: linear-gradient(135deg, #075985 0%, #0369a1 100%);
+            --node: 64px;
+        }
+        body { font-family:'Inter',sans-serif; font-size:15px; background:#0c4a6e; overflow:hidden; touch-action:none; color:#1e293b; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased; }
+
+        /* SPLASH */
+        #splash { position:fixed;inset:0;background:var(--bg);z-index:5000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .4s;padding:24px; }
+        .logo-float { animation:heroFloat 5s ease-in-out infinite; margin-bottom:1.25rem; }
+        @keyframes heroFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-10px) scale(1.05)} }
+        #splash .brand { color:white;font-weight:700;letter-spacing:.4em;font-size:1.8rem;text-transform:uppercase; }
+        #splash .sub { color:rgba(186,230,253,.6);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;margin-top:.5rem;margin-bottom:2.25rem; }
+        #lang-splash { display:flex;flex-direction:column;gap:14px;width:100%;max-width:300px; }
+        .lang-btn {
+            display:flex;align-items:center;gap:14px;
+            width:100%;padding:16px 22px;border-radius:2rem;
+            border:2px solid rgba(255,255,255,.25);
+            background:rgba(255,255,255,.1);
+            color:white;font-family:'Inter',sans-serif;font-weight:700;
+            cursor:pointer;transition:background .2s,border-color .2s,transform .15s,box-shadow .2s;
+            backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;
+        }
+        .lang-btn:active { transform:scale(.96); }
+        .lang-btn.entering { background:rgba(255,255,255,.28);border-color:white;box-shadow:0 0 0 4px rgba(255,255,255,.15); }
+        .lang-flag { font-size:1.6rem;line-height:1;flex-shrink:0; }
+        .lang-label { display:flex;flex-direction:column;align-items:flex-start;gap:1px; }
+        .lang-label-main { font-size:1.05rem;font-weight:700; }
+        .lang-label-sub  { font-size:.65rem;font-weight:500;opacity:.6;text-transform:uppercase;letter-spacing:.06em; }
+
+        /* UPDATE BANNER */
+        #update-banner { position:fixed;bottom:0;left:0;right:0;background:#1e293b;color:white;padding:12px 20px;display:none;align-items:center;justify-content:space-between;gap:12px;z-index:9000;font-size:.85rem; }
+        #update-banner.show { display:flex; }
+        #btn-update-reload { background:#0ea5e9;color:white;border:none;padding:8px 16px;border-radius:20px;font-family:'Inter',sans-serif;font-weight:700;cursor:pointer; }
+        #btn-update-dismiss { background:transparent;color:#94a3b8;border:none;cursor:pointer;font-size:1.2rem; }
+
+        /* AUTH */
+        #auth-screen { position:fixed;inset:0;background:var(--bg);z-index:6000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto; }
+        .auth-card { background:rgba(255,255,255,.98);width:100%;max-width:420px;border-radius:2.5rem;padding:2.25rem 1.75rem;box-shadow:0 25px 60px -12px rgba(0,0,0,.5);text-align:center; }
+        .ifield { width:100%;padding:.95rem;border-radius:1.5rem;border:2px solid #e2e8f0;outline:none;transition:border-color .2s,box-shadow .2s;font-family:'Inter',sans-serif;font-size:1rem;margin-bottom:.75rem; }
+        .ifield:focus { border-color:var(--primary);box-shadow:0 0 0 4px rgba(14,165,233,.12); }
+        .abtn { width:100%;padding:1rem;border-radius:1.5rem;border:none;font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s;display:flex;align-items:center;justify-content:center;gap:.75rem;margin-bottom:.6rem; }
+        .abtn:active { transform:scale(.97); }
+        .abtn.google { background:white;border:2px solid #e2e8f0;color:#334155; }
+        .abtn.email  { background:#f8fafc;color:#475569; }
+        .abtn.guest  { background:#e0f2fe;color:#0369a1;border:2px solid #bae6fd; }
+        .abtn.primary{ background:#0284c7;color:white;box-shadow:0 8px 20px rgba(2,132,199,.3); }
+        .cc { display:flex;align-items:center;cursor:pointer;user-select:none;margin-bottom:.75rem; }
+        .cc input { display:none; }
+        .ck { width:18px;height:18px;border:2px solid #cbd5e1;border-radius:6px;margin-right:10px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0; }
+        .cc input:checked + .ck { background:var(--primary);border-color:var(--primary); }
+        .ck svg { display:none; }
+        .cc input:checked + .ck svg { display:block; }
+
+        /* GAME */
+        #game-container { width:100vw;height:100vh;position:relative;background:#082f49;display:none; }
+        #map-scroll { position:absolute;top:0;left:0;right:0;margin:0 auto;width:100%;max-width:75%;min-height:100vh;background:radial-gradient(circle at top,#38bdf8,#075985);box-shadow:0 0 100px rgba(0,0,0,.7);transition:transform .6s cubic-bezier(.34,1.2,.64,1);will-change:transform;contain:layout style; }
+        @media(max-width:768px){ #map-scroll{max-width:100%;box-shadow:none;} }
+        #path-svg { position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none; }
+
+        /* HUD */
+        #game-hud { position:fixed;top:0;left:0;right:0;padding:10px 12px 0;z-index:50;display:flex;justify-content:center;pointer-events:none; }
+        .hud-inner { background:rgba(255,255,255,.97);border-radius:0 0 2rem 2rem;padding:10px 14px;box-shadow:0 4px 20px rgba(0,0,0,.2);pointer-events:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;max-width:620px;width:100%; }
+        /* safe area iOS notch */
+        .hud-inner { padding-top:max(10px, env(safe-area-inset-top)); }
+        .hstat { display:flex;align-items:center;gap:4px;font-size:.85rem; }
+        .hdiv  { width:1px;height:18px;background:#e2e8f0;flex-shrink:0; }
+        .hbtn  { padding:6px 9px;border-radius:12px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;transition:transform .15s,background .15s;display:flex;align-items:center;gap:4px;font-size:.82rem; }
+        .hbtn:active { transform:scale(.92); }
+        #hud-avatar { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:2px solid #e2e8f0;background:#f8fafc;cursor:pointer;transition:border-color .2s,transform .2s;flex-shrink:0;pointer-events:all;-webkit-tap-highlight-color:transparent; }
+        #hud-avatar:hover { border-color:#0369a1;transform:scale(1.1); }
+        #hud-avatar:active { transform:scale(.95); }
+        #hud-avatar:hover { border-color:var(--primary);transform:scale(1.1); }
+        #stat-timer { font-size:10px;font-weight:700;color:#0284c7;background:#e0f2fe;padding:2px 8px;border-radius:20px;display:none; }
+        @media(max-width:480px){ .hud-inner{gap:5px;padding:7px 10px;} }
+
+        /* PROGRESS DOTS */
+        #streak-bar { display:flex;gap:6px;align-items:center; }
+        .streak-dot { width:12px;height:12px;border-radius:50%;border:2px solid #e2e8f0;background:#f1f5f9;transition:all .3s cubic-bezier(.175,.885,.32,1.275); }
+        .streak-dot.filled { background:var(--success);border-color:#16a34a;transform:scale(1.2);box-shadow:0 0 6px rgba(34,197,94,.5); }
+        .streak-dot.flash { animation:dotFlash .4s ease; }
+        @keyframes dotFlash { 0%{transform:scale(1.2)} 50%{transform:scale(1.7)} 100%{transform:scale(1.2)} }
+
+        /* LEVEL NODES */
+        .level-node { position:absolute;width:var(--node);height:var(--node);border-radius:18px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;font-weight:700;color:white;z-index:10;cursor:pointer;font-size:1.1rem;box-shadow:0 8px 0 rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.175,.885,.32,1.275),box-shadow .2s;background:rgba(255,255,255,.2);backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.4);will-change:transform; }
+        @media(max-width:480px){ .level-node{width:56px;height:56px;border-radius:14px;font-size:1rem;} }
+        .level-node.completed { background:var(--success);box-shadow:0 6px 0 #15803d; }
+        .level-node.completed:hover { transform:scale(1.12);background:#16a34a;box-shadow:0 10px 25px rgba(0,0,0,.3),0 0 20px rgba(34,197,94,.5); }
+        .level-node.current { background:white;color:var(--primary-dark);transform:scale(1.15);animation:nodeGlow 2.5s ease-in-out infinite; }
+        @keyframes nodeGlow { 0%,100%{box-shadow:0 10px 25px rgba(0,0,0,.3),0 0 15px rgba(255,255,255,.4)} 50%{box-shadow:0 10px 35px rgba(0,0,0,.4),0 0 45px rgba(255,255,255,.8)} }
+        .level-node.locked { cursor:default;opacity:.45;pointer-events:none; }
+        .lnlabel { font-size:9px;font-weight:700;opacity:.85;line-height:1; }
+
+        /* MODALS */
+        .modal-overlay { position:fixed;inset:0;background:rgba(8,47,73,.9);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:16px;overflow-y:auto; }
+        .modal-overlay.active { display:flex;animation:fadeIn .2s ease; }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .challenge-card { background:white;padding:1.75rem 1.6rem;border-radius:2rem;width:100%;max-width:440px;box-shadow:0 40px 100px rgba(0,0,0,.5);position:relative;padding-top:4.5rem;margin:auto;animation:cardIn .3s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes cardIn { from{transform:scale(.92) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+        .fatlin-mini { position:absolute;top:-52px;left:50%;transform:translateX(-50%);z-index:10; }
+
+        /* SHAKE / GLOW */
+        @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
+        .shake { animation:shake .5s ease; }
+        @keyframes correctGlow { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)} 60%{box-shadow:0 0 0 14px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+        .cglow { animation:correctGlow .6s ease; }
+
+        /* OPTIONS */
+        .opt { width:100%;padding:.95rem 1rem;margin-bottom:.6rem;border:2px solid #f1f5f9;border-radius:1.25rem;font-weight:500;color:#334155;transition:background .15s,border-color .15s,transform .15s;text-align:left;background:#fff;cursor:pointer;font-family:'Inter',sans-serif;font-size:.93rem;line-height:1.45;animation:optIn .25s ease forwards;opacity:0;transform:translateY(6px); }
+        @keyframes optIn { to{opacity:1;transform:translateY(0)} }
+        .opt:hover:not(:disabled){ background:#f8fafc;border-color:#cbd5e1; }
+        .opt:active:not(:disabled){ transform:scale(.98); }
+        .opt.vf { text-align:center;font-size:1.1rem; }
+        .opt.correct { background:#f0fdf4!important;border-color:#22c55e!important;color:#15803d!important; }
+        .opt.wrong   { background:#fef2f2!important;border-color:#ef4444!important;color:#dc2626!important; }
+
+        /* FEEDBACK */
+        #feedback-float { position:absolute;left:1rem;right:1rem;bottom:-1rem;background:rgba(239,68,68,.97);padding:1rem;border-radius:1.25rem;color:white;text-align:center;opacity:0;transition:transform .35s cubic-bezier(.175,.885,.32,1.275),opacity .35s;z-index:100;pointer-events:none; }
+        #feedback-float.active { transform:translateY(-20px);opacity:1; }
+        .cbar { height:4px;background:rgba(255,255,255,.25);border-radius:2px;margin-top:8px;overflow:hidden; }
+        .cfill { height:100%;background:rgba(255,255,255,.8);border-radius:2px;transition:width linear; }
+
+        /* AI LOADING */
+        #ai-loading { position:absolute;inset:0;background:rgba(255,255,255,.96);border-radius:2rem;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;gap:.75rem; }
+        #ai-loading.active { display:flex; }
+        .ai-spinner { width:44px;height:44px;border:3px solid #e2e8f0;border-top:3px solid var(--primary);border-radius:50%;animation:spin .8s linear infinite; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        #ai-loading p { font-size:.85rem;font-weight:700;color:#64748b; }
+        #ai-loading small { font-size:.7rem;color:#94a3b8;text-align:center;padding:0 1rem; }
+
+        /* REWARD */
+        #modal-reward { position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:4000;display:none;align-items:center;justify-content:center;padding:20px; }
+        #modal-reward.active { display:flex;animation:fadeIn .25s ease; }
+        .reward-card { background:linear-gradient(135deg,#1e3a5f,#0369a1);border-radius:2.5rem;padding:2.5rem 2rem;max-width:380px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.6);border:2px solid rgba(255,255,255,.2);position:relative;overflow:hidden;animation:cardIn .4s cubic-bezier(.34,1.56,.64,1); }
+        .rstars { font-size:3.5rem;animation:starPop .6s ease; }
+        @keyframes starPop { 0%{transform:scale(0) rotate(-20deg)} 70%{transform:scale(1.3) rotate(5deg)} 100%{transform:scale(1) rotate(0)} }
+        .confetti-dot { position:absolute;width:8px;height:8px;border-radius:2px;animation:cfall 2.5s ease-in forwards; }
+        @keyframes cfall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(350px) rotate(720deg);opacity:0} }
+        @keyframes avatarLvl { 0%{transform:scale(1)} 30%{transform:scale(1.6);filter:drop-shadow(0 0 6px gold)} 60%{transform:scale(.9)} 100%{transform:scale(1);filter:none} }
+        .av-lvl { animation:avatarLvl .8s ease; }
+
+        /* ── RANKING MODAL ─────────────────────────────────────── */
+        #modal-ranking { position:fixed;inset:0;background:rgba(5,30,55,.97);backdrop-filter:blur(14px);z-index:3500;display:none;align-items:center;justify-content:center;padding:12px; }
+        #modal-ranking.active { display:flex;animation:fadeIn .2s ease; }
+        .rcard { background:#0f1f35;border-radius:2rem;padding:0;max-width:460px;width:100%;max-height:94vh;overflow-y:auto;box-shadow:0 30px 90px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.08); }
+        .rcard-header { padding:1.25rem 1.5rem 0;display:flex;align-items:center;justify-content:space-between; }
+        .rtabs { display:flex;gap:5px;margin:1rem 1.25rem .5rem;background:rgba(255,255,255,.06);border-radius:1rem;padding:4px; }
+        .rtab { flex:1;padding:8px 4px;border-radius:.75rem;border:none;font-family:inherit;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.4);background:transparent; }
+        .rtab.active { background:rgba(255,255,255,.12);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2); }
+
+        /* Cabecera de Liga */
+        .liga-header { margin:0 0 .75rem;padding:1.1rem 1.25rem 1rem;background:linear-gradient(135deg,#0c2a4a,#0e3460);border-bottom:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden; }
+        .liga-header::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% -20%, rgba(99,179,237,.15) 0%, transparent 60%); }
+        .liga-shield { font-size:2.8rem;filter:drop-shadow(0 0 12px var(--liga-glow,#63b3ed));animation:shieldFloat 3s ease-in-out infinite; }
+        @keyframes shieldFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+        .liga-name { font-size:1rem;font-weight:900;color:#fff;letter-spacing:.02em;margin:.25rem 0 .1rem; }
+        .liga-sub  { font-size:.72rem;color:rgba(255,255,255,.55);font-style:italic; }
+        .liga-timer-badge { display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.4);border-radius:20px;padding:4px 10px;font-size:.72rem;font-weight:700;color:#fbbf24;margin-top:.5rem; }
+
+        /* Zona Verde — Promoción */
+        .zona-promo-label { font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#34d399;padding:.5rem 1.25rem .25rem;display:flex;align-items:center;gap:5px; }
+        .ritem { display:flex;align-items:center;gap:10px;padding:9px 1.25rem;transition:background .15s;position:relative; }
+        .ritem:hover { background:rgba(255,255,255,.04); }
+        .ritem.promo { background:linear-gradient(90deg,rgba(52,211,153,.07),transparent); }
+        .ritem.promo::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#34d399;border-radius:0 2px 2px 0; }
+        .ritem.danger { background:linear-gradient(90deg,rgba(239,68,68,.07),transparent); }
+        .ritem.danger::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#ef4444;border-radius:0 2px 2px 0; }
+        .ritem.me { background:rgba(99,179,237,.12);border:1px solid rgba(99,179,237,.25);border-radius:.75rem;margin:0 .75rem; }
+        .zona-danger-label { font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#f87171;padding:.75rem 1.25rem .25rem;display:flex;align-items:center;gap:5px; }
+        .pos-num { width:26px;text-align:center;font-size:.8rem;font-weight:800;color:rgba(255,255,255,.4);flex-shrink:0; }
+        .pos-arrow { font-size:.85rem;width:16px;flex-shrink:0; }
+        .rname { font-weight:700;color:#e2e8f0;font-size:.83rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px; }
+        .rpts { font-size:.72rem;color:rgba(255,255,255,.45);margin-top:1px; }
+        .rcofre { font-size:1rem;margin-left:auto;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(251,191,36,.5)); }
+        .rdiv { height:1px;background:rgba(255,255,255,.06);margin:4px 1.25rem; }
+        .rbar { height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;width:60px;flex-shrink:0; }
+        .rbar-fill { height:100%;border-radius:2px;background:linear-gradient(90deg,#0ea5e9,#6366f1);transition:width 1s ease; }
+        .lbadge { display:inline-block;background:rgba(251,191,36,.2);color:#fbbf24;font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:20px;margin-left:4px;border:1px solid rgba(251,191,36,.3); }
+        .rcard-footer { padding:.75rem 1.25rem 1.25rem;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.06);border-radius:0 0 2rem 2rem;text-align:center;font-size:.72rem;color:rgba(255,255,255,.35);margin-top:.5rem; }
+
+        /* Global ranking */
+        .ritem-global { display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05); }
+        #ranking-list { padding:0 1.25rem; }
+
+        /* Shield animado por liga */
+        .shield-1  { --liga-glow:#a0aec0; }
+        .shield-2  { --liga-glow:#ed8936; }
+        .shield-3  { --liga-glow:#48bb78; }
+        .shield-4  { --liga-glow:#4299e1; }
+        .shield-5  { --liga-glow:#9f7aea; }
+        .shield-6  { --liga-glow:#f6e05e; }
+        .shield-7  { --liga-glow:#fc8181; }
+        .shield-8  { --liga-glow:#76e4f7; }
+        .shield-9  { --liga-glow:#f687b3; }
+        .shield-10 { --liga-glow:#ffd700; }
+
+        /* ACCOUNT */
+        #modal-account { position:fixed;inset:0;background:rgba(8,47,73,.95);backdrop-filter:blur(12px);z-index:3500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-account.active { display:flex;animation:fadeIn .2s ease; }
+        .accard { background:white;border-radius:2rem;padding:1.75rem;max-width:380px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:center;max-height:92vh;overflow-y:auto; }
+
+        /* AVATAR */
+        #modal-avatar { position:fixed;inset:0;background:rgba(8,47,73,.96);backdrop-filter:blur(12px);z-index:4500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-logros { position:fixed;inset:0;background:rgba(8,47,73,.96);backdrop-filter:blur(12px);z-index:4500;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-logros.active { display:flex;animation:fadeIn .2s ease; }
+        .logros-card { background:white;border-radius:20px;padding:16px;width:92%;max-width:340px;max-height:80vh;overflow-y:auto; }
+        .logros-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:20px; }
+        .logros-title { font-size:1.2rem;font-weight:800;color:#075985; }
+        .logros-user { display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:14px;background:#f0f9ff;border-radius:14px; }
+        .logros-avatar { font-size:2rem;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:#e0f2fe;border-radius:50%; }
+        .logros-info { flex:1; }
+        .logros-name { font-weight:800;color:#0c4a6e;font-size:1rem; }
+        .logros-level { font-size:.85rem;color:#0369a1;font-weight:600; }
+        .logros-section { margin-bottom:18px; }
+        .logros-section-title { font-size:.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px; }
+        .logros-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px; }
+        .logro-item { background:#f8fafc;border-radius:10px;padding:8px;text-align:center;border:2px solid #e2e8f0; }
+        .logro-item.earned { background:#f0fdf4;border-color:#86efac; }
+        .logro-item.locked { opacity:.4; }
+        .logro-emoji { font-size:1.4rem;display:block;margin-bottom:2px; }
+        .logro-label { font-size:.68rem;font-weight:700;color:#374151;line-height:1.2; }
+        .diploma-item { display:flex;align-items:center;gap:8px;background:#fffbeb;border:2px solid #fde68a;border-radius:10px;padding:8px;margin-bottom:6px; }
+        .diploma-emoji { font-size:1.5rem; }
+        .diploma-info { flex:1; }
+        .diploma-title { font-weight:700;color:#92400e;font-size:.78rem; }
+        .diploma-sub { font-size:.75rem;color:#b45309; }
+        .no-logros { text-align:center;color:#94a3b8;font-size:.9rem;padding:20px; }
+        #modal-avatar.active { display:flex;animation:fadeIn .2s ease; }
+        .avcard { background:white;border-radius:2rem;padding:1.25rem;max-width:320px;width:90%;box-shadow:0 30px 80px rgba(0,0,0,.5);text-align:center;overflow:hidden; }
+        .avgrid { display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:1rem 0; }
+        .avopt { width:100%;aspect-ratio:1;border-radius:1rem;border:3px solid #e2e8f0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;cursor:pointer;transition:border-color .2s,transform .2s;background:#f8fafc; }
+        .avopt:hover { border-color:var(--primary);background:#eff6ff;transform:scale(1.08); }
+        .avopt.selected { border-color:var(--primary);background:#eff6ff;box-shadow:0 0 0 3px rgba(14,165,233,.25);transform:scale(1.1); }
+
+        /* LOADING DOTS */
+        .ldots { display:flex;gap:6px;justify-content:center;align-items:center;padding:1.5rem 0; }
+        .ldots span { width:10px;height:10px;border-radius:50%;background:var(--primary);animation:db .8s ease infinite; }
+        .ldots span:nth-child(2){animation-delay:.15s} .ldots span:nth-child(3){animation-delay:.3s}
+        @keyframes db { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-8px);opacity:1} }
+
+        /* MISC */
+        #error-msg { position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(239,68,68,.95);color:white;padding:12px 24px;border-radius:20px;font-weight:600;font-size:.9rem;z-index:9999;display:none;max-width:90%;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:slideUp .3s ease; }
+        @keyframes slideUp { from{transform:translateX(-50%) translateY(20px);opacity:0} to{transform:translateX(-50%) translateY(0);opacity:1} }
+        #scroll-hint { position:fixed;bottom:70px;right:20px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);color:white;border-radius:50px;padding:8px 14px;font-size:.75rem;font-weight:600;z-index:30;opacity:0;transition:opacity .5s;pointer-events:none;display:flex;align-items:center;gap:6px; }
+        #scroll-hint.visible { opacity:1; }
+        .page-footer { position:fixed;bottom:0;left:0;right:0;padding:14px;padding-bottom:max(14px, env(safe-area-inset-bottom));text-align:center;z-index:20;pointer-events:none; }
+        .page-footer p { font-size:9px;color:rgba(255,255,255,.45);font-weight:700;letter-spacing:.2em;text-transform:uppercase; }
+        .wbtn { width:100%;padding:.9rem;border-radius:1.5rem;border:none;font-family:'Inter',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:opacity .15s,transform .15s;margin-bottom:.5rem; }
+        .wbtn:active { transform:scale(.97); }
+        .wbtn.sky { background:#e0f2fe;color:#0369a1; }
+        .wbtn.purple { background:#f3e8ff;color:#7c3aed; }
+        .wbtn.slate { background:#f1f5f9;color:#475569; }
+        .wbtn.red   { background:#fef2f2;color:#dc2626; }
+        .wbtn.primary { background:#0284c7;color:white;box-shadow:0 6px 18px rgba(2,132,199,.25); }
+        #source-badge { font-size:9px;font-weight:700;color:#94a3b8;text-align:center;margin-bottom:.5rem;letter-spacing:.05em;min-height:14px; }
+
+        /* ═══════ MODO GALA ═══════ */
+        :root {
+            --gala-gold: #f59e0b; --gala-gold-light: #fde68a;
+            --gala-bg1: #0f0a1e; --gala-bg2: #1a0a2e;
+            --gala-accent: #a855f7;
+        }
+        body.gala-mode { background: var(--gala-bg1); }
+        body.gala-mode #game-container { background: var(--gala-bg2); }
+        body.gala-mode #map-scroll {
+            background: radial-gradient(circle at top, #4c1d95, #1e0a3c) !important;
+        }
+        body.gala-mode .hud-inner {
+            background: rgba(15,10,30,.97);
+            border-bottom: 2px solid var(--gala-gold);
+        }
+        body.gala-mode .hud-inner * { color: var(--gala-gold-light) !important; }
+        body.gala-mode #stat-lives::before { content: '∞ '; color: var(--gala-gold) !important; }
+        body.gala-mode .level-node.current {
+            background: linear-gradient(135deg, var(--gala-gold), #d97706) !important;
+            color: #1e0a3c !important;
+            animation: galaNodeGlow 2s ease-in-out infinite !important;
+        }
+        @keyframes galaNodeGlow {
+            0%,100%{box-shadow:0 0 20px rgba(245,158,11,.6),0 0 40px rgba(245,158,11,.3)}
+            50%{box-shadow:0 0 40px rgba(245,158,11,1),0 0 80px rgba(245,158,11,.5)}
+        }
+        body.gala-mode .level-node.completed {
+            background: linear-gradient(135deg,#7c3aed,#4c1d95) !important;
+            box-shadow: 0 6px 0 #3b0764 !important;
+        }
+        /* Estrellas de fondo en modo Gala */
+        #gala-stars { position:fixed;inset:0;pointer-events:none;z-index:1;display:none; }
+        body.gala-mode #gala-stars { display:block; }
+        .gala-star { position:absolute;border-radius:50%;background:white;animation:twinkle 3s ease-in-out infinite; }
+        @keyframes twinkle { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+        /* HUD badge Gala */
+        #gala-badge {
+            display:none;font-size:.75rem;font-weight:700;
+            background:linear-gradient(135deg,var(--gala-gold),#d97706);
+            color:#1e0a3c;padding:3px 10px;border-radius:20px;
+            animation:pulse 2s ease infinite;
+        }
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+        body.gala-mode #gala-badge { display:inline-flex;align-items:center;gap:4px; }
+
+        /* ═══════ ESCUDOS & RACHA ═══════ */
+        #stat-shields { display:none;align-items:center;gap:3px;font-size:.85rem; }
+        #stat-shields.visible { display:flex; }
+        #stat-streak { display:none;align-items:center;gap:3px;font-size:.85rem; }
+        #stat-streak.visible { display:flex; }
+        .shield-icon { font-size:.95rem; }
+
+        /* ═══════ MODAL DIPLOMA ═══════ */
+        #modal-diploma {
+            position:fixed;inset:0;background:rgba(0,0,0,.92);
+            backdrop-filter:blur(16px);z-index:5500;
+            display:none;align-items:center;justify-content:center;padding:16px;
+        }
+        #modal-diploma.active { display:flex;animation:fadeIn .3s ease; }
+        .diploma-wrap {
+            background:white;border-radius:2rem;padding:0;
+            max-width:480px;width:100%;
+            box-shadow:0 40px 100px rgba(0,0,0,.7);
+            overflow:hidden;
+        }
+        #diploma-content {
+            background: linear-gradient(160deg,#fffbeb 0%,#fef3c7 40%,#fffbeb 100%);
+            padding:2.5rem 2rem 1.5rem;
+            text-align:center;
+            border:8px solid transparent;
+            background-clip:padding-box;
+            position:relative;
+        }
+        #diploma-content::before {
+            content:'';position:absolute;inset:0;
+            background:linear-gradient(160deg,#f59e0b,#d97706,#92400e,#f59e0b);
+            z-index:-1;margin:-8px;border-radius:2rem;
+        }
+        .diploma-border-inner {
+            border:3px double #d97706;
+            border-radius:1.25rem;
+            padding:1.5rem 1rem;
+        }
+        .diploma-seal {
+            width:80px;height:80px;
+            background:linear-gradient(135deg,#f59e0b,#d97706);
+            border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:2.2rem;
+            margin:0 auto .75rem;
+            box-shadow:0 4px 20px rgba(245,158,11,.5);
+            border:4px solid #92400e;
+        }
+        .diploma-title {
+            font-size:1.05rem;font-weight:800;color:#78350f;
+            text-transform:uppercase;letter-spacing:.2em;margin-bottom:.25rem;
+        }
+        .diploma-subtitle {
+            font-size:.65rem;color:#92400e;font-weight:700;
+            text-transform:uppercase;letter-spacing:.3em;margin-bottom:1rem;
+        }
+        .diploma-certify {
+            font-size:.75rem;color:#78350f;margin-bottom:.5rem;
+        }
+        .diploma-name {
+            font-size:1.6rem;font-weight:800;
+            color:#1e0a3c;margin:.5rem 0;
+            border-bottom:2px solid #d97706;
+            padding-bottom:.5rem;display:inline-block;min-width:200px;
+        }
+        .diploma-level {
+            font-size:1rem;font-weight:700;color:#0369a1;margin:.5rem 0;
+        }
+        .diploma-date {
+            font-size:.7rem;color:#92400e;margin-top:.5rem;
+        }
+        .diploma-logos {
+            display:flex;align-items:center;justify-content:center;
+            gap:1.5rem;margin-top:1rem;padding-top:.75rem;
+            border-top:1px solid #d97706;
+        }
+        .diploma-sig {
+            font-size:.65rem;color:#78350f;font-weight:700;
+            text-transform:uppercase;letter-spacing:.1em;
+        }
+        .diploma-actions {
+            padding:1rem 1.5rem;display:flex;gap:.75rem;
+        }
+
+        /* ═══════ MODAL TIENDA (comprar escudos) ═══════ */
+        #modal-shop {
+            position:fixed;inset:0;background:rgba(8,47,73,.96);
+            backdrop-filter:blur(12px);z-index:3600;
+            display:none;align-items:center;justify-content:center;padding:16px;
+        }
+        #modal-shop.active { display:flex;animation:fadeIn .2s ease; }
+        .shop-card {
+            background:white;border-radius:2rem;padding:1.75rem;
+            max-width:380px;width:100%;
+            box-shadow:0 30px 80px rgba(0,0,0,.5);
+            text-align:center;max-height:92vh;overflow-y:auto;
+        }
+        .shop-item {
+            display:flex;align-items:center;justify-content:space-between;
+            padding:.85rem 1rem;border:2px solid #e2e8f0;
+            border-radius:1.25rem;margin-bottom:.6rem;
+            transition:border-color .15s,background .15s;cursor:pointer;
+        }
+        .shop-item:hover { border-color:var(--primary);background:#f0f9ff; }
+        .shop-item.gala-item:hover { border-color:var(--gala-gold);background:#fffbeb; }
+
+        /* Hud extra items */
+        .hdiv-new { width:1px;height:18px;background:#e2e8f0;flex-shrink:0; }
+
+        /* ═══════ MASCOTA FLOTANTE ═══════ */
+        #fatlin-mascot {
+            position:fixed; bottom:80px; right:16px;
+            width:62px; height:62px;
+            z-index:200; cursor:pointer;
+            filter:drop-shadow(0 4px 12px rgba(14,165,233,.4));
+            animation: mascotFloat 4s ease-in-out infinite;
+            transition: transform .3s, filter .3s;
+            display:none; /* se muestra al iniciar el juego */
+        }
+        #fatlin-mascot svg { width:100%; height:100%; }
+        @media(max-width:480px){ #fatlin-mascot{width:51px;height:51px;bottom:70px;right:10px;} }
+
+        /* Estados de la mascota */
+        @keyframes mascotFloat   { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-8px)} }
+        @keyframes mascotCheer   { 0%{transform:translateY(0) scale(1)} 25%{transform:translateY(-22px) scale(1.35)} 50%{transform:translateY(-10px) scale(1.2) rotate(8deg)} 75%{transform:translateY(-18px) scale(1.3) rotate(-6deg)} 100%{transform:translateY(0) scale(1)} }
+        @keyframes mascotSad     { 0%,100%{transform:translateX(0) scale(1) opacity(1)} 15%{transform:translateX(-7px) scale(.95)} 30%{transform:translateX(7px) scale(.95)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
+        @keyframes mascotWin     { 0%{transform:scale(1) rotate(0)}  20%{transform:scale(1.5) rotate(-10deg)} 40%{transform:scale(1.6) rotate(10deg)} 60%{transform:scale(1.4) rotate(-6deg)} 80%{transform:scale(1.3) rotate(4deg)} 100%{transform:scale(1) rotate(0)} }
+        @keyframes mascotSleep   { 0%,100%{transform:translateY(0) rotate(0)}  50%{transform:translateY(-4px) rotate(-8deg)} }
+        @keyframes mascotGalaPulse { 0%,100%{filter:drop-shadow(0 0 8px rgba(251,191,36,.6))} 50%{filter:drop-shadow(0 0 24px rgba(251,191,36,1)) drop-shadow(0 0 48px rgba(251,191,36,.4))} }
+
+        #fatlin-mascot.state-cheer  { animation: mascotCheer 0.9s ease forwards; filter:drop-shadow(0 4px 20px rgba(34,197,94,.7)); }
+        #fatlin-mascot.state-sad    { animation: mascotSad   0.6s ease forwards; filter:drop-shadow(0 4px 12px rgba(239,68,68,.6)); opacity:.7; }
+        #fatlin-mascot.state-win    { animation: mascotWin   1.1s ease forwards; filter:drop-shadow(0 4px 24px rgba(245,158,11,.8)); }
+        #fatlin-mascot.state-sleep  { animation: mascotSleep 3s ease-in-out infinite; opacity:.5; }
+        #fatlin-mascot.state-gala   { animation: mascotGalaPulse 2s ease-in-out infinite !important; }
+
+        /* Burbuja Zzz */
+        #mascot-zzz {
+            position:fixed; bottom:138px; right:12px;
+            font-size:.75rem; font-weight:800; color:#94a3b8;
+            z-index:201; pointer-events:none;
+            opacity:0; transition:opacity .5s;
+            animation: zzzFloat 2s ease-in-out infinite;
+        }
+        #mascot-zzz.visible { opacity:1; }
+        @keyframes zzzFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        /* ═══════ CELEBRACIÓN CADA 5 NIVELES ═══════ */
+        #level5-blast {
+            position:fixed; inset:0; z-index:4800;
+            pointer-events:none; display:none;
+            align-items:center; justify-content:center;
+            flex-direction:column; gap:8px;
+        }
+        #level5-blast.active { display:flex; }
+
+        /* Halo de luz radial */
+        #blast-halo {
+            position:absolute; width:320px; height:320px;
+            border-radius:50%;
+            background:radial-gradient(circle, rgba(56,189,248,.35) 0%, rgba(14,165,233,.15) 40%, transparent 70%);
+            animation: haloExpand .6s cubic-bezier(.2,0,.4,1) forwards;
+        }
+        @keyframes haloExpand { from{transform:scale(0);opacity:1} to{transform:scale(1.8);opacity:0} }
+
+        /* Emblema central de la celebración */
+        #blast-emblem {
+            position:relative; z-index:1;
+            width:120px; height:120px;
+            animation: blastIn .5s cubic-bezier(.34,1.56,.64,1) forwards,
+                       blastOut .4s ease-in 2.1s forwards;
+            filter:drop-shadow(0 8px 32px rgba(14,165,233,.6));
+        }
+        #blast-emblem svg { width:100%; height:100%; }
+        @keyframes blastIn  { from{transform:scale(0) translateY(40px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+        @keyframes blastOut { from{transform:scale(1) translateY(0);opacity:1} to{transform:scale(.6) translateY(-30px);opacity:0} }
+        body.gala-mode #blast-emblem { filter:drop-shadow(0 8px 32px rgba(251,191,36,.8)); }
+
+        /* Texto del nivel celebrado */
+        #blast-text {
+            position:relative; z-index:1;
+            font-family:'Inter',sans-serif; font-weight:800;
+            font-size:1.3rem; color:white;
+            text-shadow:0 2px 16px rgba(0,0,0,.5);
+            animation: blastIn .5s cubic-bezier(.34,1.56,.64,1) .15s both,
+                       blastOut .4s ease-in 2.1s forwards;
+            background:rgba(2,132,199,.75); backdrop-filter:blur(8px);
+            padding:6px 20px; border-radius:30px;
+            border:2px solid rgba(255,255,255,.3);
+        }
+        body.gala-mode #blast-text { background:rgba(180,83,9,.8); border-color:rgba(251,191,36,.5); }
+
+        /* Partículas de la explosión */
+        .blast-particle {
+            position:absolute; border-radius:50%;
+            animation: particleFly 1.2s ease-out forwards;
+        }
+        @keyframes particleFly {
+            from{transform:translate(0,0) scale(1);opacity:1}
+            to{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}
+        }
+
+        /* ═══════ REWARD MODAL REDISEÑADO ═══════ */
+        .reward-card {
+            background:linear-gradient(160deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%) !important;
+            border:2px solid rgba(56,189,248,.3) !important;
+        }
+        body.gala-mode .reward-card {
+            background:linear-gradient(160deg,#1a0a2e 0%,#3b1a6e 50%,#1a0a2e 100%) !important;
+            border:2px solid rgba(251,191,36,.4) !important;
+        }
+
+        /* ===== MODAL DESCANSO ===== */
+        #modal-rest { position:fixed;inset:0;background:rgba(2,20,40,.92);backdrop-filter:blur(12px);z-index:9000;display:none;align-items:center;justify-content:center;padding:16px; }
+        #modal-rest.active { display:flex;animation:fadeIn .35s ease; }
+        .rest-card { background:linear-gradient(160deg,#0f172a,#0c2340);border-radius:2rem;padding:2.5rem 2rem 2rem;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.7);border:1.5px solid rgba(56,189,248,.25);position:relative;overflow:hidden; }
+        .rest-card::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(56,189,248,.08),transparent 70%);pointer-events:none; }
+        .rest-emblem-wrap { width:110px;height:110px;margin:0 auto 1.25rem;position:relative; }
+        /* Anillo pulsante */
+        .rest-ring { position:absolute;inset:-10px;border-radius:50%;border:3px solid rgba(56,189,248,.4);animation:restRing 2s ease-in-out infinite; }
+        .rest-ring2 { position:absolute;inset:-20px;border-radius:50%;border:2px solid rgba(56,189,248,.2);animation:restRing 2s ease-in-out infinite .5s; }
+        @keyframes restRing { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.12);opacity:.15} }
+        /* Emblema flotante suave */
+        @keyframes restFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-10px) rotate(2deg)} }
+        .rest-emblem-svg { animation:restFloat 3.5s ease-in-out infinite; filter:drop-shadow(0 8px 22px rgba(56,189,248,.5)); }
+        /* Zzz durmiendo */
+        .rest-zzz { position:absolute;top:-8px;right:-8px;font-size:1.1rem;animation:restZzz 2s ease-in-out infinite; }
+        @keyframes restZzz { 0%{transform:translateY(0) scale(1);opacity:1} 60%{transform:translateY(-14px) scale(1.2);opacity:.5} 100%{transform:translateY(-20px) scale(.8);opacity:0} }
+        .rest-zzz2 { position:absolute;top:-18px;right:8px;font-size:.8rem;animation:restZzz 2s ease-in-out infinite .7s; }
+        .rest-zzz3 { position:absolute;top:-26px;right:20px;font-size:.6rem;animation:restZzz 2s ease-in-out infinite 1.2s; }
+        /* Texto */
+        .rest-title { font-size:1.5rem;font-weight:800;color:#f0f9ff;margin-bottom:.35rem;line-height:1.2; }
+        .rest-subtitle { font-size:.9rem;color:#7dd3fc;margin-bottom:.25rem;font-weight:600; }
+        .rest-time-badge { display:inline-block;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.35);border-radius:2rem;padding:.3rem .9rem;font-size:.8rem;font-weight:700;color:#38bdf8;margin:.5rem 0 1rem; }
+        .rest-tip { font-size:.75rem;color:#94a3b8;margin-bottom:1.5rem;line-height:1.5; }
+        .rest-btn { background:linear-gradient(135deg,#0369a1,#0284c7);color:white;border:none;border-radius:1rem;padding:.75rem 2rem;font-size:.9rem;font-weight:700;cursor:pointer;width:100%;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(3,105,161,.4); }
+        .rest-btn:hover { transform:translateY(-2px);box-shadow:0 8px 24px rgba(3,105,161,.5); }
+        .rest-btn-skip { background:none;border:none;color:#475569;font-size:.75rem;cursor:pointer;margin-top:.75rem;display:block;width:100%;padding:.4rem; }
+        .rest-btn-skip:hover { color:#94a3b8; }
+        /* Puntos decorativos */
+        .rest-dots { display:flex;justify-content:center;gap:6px;margin-bottom:1rem; }
+        .rest-dot { width:6px;height:6px;border-radius:50%;background:#1e3a5f; }
+        .rest-dot.active { background:#0ea5e9;box-shadow:0 0 6px #0ea5e9; }
+
+        /* Contenedor del emblema en el reward */
+        #reward-emblem-wrap {
+            width:96px; height:96px; margin:0 auto 1rem;
+            position:relative;
+        }
+        #reward-emblem-wrap svg { width:100%; height:100%; }
+        #reward-emblem-ring {
+            position:absolute; inset:-8px;
+            border-radius:50%;
+            border:3px solid transparent;
+            border-top-color:var(--primary);
+            border-right-color:var(--primary-light);
+            animation:rewardRingSpin 2s linear infinite;
+        }
+        @keyframes rewardRingSpin { to{transform:rotate(360deg)} }
+        body.gala-mode #reward-emblem-ring {
+            border-top-color:var(--gala-gold);
+            border-right-color:var(--gala-gold-light);
+        }
+        #reward-emblem-glow {
+            position:absolute; inset:-4px; border-radius:50%;
+            animation:rewardGlow 2s ease-in-out infinite;
+        }
+        @keyframes rewardGlow {
+            0%,100%{box-shadow:0 0 20px rgba(14,165,233,.4)}
+            50%{box-shadow:0 0 50px rgba(14,165,233,.8),0 0 80px rgba(14,165,233,.3)}
+        }
+        body.gala-mode #reward-emblem-glow {
+            animation:rewardGlowGala 2s ease-in-out infinite;
+        }
+        @keyframes rewardGlowGala {
+            0%,100%{box-shadow:0 0 20px rgba(251,191,36,.5)}
+            50%{box-shadow:0 0 60px rgba(251,191,36,1),0 0 100px rgba(251,191,36,.4)}
+        }
+
+        /* ═══════ SELECTOR DE IDIOMA (HUD toggle) ═══════ */
+        #hud-lang {
+            display:flex; align-items:center;
+            background:#f1f5f9; border-radius:20px;
+            padding:3px; gap:2px;
+            border:1px solid #e2e8f0;
+        }
+        .hud-lang-opt {
+            padding:3px 8px; border-radius:16px;
+            border:none; background:transparent;
+            font-family:'Inter',sans-serif; font-weight:700;
+            font-size:.72rem; cursor:pointer; color:#94a3b8;
+            transition:background .15s, color .15s;
+            line-height:1.2;
+        }
+        .hud-lang-opt.active {
+            background:white; color:#0369a1;
+            box-shadow:0 1px 4px rgba(0,0,0,.1);
+        }
+        body.gala-mode .hud-lang-opt.active { color:var(--gala-gold); }
+
+        /* ═══════ MODAL INVITADO — LÍMITE 3 NIVELES ═══════ */
+        #modal-guest-limit {
+            position:fixed;inset:0;background:rgba(8,47,73,.95);
+            backdrop-filter:blur(14px);z-index:6000;
+            display:none;align-items:center;justify-content:center;padding:20px;
+        }
+        #modal-guest-limit.active { display:flex;animation:fadeIn .25s ease; }
+        .guest-limit-card {
+            background:white;border-radius:2.5rem;padding:2.5rem 2rem;
+            max-width:400px;width:100%;text-align:center;
+            box-shadow:0 40px 100px rgba(0,0,0,.6);
+            animation:cardIn .4s cubic-bezier(.34,1.56,.64,1);
+        }
+        .guest-limit-icon { font-size:3.5rem;margin-bottom:.75rem;display:block; }
+        .guest-limit-title { font-size:1.4rem;font-weight:800;color:#1e293b;margin-bottom:.5rem; }
+        .guest-limit-msg { font-size:.88rem;color:#64748b;line-height:1.6;margin-bottom:.25rem; }
+        .guest-limit-warn {
+            background:#fef2f2;border:1px solid #fecaca;border-radius:1rem;
+            padding:.75rem 1rem;margin:1rem 0;
+            font-size:.8rem;font-weight:600;color:#dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<!-- BANNER DE ACTUALIZACIÓN PWA -->
+<div id="update-banner">
+    <span>🔄 Hay una nueva versión disponible</span>
+    <div style="display:flex;gap:8px">
+        <button id="btn-update-reload">Actualizar</button>
+        <button id="btn-update-dismiss">✕</button>
+    </div>
+</div>
+
+<!-- ESTRELLAS GALA -->
+<div id="gala-stars"></div>
+
+<!-- SPLASH -->
+<div id="splash">
+    <div class="logo-float">
+        <svg width="130" height="130" viewBox="0 0 100 100">
+            <defs><filter id="glow"><feGaussianBlur stdDeviation="1.5" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+            <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+            <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+            <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+            <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+            <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+            <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#glow)"><animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/></path>
+            <circle cx="50" cy="38" r="3" fill="white" opacity="0.8"><animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"/></circle>
+        </svg>
+    </div>
+    <p class="brand">Fatlin AI</p>
+    <p class="sub">Metodología PACIE &nbsp;·&nbsp; PACIE Methodology</p>
+    <div id="lang-splash">
+        <button class="lang-btn" id="ls-es" onclick="splashChooseLang('es')">
+            <span class="lang-flag">🇪🇸</span>
+            <span class="lang-label">
+                <span class="lang-label-main">Español</span>
+                <span class="lang-label-sub">Jugar en español</span>
+            </span>
+        </button>
+        <button class="lang-btn" id="ls-en" onclick="splashChooseLang('en')">
+            <span class="lang-flag">🇺🇸</span>
+            <span class="lang-label">
+                <span class="lang-label-main">English</span>
+                <span class="lang-label-sub">Play in English</span>
+            </span>
+        </button>
+    </div>
+</div>
+
+<!-- AUTH -->
+<div id="auth-screen">
+  <div id="debug-bar" style="position:fixed;top:0;left:0;right:0;background:#1e293b;color:#94a3b8;font-size:11px;padding:6px 12px;z-index:9999;font-family:monospace;display:none">
+    ⏳ Iniciando Firebase...
+  </div>
+    <div class="auth-card">
+        <div style="display:flex;justify-content:center;margin-bottom:1.25rem">
+            <svg width="52" height="52" viewBox="0 0 100 100"><path d="M50 90 L85 75 L50 60 L15 75 Z" fill="#0369a1"/><path d="M50 80 L85 65 L50 50 L15 65 Z" fill="#0284c7"/><path d="M50 70 L85 55 L50 40 L15 55 Z" fill="#0ea5e9"/><path d="M50 60 L85 45 L50 30 L15 45 Z" fill="#38bdf8"/><path d="M50 52 L72 41 L50 30 L28 41 Z" fill="#7dd3fc"/><circle cx="50" cy="41" r="2" fill="white" opacity="0.7"/></svg>
+        </div>
+        <h1 style="font-size:1.9rem;font-weight:800;color:#1e293b;margin-bottom:.25rem">Fatlin AI</h1>
+        <p style="color:#94a3b8;font-size:.85rem;margin-bottom:1.75rem">Gestión Educativa Inteligente</p>
+        <div id="auth-main">
+            <button id="btn-google" class="abtn google"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continuar con Google</button>
+            <button id="btn-show-email" class="abtn email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Correo electrónico</button>
+            <button id="btn-guest" class="abtn guest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Entrar como Invitado</button>
+        </div>
+        <div id="auth-email" style="display:none">
+            <input type="email" id="inp-email" class="ifield" placeholder="Correo">
+            <div style="position:relative"><input type="password" id="inp-pass" class="ifield" placeholder="Contraseña" style="margin-bottom:.5rem"><button id="btn-eye" style="position:absolute;right:1rem;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:#94a3b8;padding:4px"><svg id="eye-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+            <label class="cc" style="text-align:left;padding-left:.25rem"><input type="checkbox" id="chk-rem"><div class="ck"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20,6 9,17 4,12"/></svg></div><span style="font-size:.85rem;font-weight:600;color:#64748b">Recordar credenciales</span></label>
+            <button id="btn-login" class="abtn primary" style="margin-top:.5rem">Entrar / Registrar</button>
+            <button id="btn-back" style="background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:.75rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.15em;margin-top:.25rem">← Volver</button>
+        </div>
+    </div>
+</div>
+
+<!-- GAME -->
+<div id="game-container">
+    <div id="game-hud">
+        <div class="hud-inner">
+            <div id="hud-avatar" title="Cambiar avatar" data-i18n-title="hud_avatar">🧑</div>
+            <div class="hstat">
+                <span style="font-size:1rem">❤️</span>
+                <span id="stat-lives" style="font-weight:700;color:#334155">5</span>
+                <span id="stat-timer"></span>
+            </div>
+            <div class="hdiv"></div>
+            <div class="hstat"><span style="font-size:1rem">⭐</span><span id="stat-stars" style="font-weight:700;color:#334155">0</span></div>
+            <div class="hdiv"></div>
+            <div id="streak-bar">
+                <div class="streak-dot" id="sd0"></div>
+                <div class="streak-dot" id="sd1"></div>
+                <div class="streak-dot" id="sd2"></div>
+                <div class="streak-dot" id="sd3"></div>
+            </div>
+            <div class="hdiv"></div>
+            <div class="hstat"><span style="font-size:1rem">🏆</span><span id="stat-level" style="font-weight:700;color:#334155">Nv.1</span></div>
+
+            <div class="hdiv hdiv-new"></div>
+            <div id="stat-shields" class="hstat">
+                <span class="shield-icon">🛡️</span>
+                <span id="stat-shields-count" style="font-weight:700;color:#7c3aed">0</span>
+            </div>
+            <div class="hdiv hdiv-new" id="hdiv-streak"></div>
+            <div id="stat-streak" class="hstat">
+                <span style="font-size:1rem">🔥</span>
+                <span id="stat-streak-count" style="font-weight:700;color:#ea580c">0d</span>
+            </div>
+            <div class="hdiv hdiv-new" id="hdiv-gala"></div>
+            <span id="gala-badge">✨ GALA <span id="gala-timer"></span></span>
+            <div class="hdiv"></div>
+            <div class="hstat" style="max-width:80px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span id="stat-user" style="font-size:11px;font-weight:700;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">...</span></div>
+            <div style="display:flex;gap:4px">
+                <button id="btn-logros" class="hbtn" style="background:#f0fdf4;color:#16a34a" title="Mis Logros" onclick="openLogros()">🏅</button>
+                <button id="btn-ranking" class="hbtn" style="background:#fef3c7;color:#b45309"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></button>
+                <button id="btn-gocur" class="hbtn" style="background:#e0f2fe;color:#0284c7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
+                <div id="hud-lang">
+                    <button class="hud-lang-opt active" id="hl-es" onclick="setLang('es',this,'hud')">ES</button>
+                    <button class="hud-lang-opt" id="hl-en" onclick="setLang('en',this,'hud')">EN</button>
+                </div>
+                <button id="btn-shop" class="hbtn" style="background:#fef3c7;color:#d97706" title="Tienda" data-i18n-title="hud_shop">🛡️</button>
+                <button id="btn-account" class="hbtn" style="background:#f1f5f9;color:#64748b"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            </div>
+        </div>
+    </div>
+    <div id="map-scroll"><svg id="path-svg"></svg><div id="nodes-container"></div></div>
+    <div id="scroll-hint" data-i18n="scroll_hint">🖱️ Rueda del mouse para explorar</div>
+</div>
+
+<!-- MASCOTA FATLIN (visible durante el juego) -->
+<div id="fatlin-mascot" title="Fatlin AI">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg>
+</div>
+<div id="mascot-zzz">Zzz</div>
+
+<!-- CELEBRACIÓN CADA 5 NIVELES -->
+<div id="level5-blast">
+    <div id="blast-halo"></div>
+    <div id="blast-emblem"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg></div>
+    <div id="blast-text" id="blast-level-txt">¡Nivel 5 completado! ⭐</div>
+</div>
+
+<!-- MODAL CHALLENGE -->
+<div id="modal-challenge" class="modal-overlay">
+    <div class="challenge-card" id="ccard">
+        <div class="fatlin-mini">
+            <svg width="96" height="96" viewBox="0 0 100 100" style="filter:drop-shadow(0 8px 18px rgba(0,0,0,.35))"><path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/><path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/><path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/><path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/><path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/><path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc"/><circle cx="50" cy="38" r="3" fill="white"/></svg>
+        </div>
+        <div id="ai-loading">
+            <div class="ai-spinner"></div>
+            <p id="ai-loading-msg" data-i18n="ai_loading">Consultando fuentes PACIE...</p>
+            <small id="ai-loading-sub">Generando preguntas con IA desde fatla.org y pacie.education</small>
+        </div>
+        <div id="feedback-float">
+            <p id="feedback-text" style="font-size:.85rem;font-weight:700"></p>
+            <div style="margin-top:.25rem;font-size:9px;text-transform:uppercase;letter-spacing:.1em;opacity:.7"><span data-i18n="life_lost">Vida perdida · El progreso se mantiene</span></div>
+            <div class="cbar"><div class="cfill" id="cfill" style="width:100%"></div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:.5rem">
+            <div>
+                <p id="clabel" style="font-size:10px;font-weight:700;color:#0284c7;text-transform:uppercase;letter-spacing:.1em" data-i18n="challenge_label">Desafío PACIE</p>
+                <p id="replay-badge" style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;display:none" data-i18n-prefix="replaying">🔄 Repasando nivel <span id="replay-num"></span></p>
+            </div>
+            <div style="text-align:right">
+                <span id="txt-progress" style="font-size:1.1rem;font-weight:700;color:#1e293b">0/4</span>
+                <p style="font-size:9px;color:#94a3b8;margin-top:1px" data-i18n="hits_needed">aciertos necesarios</p>
+            </div>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:1rem">
+            <div class="streak-dot" id="cd0" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd1" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd2" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd3" style="width:16px;height:16px"></div>
+        </div>
+        <div id="question-area">
+            <p id="source-badge"></p>
+            <p id="q-type-badge" style="font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;text-align:center;margin-bottom:.5rem;display:none" data-i18n="true_false">Verdadero o Falso</p>
+            <h2 id="txt-q" style="font-size:1rem;font-weight:600;color:#1e293b;margin-bottom:1.25rem;line-height:1.55;text-align:center;letter-spacing:-.01em">...</h2>
+            <div id="opts-container"></div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REWARD — emblema protagonista -->
+<div id="modal-reward">
+    <div class="reward-card" id="rcard">
+        <!-- Emblema central con anillo giratorio -->
+        <div id="reward-emblem-wrap">
+            <div id="reward-emblem-glow"></div>
+            <div id="reward-emblem-ring"></div>
+            <div id="reward-emblem-svg"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="fglow"><feGaussianBlur stdDeviation="2" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="fbg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="rgba(56,189,248,.15)"/>
+      <stop offset="100%" stop-color="rgba(56,189,248,0)"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#fbg)"/>
+  <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+  <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+  <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+  <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+  <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+  <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc" filter="url(#fglow)"/>
+  <circle cx="50" cy="38" r="3.5" fill="white" opacity="0.9"/>
+</svg></div>
+        </div>
+        <!-- Título y mensaje -->
+        <h2 style="font-size:1.5rem;font-weight:800;color:white;margin:.25rem 0" id="r-title">¡Increíble!</h2>
+        <p style="color:#7dd3fc;font-size:.85rem;margin-bottom:1.25rem" id="r-msg">Has completado 10 niveles</p>
+        <!-- Badge de insignia -->
+        <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:1.25rem;padding:.85rem 1rem;margin-bottom:1.25rem">
+            <p style="color:white;font-weight:700;font-size:1rem" id="r-badge">🎖️ Explorador PACIE</p>
+            <p style="color:#93c5fd;font-size:.7rem;margin-top:.2rem" id="r-sub" data-i18n="badge_unlocked">Insignia desbloqueada</p>
+        </div>
+        <button id="btn-reward-close" class="wbtn primary" style="font-size:1rem;padding:1rem;border-radius:1.5rem" data-i18n="keep_going">¡Seguir escalando! 🚀</button>
+    </div>
+</div>
+
+<!-- MODAL RANKING -->
+<div id="modal-ranking">
+  <div class="rcard">
+
+    <!-- Header -->
+    <div class="rcard-header">
+      <h2 style="font-size:1.1rem;font-weight:900;color:#e2e8f0">🏆 Ranking</h2>
+      <button id="btn-close-ranking" style="background:rgba(255,255,255,.08);border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="rtabs">
+      <button class="rtab active" id="tab-global" onclick="switchRankTab('global')">🌍 Global</button>
+      <button class="rtab" id="tab-liga" onclick="switchRankTab('liga')">⚡ Mi Liga</button>
+    </div>
+
+    <!-- PANEL GLOBAL -->
+    <div id="panel-global">
+      <div id="ranking-list"><div class="ldots"><span></span><span></span><span></span></div></div>
+    </div>
+
+    <!-- PANEL LIGA — 3 zonas -->
+    <div id="panel-liga" style="display:none">
+
+      <!-- A. Cabecera de Liga -->
+      <div class="liga-header">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div id="liga-shield" class="liga-shield shield-1">🛡️</div>
+          <div>
+            <div id="liga-name" class="liga-name">Liga 1 · Aspirantes Digitales</div>
+            <div id="liga-sub" class="liga-sub">El inicio del viaje</div>
+            <div class="liga-timer-badge">⏱ Finaliza en: <span id="liga-cnt">--</span></div>
+          </div>
+        </div>
+        <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.7rem;background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3);border-radius:20px;padding:3px 10px;font-weight:700">↑ Top <span id="liga-promo-n">10</span> ascienden</span>
+          <span id="liga-penalty-badge" style="font-size:.7rem;background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3);border-radius:20px;padding:3px 10px;font-weight:700;display:none">⚠ Ligas élite: 2 errores = -pts</span>
+        </div>
+      </div>
+
+      <!-- B. Zona Verde — Podio de Promoción -->
+      <div class="zona-promo-label">🟢 Zona de Ascenso &nbsp;<span style="opacity:.5;font-weight:400">· Top <span id="liga-promo-n2">10</span></span></div>
+      <div id="liga-promo-zone"></div>
+
+      <div class="rdiv"></div>
+      <div style="padding:.4rem 1.25rem;font-size:.7rem;color:rgba(255,255,255,.25);text-align:center" id="liga-mid-zone"></div>
+      <div class="rdiv"></div>
+
+      <!-- C. Zona Roja — Peligro -->
+      <div class="zona-danger-label" id="liga-danger-lbl" style="display:none">🔴 Zona de Peligro &nbsp;<span style="opacity:.5;font-weight:400">· Riesgo de descenso</span></div>
+      <div id="liga-danger-zone"></div>
+
+      <div class="rcard-footer">
+        Reinicio cada lunes 00:00 UTC · <span id="liga-week-lbl"></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL ACCOUNT -->
+<div id="modal-account">
+    <div class="accard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+            <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b" data-i18n="my_account">Mi Cuenta</h2>
+            <button id="btn-close-account" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div style="background:#f0f9ff;border-radius:1.25rem;padding:1rem;margin-bottom:1.25rem;text-align:left">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <div id="acc-av" style="width:48px;height:48px;background:#bae6fd;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;border:2px solid #7dd3fc">🧑</div>
+                <div><p id="acc-name" style="font-weight:700;color:#1e293b;font-size:.9rem">Usuario</p><p id="acc-email" style="color:#94a3b8;font-size:.75rem">—</p></div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.75rem">
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-level" style="font-weight:800;color:#0284c7;font-size:1.1rem">1</p><p style="color:#94a3b8;font-size:10px">Nivel</p></div>
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-stars" style="font-weight:800;color:#d97706;font-size:1.1rem">0</p><p style="color:#94a3b8;font-size:10px">Estrellas</p></div>
+                <div style="background:white;border-radius:.75rem;padding:.6rem;text-align:center"><p id="acc-badges" style="font-weight:800;color:#16a34a;font-size:1.1rem">0</p><p style="color:#94a3b8;font-size:10px">Insignias</p></div>
+            </div>
+        </div>
+        <button id="btn-chgav" class="wbtn purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Cambiar Avatar</button>
+        <button id="btn-switch-acc" class="wbtn sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 .49-3.78"/></svg>Cambiar de cuenta</button>
+        <button id="btn-new-acc" class="wbtn slate"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Registrar nueva cuenta</button>
+        <button id="btn-logout" class="wbtn red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+    </div>
+</div>
+
+<!-- MODAL AVATAR -->
+<div id="modal-avatar">
+    <div class="avcard">
+        <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b;margin-bottom:.25rem" data-i18n="pick_avatar">Elige tu Avatar</h2>
+        <p style="color:#94a3b8;font-size:.85rem;margin-bottom:.5rem" data-i18n="avatar_sub">Personaliza tu identidad en el juego</p>
+        <div class="avgrid" id="av-grid"></div>
+        <button id="btn-confirm-av" class="wbtn primary" data-i18n="confirm_avatar">Confirmar Avatar ✓</button>
+    </div>
+</div>
+
+<!-- MODAL DIPLOMA -->
+<div id="modal-diploma">
+    <div class="diploma-wrap">
+        <div id="diploma-content">
+            <div class="diploma-border-inner">
+                <div class="diploma-seal">🏅</div>
+                <p class="diploma-title" data-i18n="diploma_title">Certificado de Logro</p>
+                <p class="diploma-subtitle" data-i18n="diploma_org">Fatlin AI · Metodología PACIE</p>
+                <p class="diploma-certify" data-i18n="diploma_certify">Se certifica que</p>
+                <p class="diploma-name" id="dip-name">Nombre del Usuario</p>
+                <p class="diploma-level" id="dip-level" data-i18n="diploma_level">ha completado 50 niveles de la metodología PACIE</p>
+                <p class="diploma-certify" style="margin-top:.75rem;font-size:.7rem">demostrando dominio en las fases de Presencia, Alcance,<br>Capacitación, Interacción y E-learning</p>
+                <div class="diploma-logos">
+                    <div style="text-align:center">
+                        <svg width="36" height="36" viewBox="0 0 100 100"><path d="M50 90 L85 75 L50 60 L15 75 Z" fill="#0369a1"/><path d="M50 80 L85 65 L50 50 L15 65 Z" fill="#0284c7"/><path d="M50 70 L85 55 L50 40 L15 55 Z" fill="#0ea5e9"/><path d="M50 60 L85 45 L50 30 L15 45 Z" fill="#38bdf8"/><path d="M50 52 L72 41 L50 30 L28 41 Z" fill="#7dd3fc"/></svg>
+                        <p class="diploma-sig">Fatlin AI</p>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.5rem">🎓</div>
+                        <p class="diploma-sig">FATLA · PACIE</p>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.5rem">🌐</div>
+                        <p class="diploma-sig">ASOMTV</p>
+                    </div>
+                </div>
+                <p class="diploma-date" id="dip-date"></p>
+            </div>
+        </div>
+        <div class="diploma-actions">
+            <button id="btn-dip-print" class="wbtn primary" style="margin:0" data-i18n="diploma_print">🖨️ Imprimir / Guardar PDF</button>
+            <button id="btn-dip-close" class="wbtn slate" style="margin:0;flex:0 0 auto;padding:.9rem 1.2rem">✕</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TIENDA -->
+<div id="modal-shop">
+    <div class="shop-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <h2 style="font-size:1.3rem;font-weight:800;color:#1e293b" data-i18n="shop_title">🛍️ Tienda PACIE</h2>
+            <button id="btn-close-shop" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div style="background:#fef3c7;border-radius:1rem;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
+            <span style="font-size:1.2rem">⭐</span>
+            <span style="font-weight:700;color:#92400e" data-i18n="your_stars">Tus estrellas: </span>
+            <span id="shop-stars" style="font-weight:800;color:#d97706;font-size:1.1rem">0</span>
+        </div>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">Escudos de Racha</p>
+        <div class="shop-item" id="shop-buy-1" onclick="buyShields(1,350)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">🛡️</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">1 Escudo</p><p style="font-size:.75rem;color:#64748b">Protege tu racha 1 vez</p></div>
+            </div>
+            <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 350</span>
+        </div>
+        <div class="shop-item" id="shop-buy-3" onclick="buyShields(3,1100)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">🛡️🛡️🛡️</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">3 Escudos</p><p style="font-size:.75rem;color:#16a34a">¡Ahorra 50 estrellas!</p></div>
+            </div>
+            <span style="background:#f0fdf4;color:#16a34a;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 1100</span>
+        </div>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin:.75rem 0">Modo Gala ✨</p>
+        <div class="shop-item gala-item" id="shop-buy-gala" onclick="buyGala(24,500)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">✨</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 24h</p><p style="font-size:.75rem;color:#64748b">Vidas infinitas + fondo estelar</p></div>
+            </div>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 500</span>
+        </div>
+        <div class="shop-item gala-item" id="shop-buy-gala2" onclick="buyGala(72,1500)">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">👑</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 72h</p><p style="font-size:.75rem;color:#16a34a">¡El mejor valor!</p></div>
+            </div>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 1500</span>
+        </div>
+    </div>
+</div>
+
+<footer class="page-footer"><p data-i18n="footer">Tecnotips &#169; - 2026 · Tecnología con propósito</p></footer>
+<div id="error-msg"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PWA — REGISTRO DEL SERVICE WORKER
+═══════════════════════════════════════════════════════════════ -->
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then(function(reg) {
+                console.log('[PWA] Service Worker registrado, scope:', reg.scope);
+                reg.addEventListener('updatefound', function() {
+                    var newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', function() {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            document.getElementById('update-banner').classList.add('show');
+                        }
+                    });
+                });
+            })
+            .catch(function(err) { console.warn('[PWA] SW falló:', err); });
+
+        // ── Recarga automática cuando el nuevo SW toma control ──────────
+        // El SW envía SW_UPDATED después de clients.claim().
+        // Si el usuario está en el juego, se recarga suavemente.
+        navigator.serviceWorker.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'SW_UPDATED') {
+                console.log('[PWA] Nueva versión detectada — recargando...');
+                window.location.reload();
+            }
+        });
+
+        // También recargar si el controlador cambia (por skipWaiting externo)
+        var refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+            if (!refreshing) {
+                refreshing = true;
+                window.location.reload();
+            }
+        });
+
+        document.getElementById('btn-update-reload').addEventListener('click', function() {
+            navigator.serviceWorker.getRegistration().then(function(reg) {
+                if (reg && reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            });
+        });
+        document.getElementById('btn-update-dismiss').addEventListener('click', function() {
+            document.getElementById('update-banner').classList.remove('show');
+        });
+    });
+}
+window.addEventListener('appinstalled', function() {
+    console.log('[PWA] App instalada en pantalla de inicio');
+});
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     FUNCIÓN GLOBAL splashChooseLang — DEBE estar ANTES del módulo
+     para que el onclick inline del HTML pueda encontrarla.
+═══════════════════════════════════════════════════════════════ -->
+<script>
+// ── Estado mínimo necesario antes de que cargue el módulo ──────
+window._splashLangChosen = null;
+
+window.splashChooseLang = function(lang) {
+  try {
+    window._splashLangChosen = lang;
+    localStorage.setItem('fatlin_lang', lang);
+    var btn = document.getElementById('ls-' + lang);
+    if (btn) btn.classList.add('entering');
+  } catch(e) {}
+  // hideSplash puede no existir aún si el módulo tarda; usamos el fallback
+  setTimeout(function() {
+    if (typeof hideSplash === 'function') {
+      hideSplash();
+    } else {
+      // El módulo aún no cargó — ocultar splash directamente
+      var splash = document.getElementById('splash');
+      if (splash) { splash.style.opacity = '0'; setTimeout(function(){ splash.style.display = 'none'; }, 400); }
+    }
+  }, 160);
+};
+
+// Auto-skip splash si el idioma ya estaba guardado
+(function() {
+  var saved = localStorage.getItem('fatlin_lang');
+  if (saved) {
+    window._splashLangChosen = saved;
+    var splash = document.getElementById('splash');
+    if (splash) { splash.style.opacity = '0'; setTimeout(function(){ splash.style.display = 'none'; }, 400); }
+  }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LÓGICA PRINCIPAL DEL JUEGO
+═══════════════════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, getDocs, collection, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = { apiKey:"AIzaSyAByrBFOD9-Ji93nT3s31As_xN0tWS5_QE", authDomain:"fatlin.firebaseapp.com", projectId:"fatlin", storageBucket:"fatlin.appspot.com", messagingSenderId:"88080333098", appId:"1:88080333098:web:6a981dfc448b9ea670c653" };
+
+// ═══════════════════════════════════════════════════════════════
+// SISTEMA DE INTERNACIONALIZACIÓN (i18n)
+// ═══════════════════════════════════════════════════════════════
+const LANG = {
+  es: {
+    tap_continue:    'Toca para continuar',
+    subtitle:        'Metodología PACIE',
+    auth_tagline:    'Gestión Educativa Inteligente',
+    btn_google:      'Continuar con Google',
+    btn_email:       'Correo electrónico',
+    btn_guest:       'Entrar como Invitado',
+    ph_email:        'Correo',
+    ph_pass:         'Contraseña',
+    remember_me:     'Recordar credenciales',
+    btn_login:       'Entrar / Registrar',
+    btn_back:        '← Volver',
+    hud_avatar:      'Cambiar avatar',
+    hud_shop:        'Tienda',
+    challenge_label: 'Desafío PACIE',
+    replaying:       '🔄 Repasando nivel',
+    hits_needed:     'aciertos necesarios',
+    true_false:      'Verdadero o Falso',
+    life_lost:       'Vida perdida · El progreso se mantiene',
+    ai_loading:      'Consultando fuentes PACIE...',
+    ai_loading_sub:  'Buscando en fatla.org, pacie.education...',
+    tf_true:         '✅ Verdadero',
+    tf_false:        '❌ Falso',
+    badge_unlocked:  'Insignia desbloqueada',
+    keep_going:      '¡Seguir escalando! 🚀',
+    ranking_title:   '🏆 Ranking',
+    tab_global:      '🌍 Global (Top 25)',
+    tab_league:      '⚡ Liga Semanal',
+    league_week:     '⚡ Liga Semanal PACIE',
+    league_top:      '🏅 Clasificados',
+    league_table:    '📊 Tabla Semanal',
+    league_promo:    'Los 5 primeros de cada semana clasifican a la <strong>Liga PACIE</strong> ⚡',
+    league_reset:    'Reinicio cada lunes 00:00',
+    my_account:      'Mi Cuenta',
+    change_avatar:   'Cambiar Avatar',
+    switch_account:  'Cambiar de cuenta',
+    new_account:     'Registrar nueva cuenta',
+    logout:          'Cerrar sesión',
+    anon_session:    'Sesión anónima',
+    guest_label:     'Invitado',
+    confirm_logout:  '¿Cerrar sesión?',
+    confirm_switch:  '¿Cambiar de cuenta?',
+    pick_avatar:     'Elige tu Avatar',
+    avatar_sub:      'Personaliza tu identidad en el juego',
+    confirm_avatar:  'Confirmar Avatar ✓',
+    stat_level:      'Nivel',
+    stat_stars:      'Estrellas',
+    stat_badges:     'Insignias',
+    diploma_title:   'Certificado de Logro',
+    diploma_org:     'Fatlin AI · Metodología PACIE',
+    diploma_certify: 'Se certifica que',
+    diploma_level:   'ha completado {N} niveles de la metodología PACIE',
+    diploma_skills:  'demostrando dominio en las fases de Presencia, Alcance,<br>Capacitación, Interacción y E-learning',
+    diploma_issued:  'Emitido el',
+    diploma_print:   '🖨️ Imprimir / Guardar PDF',
+    shop_title:      '🛍️ Tienda PACIE',
+    your_stars:      'Tus estrellas: ',
+    shield_1_name:   '1 Escudo',
+    shield_1_desc:   'Protege tu racha 1 vez',
+    shield_3_name:   '3 Escudos',
+    shield_3_desc:   '¡Ahorra 15 estrellas!',
+    gala_24_name:    'Modo Gala 24h',
+    gala_24_desc:    'Vidas infinitas + fondo estelar',
+    gala_72_name:    'Modo Gala 72h',
+    gala_72_desc:    '¡El mejor valor!',
+    no_lives:        'No tienes vidas. Espera 10 min por vida.',
+    no_stars_need:   'Necesitas {N} ⭐ (tienes {M})',
+    shield_bought:   '🛡️ {N} escudo{S} comprado{S}. Total: {T}',
+    gala_activated:  '✨ ¡Modo Gala activado por {N}h! Vidas infinitas 🚀',
+    gala_ended:      'Modo Gala finalizado. ¡Sigue ganando estrellas!',
+    streak_saved:    '🛡️ Escudo usado — ¡Racha salvada! ({N} restantes)',
+    streak_lost:     '💔 Racha perdida. ¡Compra escudos para protegerla!',
+    streak_active:   '🔥 ¡{N} días seguidos! Racha activa',
+    scroll_hint:     '🖱️ Rueda del mouse para explorar',
+    footer:          'Tecnotips &#169; - 2026 · Tecnología con propósito',
+    node_replay:     '¡Repasar!',
+    blast_msgs: {
+      10:'¡Despegando! ⭐', 20:'¡Imparable! 🔥', 30:'¡Crack total! 💎',
+      40:'¡Élite PACIE! 🏆', 50:'¡DIPLOMA GANADO! 🎓', 60:'¡Maestro Absoluto! 👑',
+      70:'¡Superestrella! 🌟', 80:'¡Arquitecto PACIE! 🏛️', 90:'¡Visionario! 🔮',
+      100:'¡MÁSTER TOTAL! 🎓✨'},
+    rewards:[
+      {emoji:'🌱',title:'¡Primer gran paso!',  badge:'🎖️ Semilla PACIE',   msg:'10 niveles conquistados.'},
+      {emoji:'⚡',title:'¡Imparable!',          badge:'🥉 Explorador PACIE', msg:'20 niveles dominados.'},
+      {emoji:'🔥',title:'¡En llamas!',          badge:'🥈 Navegante PACIE',  msg:'30 niveles superados.'},
+      {emoji:'💎',title:'¡Élite PACIE!',        badge:'🥇 Maestro PACIE',    msg:'40 niveles vencidos.'},
+      {emoji:'🚀',title:'¡Leyenda viva!',       badge:'🏆 Leyenda PACIE',    msg:'50 niveles conquistados.'},
+      {emoji:'👑',title:'¡Máximo Honor!',       badge:'👑 Rey PACIE',        msg:'60 niveles. Cumbre alcanzada.'},
+      {emoji:'🌟',title:'¡Superestrella!',      badge:'🌟 Estrella PACIE',   msg:'70 niveles. Territorio élite.'},
+      {emoji:'🏛️',title:'¡Arquitecto PACIE!', badge:'🏛️ Arquitecto',      msg:'80 niveles. Conocimiento sólido.'},
+      {emoji:'🔮',title:'¡Visionario PACIE!',   badge:'🔮 Visionario',       msg:'90 niveles. Visión total.'},
+      {emoji:'🎓',title:'¡Máster Absoluto!',    badge:'🎓 Máster Absoluto',  msg:'100 niveles. Cima conquistada.'},
+    ],
+  },
+
+  en: {
+    tap_continue:    'Tap to continue',
+    subtitle:        'PACIE Methodology',
+    auth_tagline:    'Intelligent Educational Management',
+    btn_google:      'Continue with Google',
+    btn_email:       'Email address',
+    btn_guest:       'Enter as Guest',
+    ph_email:        'Email',
+    ph_pass:         'Password',
+    remember_me:     'Remember credentials',
+    btn_login:       'Sign in / Register',
+    btn_back:        '← Back',
+    hud_avatar:      'Change avatar',
+    hud_shop:        'Shop',
+    challenge_label: 'PACIE Challenge',
+    replaying:       '🔄 Reviewing level',
+    hits_needed:     'correct answers needed',
+    true_false:      'True or False',
+    life_lost:       'Life lost · Progress is kept',
+    ai_loading:      'Consulting PACIE sources...',
+    ai_loading_sub:  'Searching fatla.org, pacie.education...',
+    tf_true:         '✅ True',
+    tf_false:        '❌ False',
+    badge_unlocked:  'Badge unlocked',
+    keep_going:      'Keep climbing! 🚀',
+    ranking_title:   '🏆 Ranking',
+    tab_global:      '🌍 Global (Top 25)',
+    tab_league:      '⚡ Weekly League',
+    league_week:     '⚡ PACIE Weekly League',
+    league_top:      '🏅 Qualifiers',
+    league_table:    '📊 Weekly Table',
+    league_promo:    'The top 5 each week qualify for the <strong>PACIE League</strong> ⚡',
+    league_reset:    'Resets every Monday 00:00',
+    my_account:      'My Account',
+    change_avatar:   'Change Avatar',
+    switch_account:  'Switch account',
+    new_account:     'Register new account',
+    logout:          'Sign out',
+    anon_session:    'Anonymous session',
+    guest_label:     'Guest',
+    confirm_logout:  'Sign out?',
+    confirm_switch:  'Switch account?',
+    pick_avatar:     'Choose your Avatar',
+    avatar_sub:      'Customize your identity in the game',
+    confirm_avatar:  'Confirm Avatar ✓',
+    stat_level:      'Level',
+    stat_stars:      'Stars',
+    stat_badges:     'Badges',
+    diploma_title:   'Certificate of Achievement',
+    diploma_org:     'Fatlin AI · PACIE Methodology',
+    diploma_certify: 'This certifies that',
+    diploma_level:   'has completed {N} levels of the PACIE methodology',
+    diploma_skills:  'demonstrating mastery of the Presence, Scope,<br>Training, Interaction and E-learning phases',
+    diploma_issued:  'Issued on',
+    diploma_print:   '🖨️ Print / Save PDF',
+    shop_title:      '🛍️ PACIE Shop',
+    your_stars:      'Your stars: ',
+    shield_1_name:   '1 Shield',
+    shield_1_desc:   'Protects your streak once',
+    shield_3_name:   '3 Shields',
+    shield_3_desc:   'Save 15 stars!',
+    gala_24_name:    'Gala Mode 24h',
+    gala_24_desc:    'Infinite lives + starry background',
+    gala_72_name:    'Gala Mode 72h',
+    gala_72_desc:    'Best value!',
+    no_lives:        'No lives left. Wait 10 min per life.',
+    no_stars_need:   'You need {N} ⭐ (you have {M})',
+    shield_bought:   '🛡️ {N} shield{S} purchased. Total: {T}',
+    gala_activated:  '✨ Gala Mode activated for {N}h! Infinite lives 🚀',
+    gala_ended:      'Gala Mode ended. Keep earning stars!',
+    streak_saved:    '🛡️ Shield used — Streak saved! ({N} remaining)',
+    streak_lost:     '💔 Streak lost. Buy shields to protect it!',
+    streak_active:   '🔥 {N} days in a row! Streak active',
+    scroll_hint:     '🖱️ Mouse wheel to explore',
+    footer:          'Tecnotips &#169; - 2026 · Tecnología con propósito',
+    node_replay:     'Review!',
+    blast_msgs:{
+      10:'Taking off! ⭐', 20:'Unstoppable! 🔥', 30:'Total boss! 💎',
+      40:'PACIE Elite! 🏆', 50:'DIPLOMA EARNED! 🎓', 60:'Absolute Master! 👑',
+      70:'Superstar! 🌟', 80:'PACIE Architect! 🏛️', 90:'Visionary! 🔮',
+      100:'TOTAL MASTER! 🎓✨'},
+    rewards:[
+      {emoji:'🌱',title:'First big step!',     badge:'🎖️ PACIE Seed',      msg:'10 levels conquered.'},
+      {emoji:'⚡',title:'Unstoppable!',         badge:'🥉 PACIE Explorer',   msg:'20 levels mastered.'},
+      {emoji:'🔥',title:'On fire!',             badge:'🥈 PACIE Navigator',  msg:'30 levels surpassed.'},
+      {emoji:'💎',title:'PACIE Elite!',         badge:'🥇 PACIE Master',     msg:'40 levels conquered.'},
+      {emoji:'🚀',title:'Living legend!',       badge:'🏆 PACIE Legend',     msg:'50 levels conquered.'},
+      {emoji:'👑',title:'Maximum Honor!',       badge:'👑 PACIE King',       msg:'60 levels. Summit reached.'},
+      {emoji:'🌟',title:'Superstar!',           badge:'🌟 PACIE Star',       msg:'70 levels. Elite territory.'},
+      {emoji:'🏛️',title:'PACIE Architect!',   badge:'🏛️ Architect',       msg:'80 levels. Solid knowledge.'},
+      {emoji:'🔮',title:'PACIE Visionary!',     badge:'🔮 Visionary',        msg:'90 levels. Total vision.'},
+      {emoji:'🎓',title:'Absolute Master!',     badge:'🎓 Absolute Master',  msg:'100 levels. Summit conquered.'},
+    ],
+  }
+};
+
+// ── Estado del idioma ────────────────────────────────────────────
+// Tomar el idioma elegido en el splash (ya guardado en localStorage)
+let currentLang = localStorage.getItem('fatlin_lang') || (navigator.language?.startsWith('en') ? 'en' : 'es');
+
+function t(key, vars={}){
+  const d = LANG[currentLang] || LANG['es'];
+  let str = d[key] || LANG['es'][key] || key;
+  Object.entries(vars).forEach(([k,v])=>{ str = str.replaceAll(`{${k}}`, v); });
+  return str;
+}
+
+function applyLang(){
+  const d = LANG[currentLang] || LANG['es'];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(d[key] !== undefined) el.innerHTML = d[key];
+  });
+  const emailInput = document.getElementById('inp-email');
+  const passInput  = document.getElementById('inp-pass');
+  if(emailInput) emailInput.placeholder = t('ph_email');
+  if(passInput)  passInput.placeholder  = t('ph_pass');
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-title');
+    if(d[key]) el.title = d[key];
+  });
+  [
+    ['btn-google',     'btn_google'],
+    ['btn-show-email', 'btn_email'],
+    ['btn-guest',      'btn_guest'],
+    ['btn-login',      'btn_login'],
+    ['btn-back',       'btn_back'],
+    ['btn-logout',     'logout'],
+    ['btn-switch-acc', 'switch_account'],
+    ['btn-new-acc',    'new_account'],
+    ['btn-chgav',      'change_avatar'],
+    ['btn-confirm-av', 'confirm_avatar'],
+    ['btn-reward-close','keep_going'],
+    ['btn-dip-print',  'diploma_print'],
+    ['tab-global',     'tab_global'],
+    ['tab-liga',       'tab_league'],
+  ].forEach(([id, key])=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const svg = el.querySelector('svg');
+    if(svg){
+      const nodes = Array.from(el.childNodes);
+      const textNode = nodes.find(n=>n.nodeType===3 && n.textContent.trim());
+      if(textNode) textNode.textContent = t(key);
+      else el.appendChild(document.createTextNode(t(key)));
+    } else {
+      el.innerHTML = d[key] || el.innerHTML;
+    }
+  });
+  ['hl-es','hl-en'].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(btn) btn.classList.toggle('active', id.endsWith(currentLang));
+  });
+  if(typeof REWARDS !== 'undefined'){
+    const rw = d.rewards || LANG['es'].rewards;
+    for(let i=0;i<REWARDS.length;i++) Object.assign(REWARDS[i], rw[i]||{});
+  }
+  currentBlastMsgs = d.blast_msgs || LANG['es'].blast_msgs;
+}
+
+window.setLang = function(lang, btnEl, source='splash'){
+  const prev = currentLang;
+  currentLang = lang;
+  localStorage.setItem('fatlin_lang', lang);
+  applyLang();
+  const gameActive = typeof game !== 'undefined' && game && game.user;
+  if(prev !== lang){
+    clearQuestionCache();
+    if(gameActive) setTimeout(async()=>{ try{ const u=game.user||auth.currentUser; if(u){ await u.getIdToken(); prefetchAhead(game.level-1,3); } }catch(e){} }, 6000);
+  }
+  if(source !== 'silent' && gameActive){
+    const msg = lang === 'en' ? '🇺🇸 English activated' : '🇪🇸 Español activado';
+    showToast(msg, '#0284c7');
+  }
+};
+
+let currentBlastMsgs = LANG[currentLang].blast_msgs;
+
+const APP_ID = 'fatlin-ai-v1';
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// Capturar resultado de redirect de Google (para entornos iframe/onecompiler)
+getRedirectResult(auth).then(result => {
+  if(result && result.user){
+    dbg('Redirect Google OK: ' + result.user.email);
+  }
+}).catch(err => {
+  if(err.code !== 'auth/no-auth-event')
+    console.warn('[Redirect]', err.code);
+});
+const db = getFirestore(app, "fatlindb");
+try { enableIndexedDbPersistence(db); } catch(e) {}
+
+// ── Proxy seguro via Firebase Cloud Function ─────────────────────
+// La API key de Anthropic NUNCA sale al cliente.
+// El proxy valida el token Firebase antes de llamar a Anthropic.
+const CLAUDE_ENDPOINT = 'https://us-central1-fatlin.cloudfunctions.net/claudeProxy';
+
+const PACIE_SOURCES = [
+    "https://www.fatla.org",
+    "https://www.pacie.education/portal/",
+    "https://www.asomtv.org",
+    "https://www.pacie.education/portal/mod/page/view.php?id=10",
+    "https://www.pacie.education/portal/mod/page/view.php?id=16",
+    "https://www.pacie.education/portal/mod/page/view.php?id=24",
+    "https://www.pacie.education/portal/mod/page/view.php?id=25",
+    "https://www.pacie.education/portal/mod/page/view.php?id=23",
+    "https://www.pacie.education/portal/mod/page/view.php?id=17",
+    "https://licencia.asomtv.org/mod/page/view.php?id=51",
+    "https://licencia.asomtv.org/mod/page/view.php?id=5",
+    "https://licencia.asomtv.org/mod/page/view.php?id=50",
+    "https://licencia.asomtv.org/mod/page/view.php?id=5",
+    "https://licencia.asomtv.org/mod/page/view.php?id=4",
+    "https://becas.fatla.org/mod/page/view.php?id=33",
+    "https://becas.fatla.org/mod/page/view.php?id=34",
+    "https://becas.fatla.org/mod/page/view.php?id=3"
+];
+
+// Temas cíclicos: se rotan infinitamente con profundidad creciente por ciclo
+const PACIE_TOPICS_CYCLE = [
+    "fundamentos básicos de la metodología PACIE, qué es y sus 5 fases",
+    "fase Presencia de PACIE: imagen, motivación visual e impacto en el estudiante",
+    "fase Alcance de PACIE: objetivos, estándares y competencias académicas",
+    "fase Capacitación de PACIE: preparación docente y manejo tecnológico",
+    "fase Interacción de PACIE: aprendizaje colaborativo, foros, wikis y trabajo grupal",
+    "fase E-learning de PACIE: plataformas LMS, madurez pedagógica y sostenibilidad",
+    "origen y contexto histórico de PACIE, Pedro Camacho y FATLA",
+    "diferencias entre educación virtual y presencial según la metodología PACIE",
+    "herramientas tecnológicas recomendadas por PACIE para entornos virtuales",
+    "evaluación y seguimiento en PACIE: tutor, roles y acompañamiento",
+    "PACIE aplicado en proyectos reales de FATLA y ASOMTV",
+    "integración completa de PACIE: casos prácticos avanzados desde Presencia hasta E-learning",
+];
+const _DEPTH_LABELS = ["", "profundidad avanzada sobre ", "nivel experto en ", "maestría total en "];
+
+function getTopicForLevel(level) {
+    const cycleSize = PACIE_TOPICS_CYCLE.length; // 12 temas × 5 niveles = 60 por ciclo
+    const idx   = Math.floor((level - 1) / 5) % cycleSize;
+    const cycle = Math.floor((level - 1) / (5 * cycleSize));
+    const depth = _DEPTH_LABELS[Math.min(cycle, _DEPTH_LABELS.length - 1)];
+    return depth + PACIE_TOPICS_CYCLE[idx];
+}
+const questionCache = {};
+// TTL solo para el prefetch en segundo plano.
+// Las preguntas del nivel ACTUAL siempre se generan frescas.
+// El caché en memoria sirve únicamente para niveles pre-cargados
+// mientras el usuario juega el nivel anterior.
+const PREFETCH_CACHE_TTL = 8 * 60 * 1000; // 8 min: suficiente para completar un nivel
+
+function _lsKey(level){ return `fatlin_q_${currentLang}_${level}`; }
+
+// Devuelve preguntas SOLO si fueron pre-cargadas recientemente (prefetch)
+// Para el nivel actual se ignora el caché → siempre fresco
+function getCachedQuestions(level, isPrefetch=false){
+  const m = questionCache[level];
+  if(m){
+    // Si fue generado hace menos de PREFETCH_CACHE_TTL lo usamos
+    if(Date.now() - m.generatedAt < PREFETCH_CACHE_TTL) return m.questions;
+    // Caducó → eliminar para forzar nueva generación
+    delete questionCache[level];
+    try { localStorage.removeItem(_lsKey(level)); } catch(e){}
+  }
+  // localStorage solo como respaldo de prefetch (mismo TTL)
+  if(isPrefetch){
+    try {
+      const raw = localStorage.getItem(_lsKey(level));
+      if(raw){
+        const parsed = JSON.parse(raw);
+        if(Date.now() - parsed.generatedAt < PREFETCH_CACHE_TTL){
+          questionCache[level] = parsed;
+          return parsed.questions;
+        }
+        localStorage.removeItem(_lsKey(level));
+      }
+    } catch(e){}
+  }
+  return null;
+}
+
+function setCachedQuestions(level, questions){
+  const entry = { questions, generatedAt: Date.now() };
+  questionCache[level] = entry;
+  try { localStorage.setItem(_lsKey(level), JSON.stringify(entry)); } catch(e){}
+}
+
+function clearQuestionCache(){
+  Object.keys(questionCache).forEach(k => delete questionCache[k]);
+  try {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('fatlin_q_'))
+      .forEach(k => localStorage.removeItem(k));
+  } catch(e){}
+}
+
+let _prefetchInProgress = new Set();
+
+async function prefetchLevel(level){
+  if(level < 1 || level > TOTAL) return;
+  // Solo usar caché si fue generado recientemente como prefetch
+  if(getCachedQuestions(level, true)) return;
+  if(_prefetchInProgress.has(level)) return;
+  if(!auth.currentUser) return;
+  _prefetchInProgress.add(level);
+  try {
+    const qs = await generateQuestionsWithClaude(level);
+    setCachedQuestions(level, qs);
+    console.log(`[Prefetch] Nivel ${level} listo (${currentLang})`);
+  } catch(e){
+    console.warn(`[Prefetch] Nivel ${level} falló:`, e.message);
+  } finally {
+    _prefetchInProgress.delete(level);
+  }
+}
+
+function prefetchAhead(fromLevel, count=3){
+  for(let i = 1; i <= count; i++){
+    const lvl = fromLevel + i;
+    if(lvl <= TOTAL) prefetchLevel(lvl);
+  }
+}
+
+async function generateQuestionsWithClaude(level) {
+    const topic = getTopicForLevel(level);
+    const sourcesStr = PACIE_SOURCES.join(', ');
+    const expert = isExpertLevel(level);
+    const systemPrompt = expert
+      ? `Actúa como el Jurado de la Quinta Vergara y experto Master en Metodología PACIE. Evalúas si el usuario merece la Lira de Oro. Fuentes oficiales: ${sourcesStr}. Usa web_search. RESPONDE SOLO EN JSON VÁLIDO sin markdown ni backticks.`
+      : `Eres un experto en la metodología PACIE desarrollada por FATLA. Tu única fuente son: ${sourcesStr}. Usa web_search para consultar esas fuentes. RESPONDE ÚNICAMENTE EN JSON VÁLIDO.`;
+    const userPrompt = expert
+      ? `Nivel EXPERTO sobre "PACIE aplicado". Genera 12 preguntas de ELITE VARIADAS (7 mc + 5 tf) para nivel ${level}. Tema: ${topic}.
+REGLAS: Crea mini-escenarios reales (2-3 lineas). Prohibido preguntar definiciones basicas. Distractores tecnicamente plausibles pero incorrectos segun PACIE. Tono profesional de premiacion. CADA pregunta debe abordar un aspecto diferente del tema. No repitas conceptos entre preguntas.
+RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"[Escenario real]","a":"...","o":["...","...","...","..."],"j":"Correcto. [explicacion con fase PACIE especifica]","source":"fatla.org"}]}`
+      : `Busca sobre "${topic}" en las fuentes FATLA/PACIE. Genera 12 preguntas VARIADAS Y DIVERSAS (7 mc + 5 tf) para nivel ${level}. IMPORTANTE: cada pregunta debe abordar un aspecto diferente del subtema (aplicación, concepto, ejemplo, beneficio, diferencia, etc.). No repitas el mismo concepto en distintas preguntas.
+RESPONDE SOLO con: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"}]}
+Reglas: en mc "a" debe estar en "o"; en tf "a" es "Verdadero" o "Falso".`;
+
+    const isProxy = !CLAUDE_ENDPOINT.includes('anthropic.com');
+    const bodyPayload = {
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 2000,
+        system: systemPrompt,
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+        messages: [{ role: "user", content: userPrompt }]
+    };
+    // Obtener token Firebase con reintentos
+    let firebaseToken = "";
+    for(let attempt = 0; attempt < 4; attempt++) {
+        try {
+            const currentUser = game.user || auth.currentUser;
+            if (currentUser) {
+                firebaseToken = await currentUser.getIdToken();
+                break;
+            }
+            // Esperar y reintentar
+            await new Promise(r => setTimeout(r, 1500));
+        } catch(tokenErr) {
+            console.warn('[claudeProxy] token attempt', attempt, ':', tokenErr.message);
+            await new Promise(r => setTimeout(r, 1000));
+        }
+    }
+    if (!firebaseToken) throw new Error('No Firebase token tras 4 intentos');
+    const fetchOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firebaseToken}` },
+        body: JSON.stringify(bodyPayload)
+    };
+    const response = await fetch(CLAUDE_ENDPOINT, fetchOptions);
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    const fullText = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    let parsed;
+    try { const clean=fullText.replace(/```json|```/g,"").trim(); const m=clean.match(/\{[\s\S]*\}/); if(!m) throw new Error("No JSON"); parsed=JSON.parse(m[0]); } catch(e){ throw new Error("Parse error: "+e.message); }
+    if(!parsed.questions||!Array.isArray(parsed.questions)||!parsed.questions.length) throw new Error("Invalid structure");
+    const valid=parsed.questions.filter(q=>{if(!q.q||!q.a||!q.o||!Array.isArray(q.o))return false;if(q.type==='mc'&&!q.o.includes(q.a))return false;if(q.type==='tf'&&!['Verdadero','Falso','True','False'].includes(q.a))return false;return true;});
+    if(valid.length<5) throw new Error("Too few valid questions");
+    return valid;
+}
+
+const FALLBACK_QUESTIONS = [
+    {type:"mc",q:"¿Qué significa la P en la metodología PACIE?",a:"Presencia",o:["Presencia","Proceso","Planificación","Pedagógico"],j:"La P de PACIE corresponde a Presencia, primera fase del modelo.",source:"fatla.org"},
+    {type:"mc",q:"¿Cuántas fases tiene la metodología PACIE?",a:"5 fases",o:["3 fases","5 fases","7 fases","4 fases"],j:"PACIE: Presencia, Alcance, Capacitación, Interacción y E-learning.",source:"fatla.org"},
+    {type:"mc",q:"¿En qué país fue creada la metodología PACIE?",a:"Ecuador",o:["México","Ecuador","Colombia","Argentina"],j:"PACIE fue desarrollada en Ecuador por Pedro Camacho de FATLA.",source:"pacie.education"},
+    {type:"tf",q:"La metodología PACIE fue desarrollada por FATLA para mejorar la educación virtual.",a:"Verdadero",o:["Verdadero","Falso"],j:"FATLA creó PACIE para innovar en la educación virtual latinoamericana.",source:"fatla.org"},
+    {type:"tf",q:"En PACIE, la fase de Interacción se enfoca en el trabajo individual.",a:"Falso",o:["Verdadero","Falso"],j:"La Interacción promueve el trabajo colaborativo y aprendizaje social.",source:"pacie.education"},
+    {type:"tf",q:"El Alcance en PACIE define los objetivos y competencias del proceso educativo.",a:"Verdadero",o:["Verdadero","Falso"],j:"El Alcance establece los estándares y metas académicas del proceso.",source:"fatla.org"},
+    {type:"mc",q:"¿Qué significa la A en PACIE?",a:"Alcance",o:["Alcance","Aprendizaje","Acción","Adaptación"],j:"La A de PACIE corresponde a Alcance, la fase que define objetivos y estándares.",source:"fatla.org"},
+    {type:"mc",q:"¿Cuál fase de PACIE se enfoca en la preparación del docente?",a:"Capacitación",o:["Presencia","Alcance","Capacitación","Interacción"],j:"La Capacitación en PACIE prepara al docente en competencias tecnológicas y pedagógicas.",source:"fatla.org"},
+    {type:"mc",q:"¿Qué organización creó la metodología PACIE?",a:"FATLA",o:["UNESCO","FATLA","IESALC","OEI"],j:"FATLA (Fundación Latinoamérica) desarrolló PACIE para la educación virtual.",source:"fatla.org"},
+    {type:"tf",q:"La fase E-learning de PACIE se refiere al uso de plataformas LMS.",a:"Verdadero",o:["Verdadero","Falso"],j:"E-learning en PACIE implica la madurez en el uso de entornos virtuales y LMS.",source:"pacie.education"},
+    {type:"mc",q:"¿Qué representa la fase de Presencia en PACIE?",a:"La imagen y motivación visual del aula virtual",o:["El número de estudiantes","La imagen y motivación visual del aula virtual","La evaluación final","Los foros de discusión"],j:"Presencia trata la imagen institucional y el impacto visual que motiva al estudiante.",source:"fatla.org"},
+    {type:"tf",q:"PACIE puede aplicarse tanto en educación presencial como virtual.",a:"Falso",o:["Verdadero","Falso"],j:"PACIE es una metodología diseñada específicamente para entornos virtuales de aprendizaje.",source:"pacie.education"},
+    {type:"mc",q:"¿Cuál es el último nivel de la metodología PACIE?",a:"E-learning",o:["Interacción","E-learning","Evaluación","Capacitación"],j:"E-learning es la quinta y última fase de PACIE, donde se logra la madurez pedagógica virtual.",source:"fatla.org"},
+    {type:"tf",q:"La fase de Capacitación en PACIE incluye el manejo de herramientas tecnológicas.",a:"Verdadero",o:["Verdadero","Falso"],j:"Capacitación abarca el dominio técnico y pedagógico necesario para el entorno virtual.",source:"fatla.org"},
+];
+
+const AVATARS=["🦁","🐯","🦊","🐺","🦅","🦋","🐬","🦄","🐉","🤖","👨‍🚀","🧙","🧜","🥷","🧑‍💻","🦸","🧚","🦩","🐸","🎭"];
+const REWARDS=[
+    {emoji:"🌱",title:"¡Primer gran paso!",   badge:"🎖️ Semilla PACIE",     msg:"10 niveles conquistados."},
+    {emoji:"⚡",title:"¡Imparable!",           badge:"🥉 Explorador PACIE",  msg:"20 niveles dominados."},
+    {emoji:"🔥",title:"¡En llamas!",           badge:"🥈 Navegante PACIE",   msg:"30 niveles superados."},
+    {emoji:"💎",title:"¡Élite PACIE!",         badge:"🥇 Maestro PACIE",     msg:"40 niveles vencidos."},
+    {emoji:"🚀",title:"¡Leyenda viva!",        badge:"🏆 Leyenda PACIE",     msg:"50 niveles conquistados."},
+    {emoji:"👑",title:"¡Máximo Honor!",        badge:"👑 Rey PACIE",         msg:"60 niveles. Cumbre alcanzada."},
+    {emoji:"🌟",title:"¡Superestrella!",       badge:"🌟 Estrella PACIE",    msg:"70 niveles. Territorio élite."},
+    {emoji:"🏛️",title:"¡Arquitecto PACIE!",  badge:"🏛️ Arquitecto",       msg:"80 niveles. Conocimiento sólido."},
+    {emoji:"🔮",title:"¡Visionario PACIE!",    badge:"🔮 Visionario",        msg:"90 niveles. Visión total."},
+    {emoji:"🎓",title:"¡Máster Absoluto!",     badge:"🎓 Máster Absoluto",   msg:"100 niveles. Cima conquistada."},
+];
+
+// Genera insignia dinámica para niveles 110+
+function getRewardForMilestone(milestone){
+  const idx = Math.floor(milestone / 10) - 1;
+  if(idx >= 0 && idx < REWARDS.length) return REWARDS[idx];
+  const emojis = ["⚡","🔥","💎","🚀","🌟","👑","🎯","🏆","🎓","🔮"];
+  const e = emojis[idx % emojis.length];
+  return {
+    emoji: e,
+    title: currentLang==='en' ? `Incredible! Level ${milestone}` : `¡Increíble! Nivel ${milestone}`,
+    badge: `${e} ${currentLang==='en'?'Legend':'Leyenda'} Nv.${milestone}`,
+    msg:   currentLang==='en'
+      ? `${milestone} levels mastered. No limits!`
+      : `${milestone} niveles dominados. ¡Sin límites!`
+  };
+}
+let selectedAvatar="🧑",tempAvatar="🧑";
+
+// ── SISTEMA DE LIGAS ────────────────────────────────────────────────
+const LIGAS = [
+  { idx:1,  nombre:'Aspirantes Digitales',          sub:'El inicio del viaje',              escudo:'🛡️',  escudoClass:'shield-1',  promoCut:20, penaltyPts:false },
+  { idx:2,  nombre:'Tutores en Adiestramiento',     sub:'Dominando las herramientas básicas',escudo:'🪖',  escudoClass:'shield-2',  promoCut:15, penaltyPts:false },
+  { idx:3,  nombre:'Especialistas en Presencia',    sub:'Primer peldaño de PACIE',          escudo:'🔰',  escudoClass:'shield-3',  promoCut:12, penaltyPts:false },
+  { idx:4,  nombre:'Arquitectos de Alcance',        sub:'Expertos en planificación pedagógica',escudo:'🏗️',escudoClass:'shield-4', promoCut:10, penaltyPts:false },
+  { idx:5,  nombre:'Mentores de Capacitación',      sub:'Usuarios que ya enseñan a otros',  escudo:'🎓',  escudoClass:'shield-5',  promoCut:8,  penaltyPts:false },
+  { idx:6,  nombre:'Maestros de la Interacción',    sub:'El corazón de la metodología',     escudo:'⚡',  escudoClass:'shield-6',  promoCut:6,  penaltyPts:false },
+  { idx:7,  nombre:'Tecnopedagogos de Élite',       sub:'Dominio total del E-learning',     escudo:'🔬',  escudoClass:'shield-7',  promoCut:5,  penaltyPts:true,  penaltyAmt:20 },
+  { idx:8,  nombre:'Consultores Internacionales OMVT',sub:'Reconocimiento global',          escudo:'🌍',  escudoClass:'shield-8',  promoCut:4,  penaltyPts:true,  penaltyAmt:40 },
+  { idx:9,  nombre:'Sabios del Planeta FATLA',      sub:'Nivel casi máximo',                escudo:'🧠',  escudoClass:'shield-9',  promoCut:3,  penaltyPts:true,  penaltyAmt:75 },
+  { idx:10, nombre:'Círculo de Eminencias Tecnológicas',sub:'Solo para el Top 10 mundial', escudo:'👑',  escudoClass:'shield-10', promoCut:3,  penaltyPts:true,  penaltyAmt:120 },
+];
+// Cofres de recompensa por posición
+const PROMO_COFRE = { 1:'💎+50⭐', 2:'🏆+35⭐', 3:'🥇+25⭐', default:'📦+15⭐' };
+
+let game=window.game={
+  user:null, level:1, playingLevel:1, stars:0, lives:5,
+  lastDeathTime:null, correctCount:0, targetCorrect:4,
+  consecutiveErrors:0,
+  isProcessing:false, currentQ:null, levelQuestions:[], qIndex:0,
+  badges:0, lastRewardAt:0,
+  shields:0, streakDays:0, lastPlayDate:null,
+  diplomasEarned:0, infiniteLivesUntil:null,
+  ligaLevel:1, lastLigaWeek:null
+};
+
+function showToast(msg,color='#0ea5e9',duration=3500){const t=document.getElementById('error-msg');if(!t)return;t.style.background=color;t.style.color='#fff';t.textContent=msg;t.style.display='block';setTimeout(()=>{t.style.display='none';t.style.background='';t.style.color='';},duration);}
+function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4500);}
+function playBell(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[[1046.5,0],[1318.5,0],[1568,.15],[2093,.3]].forEach(([f,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(f,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);g.gain.setValueAtTime(.4,ctx.currentTime+d);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d+1.1);o.start(ctx.currentTime+d);o.stop(ctx.currentTime+d+1.1);});}catch(e){}}
+function playClick(ok=true){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(ok?880:280,ctx.currentTime);g.gain.setValueAtTime(.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.18);}catch(e){}}
+
+function updateProgressUI(){for(let i=0;i<4;i++){const sd=document.getElementById(`sd${i}`);const cd=document.getElementById(`cd${i}`);if(sd)sd.classList.toggle('filled',i<game.correctCount);if(cd)cd.classList.toggle('filled',i<game.correctCount);}document.getElementById('txt-progress').innerText=`${game.correctCount}/4`;}
+function flashProgressDot(idx){const d=document.getElementById(`cd${idx}`);if(!d)return;d.classList.remove('flash');void d.offsetWidth;d.classList.add('flash');setTimeout(()=>d.classList.remove('flash'),500);}
+
+applyLang();
+
+// ── hideSplash expuesto globalmente para que splashChooseLang pueda llamarlo ──
+window.hideSplash = function(){
+  if(window._splashHidden) return;
+  window._splashHidden = true;
+  const s = document.getElementById('splash');
+  s.style.opacity = '0';
+  setTimeout(()=>s.style.display='none', 400);
+};
+
+function dbg(msg){
+  const b = document.getElementById('debug-bar');
+  if(b){ b.style.display='block'; b.textContent='🔧 '+msg; }
+  console.log('[FATLIN]', msg);
+}
+
+onAuthStateChanged(auth, async(user) => {
+  dbg('Firebase respondió. Usuario: ' + (user ? user.email||user.uid : 'ninguno'));
+
+  // Ocultar splash siempre
+  const splash = document.getElementById('splash');
+  if(splash){ splash.style.opacity='0'; setTimeout(()=>{ splash.style.display='none'; }, 350); }
+  window._splashHidden = true;
+
+  if(user){
+    dbg('Cargando progreso...');
+    game.user = user;
+    try{ await loadProgress(); }catch(e){ dbg('loadProgress error: '+e.message); }
+    window._gameRef = game;
+    dbg('Iniciando UI del juego...');
+    initGameUI();
+    setTimeout(()=>{ const b=document.getElementById('debug-bar'); if(b) b.style.display='none'; }, 2000);
+  } else {
+    dbg('Sin sesión — mostrando pantalla de login');
+    const as = document.getElementById('auth-screen');
+    as.style.display = 'flex';
+    setTimeout(()=>{ const b=document.getElementById('debug-bar'); if(b) b.style.display='none'; }, 3000);
+  }
+});
+
+// Si el idioma ya fue elegido antes de que el módulo cargara, ocultar splash ahora
+if(window._splashLangChosen && !window._splashHidden) {
+  setTimeout(window.hideSplash, 50);
+}
+
+async function loadProgress(){
+  let cloudData = null;
+  let cloudOk = false;
+  try {
+    const snap = await getDoc(doc(db,`artifacts/${APP_ID}/users/${game.user.uid}/progress/current`));
+    if(snap.exists()){ cloudData = snap.data(); cloudOk = true; }
+  } catch(e) { console.warn('[Progress] Firestore falló:',e.code, e.message); }
+
+  let localData = null;
+  try {
+    const raw = localStorage.getItem(`fatlin_save_${game.user.uid}`);
+    if(raw) localData = JSON.parse(raw);
+  } catch(e) {}
+
+  if(!cloudData && !localData){
+    game.level = 1; game.stars = 0; game.lives = 5;
+    game.lastDeathTime = null; game.badges = 0; game.lastRewardAt = 0;
+    selectedAvatar = "🧑"; tempAvatar = "🧑";
+  } else if(cloudOk && cloudData && !localData){
+    game.level       = cloudData.level       || 1;
+    game.stars       = cloudData.stars       || 0;
+    game.lives       = typeof cloudData.lives === 'number' ? cloudData.lives : 5;
+    game.ligaLevel   = typeof cloudData.ligaLevel === 'number' ? cloudData.ligaLevel : 1;
+    game.lastLigaWeek= cloudData.lastLigaWeek || null;
+    game.lastDeathTime = cloudData.lastDeathTime || null;
+    game.badges      = cloudData.badges      || 0;
+    game.lastRewardAt= cloudData.lastRewardAt|| 0;
+    selectedAvatar   = cloudData.avatar      || "🧑";
+    tempAvatar       = selectedAvatar;
+    game.shields     = cloudData.shields     || 0;
+    game.streakDays  = cloudData.streakDays  || 0;
+    game.lastPlayDate= cloudData.lastPlayDate|| null;
+    game.diplomasEarned = cloudData.diplomasEarned || 0;
+    game.infiniteLivesUntil = cloudData.infiniteLivesUntil || null;
+  } else if(!cloudOk && localData){
+    game.level       = localData.level       || 1;
+    game.stars       = localData.stars       || 0;
+    game.lives       = typeof localData.lives === 'number' ? localData.lives : 5;
+    game.ligaLevel   = typeof localData.ligaLevel === 'number' ? localData.ligaLevel : 1;
+    game.lastLigaWeek= localData.lastLigaWeek || null;
+    game.lastDeathTime = localData.lastDeathTime || null;
+    game.badges      = localData.badges      || 0;
+    game.lastRewardAt= localData.lastRewardAt|| 0;
+    selectedAvatar   = localData.avatar      || "🧑";
+    tempAvatar       = selectedAvatar;
+    game.shields     = localData.shields     || 0;
+    game.streakDays  = localData.streakDays  || 0;
+    game.lastPlayDate= localData.lastPlayDate|| null;
+    game.diplomasEarned = localData.diplomasEarned || 0;
+    game.infiniteLivesUntil = localData.infiniteLivesUntil || null;
+  } else {
+    const cloudLevel  = cloudData?.level  || 1;
+    const localLevel  = localData?.level  || 1;
+    const cloudStars  = cloudData?.stars  || 0;
+    const localStars  = localData?.stars  || 0;
+    const cloudTime   = cloudData?.updatedAt || 0;
+    const localTime   = localData?.updatedAt || 0;
+    const newerSource = cloudTime >= localTime ? cloudData : localData;
+    game.level  = Math.max(cloudLevel, localLevel);
+    game.stars  = Math.max(cloudStars, localStars);
+    game.lives         = typeof newerSource.lives === 'number' ? newerSource.lives : 5;
+    game.ligaLevel     = typeof newerSource.ligaLevel === 'number' ? newerSource.ligaLevel : 1;
+    game.lastLigaWeek  = newerSource.lastLigaWeek || null;
+    game.lastDeathTime = newerSource.lastDeathTime || null;
+    game.badges        = newerSource.badges        || 0;
+    game.lastRewardAt  = newerSource.lastRewardAt  || 0;
+    selectedAvatar     = newerSource.avatar        || "🧑";
+    tempAvatar         = selectedAvatar;
+    game.shields       = newerSource.shields       || 0;
+    game.streakDays    = newerSource.streakDays    || 0;
+    game.lastPlayDate  = newerSource.lastPlayDate  || null;
+    game.diplomasEarned = Math.max(cloudData?.diplomasEarned||0, localData?.diplomasEarned||0);
+    game.infiniteLivesUntil = Math.max(cloudData?.infiniteLivesUntil||0, localData?.infiniteLivesUntil||0) || null;
+    if(localLevel > cloudLevel) setTimeout(()=>saveProgress(), 1000);
+  }
+
+  game.playingLevel = game.level;
+  applyLang();
+  checkDailyStreak();
+  setTimeout(checkLigaPromocion, 2000); // verifica ascenso de liga al abrir app
+}
+
+async function saveProgress(){if(!game.user)return;const payload={
+    level:game.level, stars:game.stars, lives:game.lives,
+    lastDeathTime:game.lastDeathTime, badges:game.badges,
+    lastRewardAt:game.lastRewardAt, updatedAt:Date.now(),
+    avatar:selectedAvatar,
+    displayName:game.user.displayName||game.user.email?.split('@')[0]||'Invitado',
+    shields:game.shields, streakDays:game.streakDays,
+    lastPlayDate:game.lastPlayDate, diplomasEarned:game.diplomasEarned,
+    infiniteLivesUntil:game.infiniteLivesUntil,
+    ligaLevel:game.ligaLevel||1,
+    lastLigaWeek:game.lastLigaWeek||null
+  };localStorage.setItem(`fatlin_save_${game.user.uid}`,JSON.stringify(payload));try{await setDoc(doc(db,`artifacts/${APP_ID}/users/${game.user.uid}/progress/current`),payload,{merge:true});const now=Date.now(),ws=getWeekStart();await setDoc(doc(db,`fatlin_ranking_${APP_ID}`,game.user.uid),{displayName:payload.displayName,level:game.level,stars:game.stars,avatar:selectedAvatar,updatedAt:now},{merge:true});await setDoc(doc(db,`fatlin_weekly_${APP_ID}`,`${ws}_${game.user.uid}`),{displayName:payload.displayName,level:game.level,stars:game.stars,avatar:selectedAvatar,weekStart:ws,uid:game.user.uid,ligaLevel:game.ligaLevel||1,updatedAt:now},{merge:true});}catch(e){}}
+
+function mascotShow(){ document.getElementById('fatlin-mascot').style.display='block'; }
+function mascotSetState(state, duration=0){
+  const m = document.getElementById('fatlin-mascot');
+  const z = document.getElementById('mascot-zzz');
+  m.className = '';
+  m.style.display = 'block';
+  z.classList.remove('visible');
+  if(state === 'sleep'){ m.classList.add('state-sleep'); z.classList.add('visible'); return; }
+  m.classList.add(`state-${state}`);
+  if(duration > 0) setTimeout(()=>{ m.className=''; m.style.animation='mascotFloat 4s ease-in-out infinite'; }, duration);
+}
+let _idleTimer = null;
+function resetMascotIdleTimer(){
+  clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(()=>mascotSetState('sleep'), 90000);
+}
+document.getElementById('fatlin-mascot').onclick = ()=>{ mascotSetState('cheer',1200); resetMascotIdleTimer(); };
+
+function updateMascotSvg(isGala){ /* SVG stays same for both modes */ }
+function updateRewardEmblem(){ /* uses static SVG already in DOM */ }
+
+function triggerLevel5Blast(level){
+  const blast = document.getElementById('level5-blast');
+  const txt   = document.getElementById('blast-text');
+  const msg   = currentBlastMsgs[level] || (currentLang==='en' ? `Level ${level} conquered! 🚀` : `¡Nivel ${level} conquistado! 🚀`);
+  txt.textContent = msg;
+  // Generar partículas
+  blast.querySelectorAll('.blast-particle').forEach(p=>p.remove());
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  const cols = isGala
+    ? ['#fbbf24','#f59e0b','#fde68a','#d97706','#a855f7']
+    : ['#38bdf8','#7dd3fc','#f59e0b','#22c55e','#f472b6'];
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div'); p.className='blast-particle';
+    const angle=(i/20)*Math.PI*2, dist=80+Math.random()*120;
+    p.style.cssText=`width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;background:${cols[i%cols.length]};left:50%;top:50%;--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;animation-delay:${Math.random()*.3}s;animation-duration:${.8+Math.random()*.5}s`;
+    blast.appendChild(p);
+  }
+  blast.classList.add('active');
+  mascotSetState('win', 2500); resetMascotIdleTimer();
+  setTimeout(()=>blast.classList.remove('active'), 2700);
+}
+
+function initGameUI(){
+  document.getElementById('hud-avatar').onclick = openAvatarPicker;
+  applyLang();
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('game-container').style.display='block';
+  renderMap(); updateHUD(); mascotShow(); resetMascotIdleTimer(); startRestTimer();
+  setTimeout(async()=>{ try{ const u=game.user||auth.currentUser; if(u){ await u.getIdToken(); prefetchAhead(game.level-1,3); } }catch(e){} }, 6000);
+  setTimeout(()=>{centerCamera(true);window.hideSplash();if(!('ontouchstart' in window)){const h=document.getElementById('scroll-hint');h.classList.add('visible');setTimeout(()=>h.classList.remove('visible'),4000);}},200);
+}
+
+function checkLivesRegen(){
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  if(isGala){ document.getElementById('stat-timer').style.display='none'; updateHUD(); return; }
+  if(game.lives<5&&game.lastDeathTime){
+    const REGEN_MS = 10*60*1000; // 10 minutos por vida
+    const elapsed = Date.now()-game.lastDeathTime;
+    const livesRegened = Math.floor(elapsed / REGEN_MS);
+    if(livesRegened > 0){
+      const newLives = Math.min(5, game.lives + livesRegened);
+      const consumed = newLives - game.lives;
+      game.lives = newLives;
+      if(game.lives < 5){
+        game.lastDeathTime = game.lastDeathTime + consumed * REGEN_MS;
+      } else {
+        game.lastDeathTime = null;
+      }
+      saveProgress(); updateHUD();
+    }
+  }
+  const ti=document.getElementById('stat-timer');
+  if(game.lives<5&&game.lastDeathTime){
+    const REGEN_MS = 10*60*1000;
+    ti.style.display='inline';
+    const r = REGEN_MS - (Date.now()-game.lastDeathTime);
+    if(r>0){const m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);ti.innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
+  } else ti.style.display='none';
+}
+setInterval(checkLivesRegen,1000);
+
+const TOTAL=9999,SPACING=180;
+function renderMap(){const nc=document.getElementById('nodes-container'),sv=document.getElementById('path-svg');nc.innerHTML='';sv.innerHTML='';const W=document.getElementById('map-scroll').offsetWidth;let d='';const visibleMax = game.level + 5; for(let i=1;i<=visibleMax;i++){const y=200+(i-1)*SPACING,x=(W/2)+Math.sin(i*.7)*(W*.25);d+=(i===1?'M':'L')+` ${x} ${y}`;const n=document.createElement('div');if(i<game.level){n.className='level-node completed';n.innerHTML=`<span class="lnlabel">${i}</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20,6 9,17 4,12"/></svg>`;if(i%10===0)n.innerHTML+=`<span style="position:absolute;top:-10px;right:-8px;font-size:13px">🏅</span>`;}else if(i===game.level){n.className='level-node current';n.innerHTML=`<span class="lnlabel">Nv.${i}</span>⭐`;}else{n.className='level-node locked';n.innerHTML=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" opacity=".4"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;}n.style.left=`${x-32}px`;n.style.top=`${y-32}px`;const ci=i;n.onclick=()=>{if(ci<=game.level&&!game.isProcessing){game.playingLevel=ci;startChallenge();}};nc.appendChild(n);}const p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("d",d);p.setAttribute("stroke","rgba(255,255,255,0.1)");p.setAttribute("stroke-width","8");p.setAttribute("stroke-linecap","round");p.setAttribute("fill","none");sv.appendChild(p);
+  // Altura dinamica segun niveles visibles
+  const totalH = 200 + (visibleMax - 1) * SPACING + 400;
+  nc.style.height = totalH + 'px';
+  sv.setAttribute('height', totalH);
+  // Actualizar altura real del contenedor para que el scroll llegue
+  const mapEl = document.getElementById('map-scroll');
+  mapEl.style.height = totalH + 'px';
+}
+
+async function startChallenge(){
+  if(game.lives<=0){showError(t("no_lives"));return;}
+  game.correctCount=0; game.consecutiveErrors=0; game._seenQs=new Set(); updateProgressUI(); game.isProcessing=true;
+  const badge=document.getElementById('replay-badge'),num=document.getElementById('replay-num'),lbl=document.getElementById('clabel');
+  if(game.playingLevel<game.level){ badge.style.display='block'; num.innerText=game.playingLevel; lbl.style.display='none'; }
+  else { badge.style.display='none'; lbl.style.display='block'; }
+  document.getElementById('modal-challenge').classList.add('active');
+  const aiLoad = document.getElementById('ai-loading');
+  const sub = document.getElementById('source-badge');
+
+  // ── Intentar usar preguntas pre-cargadas por prefetch ──────────
+  // IMPORTANTE: getCachedQuestions sin isPrefetch=true devuelve null
+  // para el nivel actual si el TTL caducó, forzando generación fresca.
+  const prefetched = getCachedQuestions(game.playingLevel, true);
+
+  if(prefetched){
+    // Tenemos preguntas pre-cargadas frescas → arranque instantáneo
+    aiLoad.classList.remove('active');
+    game.levelQuestions = [...prefetched].sort(()=>Math.random()-.5);
+    game.qIndex = 0;
+    game.isProcessing = false;
+    showNextQuestion();
+    // Invalidar caché de este nivel para que la próxima vez sea fresco
+    delete questionCache[game.playingLevel];
+    try { localStorage.removeItem(_lsKey(game.playingLevel)); } catch(e){}
+    // Pre-cargar los siguientes en segundo plano
+    prefetchAhead(game.playingLevel, 3);
+
+  } else {
+    // Sin prefetch disponible → generar ahora con spinner visible
+    aiLoad.classList.add('active');
+    if(sub) sub.innerText = '';
+    try {
+      const qs = await generateQuestionsWithClaude(game.playingLevel);
+      aiLoad.classList.remove('active');
+      game.levelQuestions = [...qs].sort(()=>Math.random()-.5);
+      game.qIndex = 0;
+      game.isProcessing = false;
+      showNextQuestion();
+      // NO guardar en caché el nivel actual → próxima vez siempre fresco
+      prefetchAhead(game.playingLevel, 3);
+    } catch(apiErr){
+      // ── Fallback silencioso al banco de preguntas ────────────
+      console.warn('[Challenge] API falló, usando banco local:', apiErr.message);
+      aiLoad.classList.remove('active');
+      const fallback = [...FALLBACK_QUESTIONS].sort(()=>Math.random()-.5);
+      game.levelQuestions = fallback;
+      game.qIndex = 0;
+      game.isProcessing = false;
+      showNextQuestion();
+      // Reintentar generación en segundo plano sin interrumpir al usuario
+      setTimeout(()=>{
+        generateQuestionsWithClaude(game.playingLevel)
+          .then(qs => {
+            // Solo reemplazar si el usuario aún no avanzó de pregunta
+            if(game.correctCount === 0 && game.playingLevel === game.level){
+              game.levelQuestions = [...qs].sort(()=>Math.random()-.5);
+              game.qIndex = 0;
+              if(sub) sub.innerText = '';
+            }
+          })
+          .catch(()=>{ /* fallo silencioso, banco local sigue activo */ });
+      }, 5000);
+    }
+  }
+}
+
+function showNextQuestion(){
+  // ── Anti-repetición ─────────────────────────────────────────
+  // Usamos un Set con el texto de cada pregunta para evitar
+  // mostrar la misma dentro del mismo intento de nivel.
+  if(!game._seenQs) game._seenQs = new Set();
+
+  // Si ya se mostraron TODAS las preguntas disponibles,
+  // limpiamos el historial (nueva vuelta) y pedimos más al API
+  if(game._seenQs.size >= game.levelQuestions.length){
+    game._seenQs.clear();
+    // Solicitar banco adicional en segundo plano si el pool es pequeño
+    if(game.levelQuestions.length < 14){
+      generateQuestionsWithClaude(game.playingLevel).then(fresh=>{
+        if(fresh && fresh.length >= 3){
+          // Fusionar sin duplicar por texto de pregunta
+          const existing = new Set(game.levelQuestions.map(q=>q.q));
+          const newOnes  = fresh.filter(q=>!existing.has(q.q));
+          if(newOnes.length > 0){
+            game.levelQuestions = [...game.levelQuestions, ...newOnes];
+            setCachedQuestions(game.playingLevel, game.levelQuestions);
+          }
+        }
+      }).catch(()=>{});
+    }
+  }
+
+  // Elegir pregunta no vista aún en esta ronda
+  const unseen = game.levelQuestions.filter(q=>!game._seenQs.has(q.q));
+  const pool   = unseen.length > 0 ? unseen : game.levelQuestions;
+  const pick   = Math.floor(Math.random() * pool.length);
+  game.currentQ = pool[pick];
+  game._seenQs.add(game.currentQ.q);
+  game.qIndex++;const area=document.getElementById('question-area');area.style.opacity='0';area.style.transform='translateY(8px)';requestAnimationFrame(()=>{document.getElementById('txt-q').innerText=game.currentQ.q;document.getElementById('source-badge').innerText=game.currentQ.source?`📚 Fuente: ${game.currentQ.source}`:'';const tb=document.getElementById('q-type-badge');tb.style.display=game.currentQ.type==='tf'?'block':'none';renderOptions();area.style.transition='opacity .25s ease, transform .25s ease';area.style.opacity='1';area.style.transform='translateY(0)';updateProgressUI();});}
+
+function renderOptions(){const c=document.getElementById('opts-container');c.innerHTML='';const isTF=game.currentQ.type==='tf';const opts=isTF?[...game.currentQ.o]:[...game.currentQ.o].sort(()=>Math.random()-.5);opts.forEach((opt,idx)=>{const b=document.createElement('button');b.className=`opt${isTF?' vf':''}`;b.style.animationDelay=`${idx*60}ms`;b.textContent=isTF?(opt==='Verdadero'?t('tf_true'):t('tf_false')):opt;b.onclick=()=>{if(game.isProcessing)return;opt===game.currentQ.a?handleCorrect(b):handleWrong(b);};c.appendChild(b);});}
+
+function handleCorrect(btn){btn.classList.add('correct','cglow');game.correctCount++;game.consecutiveErrors=0;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){
+  game.level++;
+    // ── Límite de invitado: máximo 3 niveles ──────────────────
+    if(game.user?.isAnonymous && game.level > 3){
+      playBell();
+      document.getElementById('modal-challenge').classList.remove('active');
+      setTimeout(()=>showGuestLimitModal(), 400);
+      return;
+    }
+    playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/10)*10;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%10===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}}
+
+function handleWrong(btn){
+  btn.classList.add('wrong');game.isProcessing=true;
+  game.consecutiveErrors = (game.consecutiveErrors||0) + 1;
+  const ligaActual = LIGAS[(game.ligaLevel||1)-1] || LIGAS[0];
+  const penaltyReset = game.consecutiveErrors >= 2;
+  if(penaltyReset && ligaActual.penaltyPts){
+    game.stars = Math.max(0, game.stars - ligaActual.penaltyAmt);
+    const msg = currentLang==='en'
+      ? '⚠️ Elite league: -'+ligaActual.penaltyAmt+' pts penalty!'
+      : '⚠️ Liga élite: -'+ligaActual.penaltyAmt+' pts de penalización!';
+    setTimeout(()=>showToast(msg,'#ef4444'),200);
+  }
+  mascotSetState('sad', 700); resetMascotIdleTimer();
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  if(!isGala) game.lives--;if(!game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});
+  const penaltyMsg = penaltyReset && game.correctCount > 0 ? (currentLang==='en'?'⚠️ 2 errors in a row — progress reset!':'⚠️ 2 errores seguidos — ¡progreso reiniciado!') : '';
+  document.getElementById('feedback-text').innerText = (penaltyMsg ? penaltyMsg + ' · ' : '') + game.currentQ.j;
+  document.getElementById('feedback-float').classList.add('active');const fill=document.getElementById('cfill');fill.style.transition='none';fill.style.width='100%';requestAnimationFrame(()=>{fill.style.transition='width 2.5s linear';fill.style.width='0%';});setTimeout(()=>{document.getElementById('feedback-float').classList.remove('active');card.classList.remove('shake');
+  if(penaltyReset){game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();}
+  game.isProcessing=false;if(game.lives<=0){document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();showError(t("no_lives"));renderMap();centerCamera();}else{showNextQuestion();}},2500);}
+
+function showReward(milestone){
+  const r = getRewardForMilestone(milestone);
+  document.getElementById('r-title').innerText=r.title;
+  document.getElementById('r-msg').innerText=r.msg;
+  document.getElementById('r-badge').innerText=r.badge;
+  const card=document.getElementById('rcard');
+  card.querySelectorAll('.confetti-dot').forEach(d=>d.remove());
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  const cols=isGala?['#fbbf24','#f59e0b','#fde68a','#d97706','#a855f7','white']:['#38bdf8','#f59e0b','#22c55e','#f472b6','#a78bfa','#fb923c'];
+  for(let i=0;i<28;i++){const d=document.createElement('div');d.className='confetti-dot';d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*20}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*1}s;width:${4+Math.random()*7}px;height:${4+Math.random()*7}px`;card.appendChild(d);}
+  mascotSetState('win', 2000); resetMascotIdleTimer();
+  document.getElementById('modal-reward').classList.add('active');
+}
+document.getElementById('btn-reward-close').onclick=()=>document.getElementById('modal-reward').classList.remove('active');
+
+function getWeekStart(offsetMs=0){const n=new Date(Date.now()+(offsetMs||0)),d=n.getUTCDay(),df=d===0?6:d-1,m=new Date(Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()-df));return m.getTime();}
+function getWeekCountdown(){const n=new Date(),d=n.getUTCDay(),df=d===0?0:7-d,nx=new Date(n);nx.setUTCDate(n.getUTCDate()+df+1);nx.setUTCHours(0,0,0,0);const ms=nx-n,dd=Math.floor(ms/86400000),h=Math.floor((ms%86400000)/3600000),mm=Math.floor((ms%3600000)/60000);return`Reinicia en ${dd}d ${h}h ${mm}m`;}
+function getWeekLabel(){const ws=new Date(getWeekStart()),o={day:'numeric',month:'long'};return`${ws.toLocaleDateString('es-ES',o)} – ${new Date(ws.getTime()+6*86400000).toLocaleDateString('es-ES',o)}`;}
+function buildRankItem(p,idx,isMe,maxL,showL=false){const medals=['🥇','🥈','🥉'];const medal=medals[idx]!=null?medals[idx]:`<span style="font-size:.8rem;color:#94a3b8;font-weight:700">${idx+1}</span>`;const lb=(showL&&idx<5)?'<span class="lbadge">⚡ Liga</span>':'';const item=document.createElement('div');item.className=`ritem${isMe?' me':''}`;item.innerHTML=`<div style="font-size:1.4rem;width:32px;text-align:center">${medal}</div><div style="font-size:1.3rem;margin-right:6px;flex-shrink:0">${p.avatar||'🧑'}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;color:#1e293b;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">${p.displayName||'Jugador'}${isMe?' <span style="color:#0ea5e9">(Tú)</span>':''}${lb}</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${p.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:${Math.round((p.level/maxL)*100)}%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${p.stars||0} pts</span></div>`;return item;}
+function buildErrFallback(el){el.innerHTML=`<div style="text-align:center;padding:1rem"><p style="color:#94a3b8;font-size:.85rem;margin-bottom:.5rem">Sin conexión o sin datos.</p><div class="ritem me"><div style="font-size:1.4rem;width:32px;text-align:center">🏆</div><div style="font-size:1.3rem;margin-right:6px">${selectedAvatar}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="font-weight:700;color:#1e293b;font-size:.85rem">Tú (local)</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${game.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:100%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${game.stars} pts</span></div></div></div>`;}
+window.switchRankTab=function(tab){document.getElementById('tab-global').classList.toggle('active',tab==='global');document.getElementById('tab-liga').classList.toggle('active',tab==='liga');document.getElementById('panel-global').style.display=tab==='global'?'':'none';document.getElementById('panel-liga').style.display=tab==='liga'?'':'none';if(tab==='liga'){document.getElementById('liga-cnt').innerText=getWeekCountdown();loadLigaData();}};
+async function loadGlobalRanking(){const list=document.getElementById('ranking-list');list.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';try{let pl=[];try{const q=query(collection(db,`fatlin_ranking_${APP_ID}`),orderBy('level','desc'),limit(25));const s=await getDocs(q);s.forEach(d=>pl.push({id:d.id,...d.data()}));}catch(e){const s=await getDocs(collection(db,`fatlin_ranking_${APP_ID}`));s.forEach(d=>pl.push({id:d.id,...d.data()}));pl.sort((a,b)=>(b.level||0)-(a.level||0)||(b.stars||0)-(a.stars||0));pl=pl.slice(0,25);}if(!pl.length){list.innerHTML='<p style="text-align:center;color:#94a3b8;padding:2rem;font-size:.85rem">¡Sé el primero!</p>';return;}list.innerHTML='';const ml=Math.max(...pl.map(p=>p.level||1));pl.forEach((p,i)=>{const isMe=game.user&&p.id===game.user.uid;if(i===4&&pl.length>5){const d=document.createElement('div');d.className='rdiv';list.appendChild(d);}list.appendChild(buildRankItem(p,i,isMe,ml,true));});const inL=pl.some(p=>game.user&&p.id===game.user.uid);if(!inL&&game.user){const sep=document.createElement('p');sep.style.cssText='font-size:10px;color:#94a3b8;text-align:center;margin:.5rem 0;font-weight:700;text-transform:uppercase;letter-spacing:.1em';sep.innerText='— Tu posición —';list.appendChild(sep);list.appendChild(buildRankItem({id:game.user.uid,displayName:game.user.displayName||game.user.email?.split('@')[0]||'Tú',level:game.level,stars:game.stars,avatar:selectedAvatar},999,true,ml,false));}}catch(e){buildErrFallback(list);}}
+async function loadLigaData(){document.getElementById('liga-week-lbl').innerText=getWeekLabel();document.getElementById('liga-cnt').innerText=getWeekCountdown();const t5=document.getElementById('liga-top5'),fu=document.getElementById('liga-full');t5.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';fu.innerHTML='';try{const ws=getWeekStart();let pl=[];try{const q=query(collection(db,`fatlin_weekly_${APP_ID}`),orderBy('stars','desc'),limit(50));const s=await getDocs(q);s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}catch(e){const s=await getDocs(collection(db,`fatlin_weekly_${APP_ID}`));s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}pl.sort((a,b)=>(b.stars||0)-(a.stars||0)||(b.level||0)-(a.level||0));pl=pl.slice(0,25);if(!pl.length){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Nadie ha jugado.</p>';fu.innerHTML='';return;}t5.innerHTML='';const medals=['🥇','🥈','🥉','🏅','🏅'];pl.slice(0,5).forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1)';item.innerHTML=`<span style="font-size:1.3rem;width:28px;text-align:center">${medals[i]}</span><span style="font-size:1.2rem">${p.avatar||'🧑'}</span><div style="flex:1;min-width:0"><p style="color:white;font-weight:700;font-size:.85rem;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.displayName||'Jugador'}${isMe?' (Tú)':''}</p><p style="color:rgba(255,255,255,.6);font-size:.7rem;margin:0">⭐ ${p.stars||0} pts · Nv.${p.level}</p></div>`;t5.appendChild(item);});fu.innerHTML='';const ms=Math.max(...pl.map(p=>p.stars||1));pl.forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;fu.appendChild(buildRankItem({id:p.uid,displayName:p.displayName,level:p.level,stars:p.stars,avatar:p.avatar},i,isMe,ms,false));});}catch(e){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Error.</p>';buildErrFallback(fu);}}
+setInterval(()=>{const el=document.getElementById('liga-cnt');if(el&&document.getElementById('panel-liga').style.display!=='none')el.innerText=getWeekCountdown();},60000);
+
+function generateDiploma(completedLevel){
+  const liga = LIGAS[(game.ligaLevel||1)-1]||LIGAS[0];
+  generateDiplomaLiga(liga);
+}
+
+function generateDiplomaLiga(liga){
+  const name = game.user?.displayName || game.user?.email?.split('@')[0] || 'Estudiante';
+  const date = new Date().toLocaleDateString('es-ES',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dip-name').innerText = name;
+  document.getElementById('dip-level').innerText =
+    'ha ascendido a la ' + liga.nombre + ' — ' + liga.sub;
+  document.getElementById('dip-date').innerText =
+    'Promoción registrada el ' + date + ' · Fatlin AI v1';
+  document.querySelector('.diploma-seal').innerText = liga.escudo;
+  document.getElementById('modal-diploma').classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  SISTEMA DE LIGAS — Promoción semanal + UI 3 zonas
+// ══════════════════════════════════════════════════════════════════
+
+// Comprueba al inicio de sesión si el usuario merece ascender de liga
+async function checkLigaPromocion(){
+  if(!game.user) return;
+  const ws = getWeekStart();
+  // Ya procesamos esta semana?
+  if(game.lastLigaWeek === ws) return;
+
+  const ligaIdx = (game.ligaLevel||1) - 1;
+  const ligaActual = LIGAS[ligaIdx] || LIGAS[0];
+  const prevWs = getWeekStart(-7); // semana anterior
+
+  try{
+    // Obtener ranking de la semana pasada en la liga del usuario
+    let pl=[];
+    try{
+      const q = query(
+        collection(db,`fatlin_weekly_${APP_ID}`),
+        orderBy('stars','desc'), limit(100)
+      );
+      const snap = await getDocs(q);
+      snap.forEach(d=>{
+        const dat=d.data();
+        if(dat.weekStart===prevWs && dat.ligaLevel===(game.ligaLevel||1))
+          pl.push({uid:d.data().uid||d.id,...dat});
+      });
+    }catch(e){ return; }
+
+    pl.sort((a,b)=>(b.stars||0)-(a.stars||0));
+    const myPos = pl.findIndex(p=>p.uid===game.user.uid);
+
+    if(myPos>=0 && myPos < ligaActual.promoCut && ligaActual.idx < 10){
+      // ¡Ascenso!
+      game.ligaLevel = ligaActual.idx + 1;
+      game.lastLigaWeek = ws;
+      game.diplomasEarned++;
+      await saveProgress();
+      const nuevaLiga = LIGAS[game.ligaLevel-1];
+      setTimeout(()=>{
+        showToast('🎉 ¡Ascendiste a '+nuevaLiga.nombre+'!', '#34d399', 5000);
+        setTimeout(()=>generateDiplomaLiga(nuevaLiga), 1200);
+      }, 800);
+    } else {
+      // Se queda en la misma liga
+      game.lastLigaWeek = ws;
+      await saveProgress();
+    }
+  }catch(e){}
+}
+
+// Contador regresivo hasta el lunes
+// ─── Render ranking de liga con las 3 zonas ───────────────────────
+
+setInterval(()=>{
+  if(game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now()) updateHUD();
+  else if(game.infiniteLivesUntil && game.infiniteLivesUntil <= Date.now()){
+    game.infiniteLivesUntil = null;
+    game.lives = Math.min(game.lives, 5);
+    saveProgress(); updateHUD();
+    mascotSetState('cheer', 800);
+    showToast(t('gala_ended'),'#0369a1');
+  }
+}, 60000);
+
+function isExpertLevel(level){
+  // Modo experto: últimos 12 niveles de cada ciclo de 60
+  // Niveles 49-60, 109-120, 169-180...
+  const posInCycle = ((level - 1) % 60) + 1;
+  return posInCycle >= 49;
+}
+
+// ── Modal de límite para invitados ──────────────────────────────
+function showGuestLimitModal(){
+  const isEn = currentLang === 'en';
+  document.getElementById('guestlimit-title').innerText = isEn ? 'You reached the limit!' : '¡Llegaste al límite!';
+  document.getElementById('guestlimit-msg').innerHTML = isEn
+    ? 'As a guest you can explore up to <strong>3 levels</strong>. Register for free to save your progress and keep learning PACIE without limits.'
+    : 'Como invitado puedes explorar hasta <strong>3 niveles</strong>. Regístrate gratis para guardar tu progreso y seguir aprendiendo PACIE sin límites.';
+  document.getElementById('guestlimit-warn').innerText = isEn
+    ? '⚠️ If you continue as a guest, your current progress will be lost when you close the session.'
+    : '⚠️ Si continúas como invitado, tu progreso actual se perderá al cerrar la sesión.';
+  document.getElementById('modal-guest-limit').classList.add('active');
+  mascotSetState('sad', 800); resetMascotIdleTimer();
+}
+
+document.getElementById('btn-guestlimit-register').onclick = () => {
+  document.getElementById('modal-guest-limit').classList.remove('active');
+  signOut(auth).catch(()=>{}).finally(()=>{ game.user=null; showAuthUI('email'); });
+};
+// ═══════════════════════════════════════════════════════════
+// AUTH SPLASH — todos los handlers
+// ═══════════════════════════════════════════════════════════
+
+function showAuthUI(panel){
+  document.getElementById('auth-main').style.display  = panel==='email' ? 'none'  : 'flex';
+  document.getElementById('auth-email').style.display = panel==='email' ? 'block' : 'none';
+  if(panel==='email') setTimeout(()=>document.getElementById('inp-email').focus(), 80);
+}
+
+document.getElementById('btn-google').onclick = () => {
+  dbg('Iniciando login Google...');
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider).catch(err => {
+    dbg('Popup falló: ' + err.code + ' — usando redirect...');
+    if(['auth/popup-blocked','auth/popup-closed-by-user',
+        'auth/cancelled-popup-request',
+        'auth/operation-not-supported-in-this-environment'].includes(err.code)){
+      signInWithRedirect(auth, provider);
+    } else if(err.code === 'auth/unauthorized-domain'){
+      const w = document.getElementById('domain-warn');
+      if(w) w.style.display='block';
+      showError('⚠ Dominio no autorizado: ' + window.location.hostname);
+    } else {
+      showError('Error Google: ' + (err.message || err.code));
+    }
+  });
+};
+document.getElementById('btn-show-email').onclick = () => showAuthUI('email');
+
+document.getElementById('btn-back').onclick = () => showAuthUI('main');
+
+document.getElementById('btn-guest').onclick = () => {
+  dbg('Intentando login anónimo...');
+  signInAnonymously(auth).catch(err => {
+    dbg('Error anónimo: ' + err.code + ' ' + err.message);
+    showError('Error invitado: ' + err.code);
+  });
+};
+
+document.getElementById('btn-eye').onclick = () => {
+  const inp = document.getElementById('inp-pass');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+};
+
+document.getElementById('btn-login').onclick = async () => {
+  const email = document.getElementById('inp-email').value.trim();
+  const pass  = document.getElementById('inp-pass').value.trim();
+  if(!email || !pass){ showError('Ingresa correo y contraseña.'); return; }
+  if(pass.length < 6){ showError('Mínimo 6 caracteres en la contraseña.'); return; }
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  btn.textContent = '⏳ Verificando…';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e1) {
+    if(['auth/user-not-found','auth/invalid-credential','auth/wrong-password'].includes(e1.code)){
+      try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+      } catch(e2) {
+        showError(e2.code==='auth/email-already-in-use' ? 'Contraseña incorrecta.' : 'Error: '+e2.message);
+      }
+    } else {
+      showError(e1.code==='auth/invalid-email' ? 'Correo no válido.' : 'Error: '+e1.message);
+    }
+  }
+  btn.disabled = false;
+  btn.textContent = currentLang==='en' ? 'Sign In / Register' : 'Entrar / Registrar';
+};
+document.getElementById('btn-guestlimit-google').onclick = () => {
+  document.getElementById('modal-guest-limit').classList.remove('active');
+  signOut(auth).catch(()=>{}).finally(()=>{ game.user=null; signInWithPopup(auth, new GoogleAuthProvider()).catch(()=>{}); });
+};
+document.getElementById('btn-guestlimit-close').onclick = () => {
+  document.getElementById('modal-guest-limit').classList.remove('active');
+  // Mantener en nivel 3, revertir el incremento
+  if(game.user?.isAnonymous && game.level > 3) game.level = 3;
+  game.playingLevel = game.level;
+  game.correctCount = 0; game.consecutiveErrors = 0;
+  updateProgressUI(); renderMap(); centerCamera();
+};
+
+window.onresize=()=>{if(game.user){renderMap();centerCamera();}};
+</script>
+<!-- MODAL LÍMITE INVITADO -->
+
+<div id="modal-rest">
+  <div class="rest-card">
+    <div class="rest-emblem-wrap">
+      <div class="rest-ring"></div>
+      <div class="rest-ring2"></div>
+      <span class="rest-zzz">💤</span>
+      <span class="rest-zzz2">💤</span>
+      <span class="rest-zzz3">💤</span>
+      <svg class="rest-emblem-svg" width="110" height="110" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 90 L90 70 L50 50 L10 70 Z" fill="#075985"/>
+        <path d="M50 82 L90 62 L50 42 L10 62 Z" fill="#0369a1"/>
+        <path d="M50 74 L90 54 L50 34 L10 54 Z" fill="#0284c7"/>
+        <path d="M50 66 L90 46 L50 26 L10 46 Z" fill="#0ea5e9"/>
+        <path d="M50 58 L90 38 L50 18 L10 38 Z" fill="#38bdf8"/>
+        <path d="M50 50 L75 38 L50 26 L25 38 Z" fill="#7dd3fc"/>
+        <circle cx="50" cy="38" r="3" fill="white"/>
+      </svg>
+    </div>
+    <div class="rest-title" id="rest-title">¡Hora de descansar!</div>
+    <div class="rest-subtitle" id="rest-subtitle">Llevas activo</div>
+    <div class="rest-time-badge" id="rest-time-badge">10 minutos</div>
+    <div class="rest-dots" id="rest-dots"></div>
+    <p class="rest-tip" id="rest-tip">Tu cerebro aprende mejor con pausas cortas. 👀 Aparta la vista de la pantalla unos minutos — ¡vuelve con más energía!</p>
+    <button class="rest-btn" onclick="closeRestModal()">✅ Entendido, tomo un descanso</button>
+    <button class="rest-btn-skip" onclick="closeRestModal(true)" id="rest-skip-btn">Seguir jugando de todas formas</button>
+  </div>
+</div>
+
+<div id="modal-guest-limit">
+  <div class="guest-limit-card">
+    <span class="guest-limit-icon">🔒</span>
+    <p class="guest-limit-title" id="guestlimit-title">¡Llegaste al límite!</p>
+    <p class="guest-limit-msg" id="guestlimit-msg">Como invitado puedes explorar hasta <strong>3 niveles</strong>. Regístrate gratis para guardar tu progreso y seguir aprendiendo PACIE sin límites.</p>
+    <div class="guest-limit-warn" id="guestlimit-warn">⚠️ Si continúas como invitado, tu progreso actual se perderá al cerrar la sesión.</div>
+    <button id="btn-guestlimit-register" class="wbtn primary" style="margin-bottom:.6rem">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Registrarme gratis
+    </button>
+    <button id="btn-guestlimit-google" class="wbtn sky" style="margin-bottom:.6rem">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuar con Google
+    </button>
+    <button id="btn-guestlimit-close" class="wbtn slate" style="font-size:.8rem">Seguir como invitado (perderé mi progreso)</button>
+  </div>
+</div>
+
+<!-- ── MODAL LOGROS ──────────────────────────────── -->
+<div id="modal-logros">
+  <div class="logros-card">
+    <div class="logros-header">
+      <span class="logros-title">🏅 Mis Logros</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button onclick="document.getElementById('modal-logros').classList.remove('active');openAvatarPicker()" style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:4px 8px;font-size:.75rem;color:#0369a1;cursor:pointer">🧑 Avatar</button>
+        <button onclick="document.getElementById('modal-logros').classList.remove('active')" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#64748b">✕</button>
+      </div>
+    </div>
+    <div class="logros-user">
+      <div class="logros-avatar" id="logros-avatar">🧑</div>
+      <div class="logros-info">
+        <div class="logros-name" id="logros-name">Usuario</div>
+        <div class="logros-level" id="logros-level">Nivel 1 · 0 ⭐</div>
+      </div>
+    </div>
+    <div class="logros-section">
+      <div class="logros-section-title">🎖️ Insignias</div>
+      <div class="logros-grid" id="logros-badges-grid"></div>
+    </div>
+    <div class="logros-section">
+      <div class="logros-section-title">📜 Diplomas</div>
+      <div id="logros-diplomas-list"></div>
+    </div>
+  </div>
+</div>
+<script>
+/* ===== SISTEMA ALERTA DE DESCANSO ===== */
+(function(){
+  let _sessionStart = null;
+  let _restInterval = null;
+  let _restCount = 0;
+  const REST_INTERVAL_MS = 10 * 60 * 1000; // 10 min
+
+  const tips = [
+    'Tu cerebro aprende mejor con pausas cortas. 👀 Aparta la vista de la pantalla unos minutos — ¡vuelve con más energía!',
+    'La memoria se consolida durante el descanso. 🧠 Cierra los ojos 2 minutos y respira profundo.',
+    '¡Ya llevas mucho rato! 💪 Estira el cuello, mueve los hombros y bebe agua antes de continuar.',
+    '¡Eres increíble! 🌟 Pero tu concentración necesita aire. Un descanso ahora vale 10 de después.',
+    '🏅 Récord de sesión. Recuerda: los campeones también descansan. ¡Vuelve renovado!',
+  ];
+
+  function formatTime(minutes){
+    if(minutes < 60) return `${minutes} minuto${minutes>1?'s':''}`;
+    const h = Math.floor(minutes/60), m = minutes%60;
+    return m > 0 ? `${h}h ${m}min` : `${h} hora${h>1?'s':''}`;
+  }
+
+  function buildDots(count){
+    const el = document.getElementById('rest-dots');
+    if(!el) return;
+    el.innerHTML = '';
+    const max = Math.min(count, 8);
+    for(let i=0;i<max;i++){
+      const d = document.createElement('div');
+      d.className = 'rest-dot active';
+      el.appendChild(d);
+    }
+  }
+
+  window.showRestModal = function(){
+    _restCount++;
+    const minutes = _restCount * 10;
+    const timeStr = formatTime(minutes);
+
+    const isLong = _restCount >= 3;
+    const title = document.getElementById('rest-title');
+    const subtitle = document.getElementById('rest-subtitle');
+    const badge = document.getElementById('rest-time-badge');
+    const tip = document.getElementById('rest-tip');
+    const skipBtn = document.getElementById('rest-skip-btn');
+
+    if(title) title.innerText = isLong ? '🌙 ¡Mereces un descanso real!' : '☕ ¡Hora de descansar!';
+    if(subtitle) subtitle.innerText = 'Llevas activo en Fatlin AI';
+    if(badge) badge.innerText = timeStr;
+    if(tip) tip.innerText = tips[Math.min(_restCount-1, tips.length-1)];
+    if(skipBtn) skipBtn.innerText = _restCount >= 4
+      ? '😅 Seguir (de verdad, descansa luego)'
+      : 'Seguir jugando de todas formas';
+
+    buildDots(_restCount);
+
+    // Efecto emblema más intenso según tiempo
+    const emblem = document.querySelector('.rest-emblem-svg');
+    if(emblem){
+      const intensity = Math.min(_restCount * 8, 30);
+      emblem.style.filter = `drop-shadow(0 8px ${intensity}px rgba(56,189,248,${0.4 + _restCount*0.1}))`;
+    }
+
+    document.getElementById('modal-rest').classList.add('active');
+  };
+
+  window.closeRestModal = function(skip){
+    document.getElementById('modal-rest').classList.remove('active');
+    // Si elige descansar, pausa el timer 5 min extra como gracia
+    // Si sigue jugando, el timer continúa normalmente
+  };
+
+  window.startRestTimer = function(){
+    if(_restInterval) return; // ya activo
+    _sessionStart = Date.now();
+    _restInterval = setInterval(()=>{
+      // Solo mostrar si el juego está activo (no en splash, tiene usuario)
+      if(game && game.user && !document.getElementById('splash').style.display !== 'none'){
+        window.showRestModal();
+      }
+    }, REST_INTERVAL_MS);
+  };
+
+  window.stopRestTimer = function(){
+    if(_restInterval){ clearInterval(_restInterval); _restInterval = null; }
+    _restCount = 0;
+  };
+})();
+</script>
+</body>
+</html>
