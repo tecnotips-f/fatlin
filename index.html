@@ -1293,9 +1293,19 @@ window.splashChooseLang = function(lang) {
     var btn = document.getElementById('ls-' + lang);
     if (btn) btn.classList.add('entering');
   } catch(e) {}
-  // Mostrar spinner — NO ocultar splash hasta que Firebase responda
+  // Mostrar spinner mientras Firebase responde
   var ls = document.getElementById('lang-splash');
-  if(ls){ ls.innerHTML = '<div style="color:rgba(186,230,253,.7);font-size:.85rem;margin-top:1rem;text-align:center"><div style="font-size:2rem;animation:spin 1s linear infinite;display:inline-block">⏳</div><br>Conectando...</div>'; }
+  if(ls){ ls.innerHTML = '<div style="color:rgba(186,230,253,.7);font-size:.85rem;margin-top:1.5rem;text-align:center"><div style="font-size:2rem;display:inline-block;animation:spin 1s linear infinite">⏳</div><br><span style="letter-spacing:.05em">Conectando...</span></div>'; }
+  // WATCHDOG: si Firebase no responde en 6s, forzar auth-screen
+  window._authWatchdog = setTimeout(function() {
+    if(window._splashHidden) return; // ya resolvió
+    console.warn('[FATLIN] Firebase tardó demasiado — forzando auth-screen');
+    var splash = document.getElementById('splash');
+    if(splash){ splash.style.opacity='0'; setTimeout(function(){ splash.style.display='none'; },400); }
+    window._splashHidden = true;
+    var as = document.getElementById('auth-screen');
+    if(as) as.style.display = 'flex';
+  }, 6000);
 };
 
 // Auto-skip splash si el idioma ya estaba guardado
@@ -1896,9 +1906,22 @@ function dbg(msg){
 }
 
 onAuthStateChanged(auth, async(user) => {
+  // Cancelar watchdog — Firebase respondió a tiempo
+  if(window._authWatchdog){ clearTimeout(window._authWatchdog); window._authWatchdog=null; }
+  if(window._splashHidden){ 
+    // El watchdog ya actuó — solo manejar sesión
+    if(user){
+      game.user = user;
+      try{ await loadProgress(); }catch(e){}
+      window._gameRef = game;
+      initGameUI();
+    }
+    return;
+  }
+
   dbg('Firebase OK · ' + (user ? (user.email||user.uid) : 'sin sesión'));
 
-  // Ocultar splash con fade suave
+  // Ocultar splash
   const splash = document.getElementById('splash');
   if(splash){
     splash.style.transition = 'opacity .4s ease';
@@ -1912,14 +1935,11 @@ onAuthStateChanged(auth, async(user) => {
     try{ await loadProgress(); }catch(e){ dbg('loadProgress error: '+e.message); }
     window._gameRef = game;
     initGameUI();
-    setTimeout(()=>{ const b=document.getElementById('debug-bar'); if(b) b.style.display='none'; }, 2000);
   } else {
-    // Sin sesión: mostrar pantalla de login
     setTimeout(()=>{
       const as = document.getElementById('auth-screen');
       if(as) as.style.display = 'flex';
-      setTimeout(()=>{ const b=document.getElementById('debug-bar'); if(b) b.style.display='none'; }, 3000);
-    }, 450); // esperar a que el splash termine de desaparecer
+    }, 450);
   }
 });
 
