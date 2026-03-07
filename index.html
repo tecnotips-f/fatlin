@@ -316,11 +316,18 @@
         body.gala-mode .hud-inner #btn-gocur   svg { stroke: #e9d5ff !important; }
 
         /* Gala: selector de idioma */
-        body.gala-mode .hud-inner .hud-lang-opt { color: rgba(253,230,138,.5) !important; }
+        /* ── Selector idioma en Gala: máximo contraste ── */
+        body.gala-mode .hud-inner #hud-lang {
+            background: rgba(0,0,0,.35) !important;       /* fondo oscuro para el pill */
+            border-color: rgba(245,158,11,.4) !important;
+        }
+        body.gala-mode .hud-inner .hud-lang-opt {
+            color: rgba(253,230,138,.85) !important;       /* inactivo: visible, suave */
+        }
         body.gala-mode .hud-inner .hud-lang-opt.active {
-            background: rgba(245,158,11,.3) !important;
-            color: #fde68a !important;
-            box-shadow: 0 0 8px rgba(245,158,11,.4) !important;
+            background: rgba(245,158,11,.45) !important;   /* activo: fondo dorado sólido */
+            color: #fff8e1 !important;                     /* texto blanco-crema: máx contraste */
+            box-shadow: 0 0 10px rgba(245,158,11,.5) !important;
         }
 
         /* Gala: divisores */
@@ -977,6 +984,45 @@
             to   { opacity:1; transform:translateY(0); }
         }
 
+        
+        /* ── AVATAR CON FOTO GOOGLE ─────────────────────────── */
+        #hud-avatar img,
+        .logros-avatar img,
+        .acc-av-img,
+        .rank-avatar-img {
+            width:100%; height:100%;
+            object-fit:cover; border-radius:50%;
+            display:block;
+        }
+        #hud-avatar.has-photo { font-size:0; padding:0; overflow:hidden; }
+        .logros-avatar.has-photo { font-size:0; padding:0; overflow:hidden; }
+        .acc-av-wrap.has-photo  { font-size:0; overflow:hidden; }
+        /* Opción foto Google en el picker */
+        .av-google-opt {
+            grid-column: span 2;
+            display:flex; align-items:center; gap:8px;
+            background:rgba(66,133,244,.1);
+            border:1.5px solid rgba(66,133,244,.35);
+            border-radius:.85rem; padding:.55rem .75rem;
+            cursor:pointer; margin-bottom:.4rem;
+            transition:background .15s;
+        }
+        .av-google-opt:hover { background:rgba(66,133,244,.18); }
+        .av-google-opt img {
+            width:36px; height:36px;
+            border-radius:50%; object-fit:cover;
+            border:2px solid rgba(66,133,244,.5);
+            flex-shrink:0;
+        }
+        .av-google-opt-info { flex:1; }
+        .av-google-opt-label { font-size:.72rem; font-weight:800; color:#93c5fd; }
+        .av-google-opt-sub   { font-size:.6rem;  color:rgba(147,197,253,.55); }
+        .av-google-opt.selected {
+            background:rgba(66,133,244,.22);
+            border-color:rgba(66,133,244,.7);
+            box-shadow:0 0 12px rgba(66,133,244,.3);
+        }
+
         </style>
 </head>
 <body>
@@ -1266,7 +1312,7 @@
       <h3>1. Información que Recopilamos</h3>
       <p>Para el funcionamiento de la gamificación y el ranking, recopilamos:</p>
       <ul>
-        <li><strong>Datos de Perfil:</strong> Nombre de usuario o pseudónimo, país y foto de perfil si el usuario la sube.</li>
+        <li><strong>Datos de Perfil:</strong> Nombre de usuario o pseudónimo, país y foto de perfil. Si inicias sesión con Google, tu foto de perfil de Google se usa automáticamente para personalizar tu experiencia; puedes cambiarla en cualquier momento desde el selector de avatar.</li>
         <li><strong>Progreso Académico:</strong> Puntuaciones, niveles completados, rachas de estudio y diplomas obtenidos.</li>
         <li><strong>Datos Técnicos:</strong> Identificadores de dispositivo, modelo de hardware y versión del sistema operativo.</li>
       </ul>
@@ -2435,7 +2481,9 @@ async function loadProgress(){
   if(!cloudData && !localData){
     game.level = 1; game.stars = 0; game.lives = 5;
     game.lastDeathTime = null; game.badges = 0; game.lastRewardAt = 0;
-    selectedAvatar = "🧑"; tempAvatar = "🧑";
+    const _gPhoto = getGooglePhotoURL();
+  selectedAvatar = _gPhoto || "🧑";
+  tempAvatar     = selectedAvatar;
   } else if(cloudOk && cloudData && !localData){
     game.level       = cloudData.level       || 1;
     game.stars       = cloudData.stars       || 0;
@@ -2443,8 +2491,8 @@ async function loadProgress(){
     game.lastDeathTime = cloudData.lastDeathTime || null;
     game.badges      = cloudData.badges      || 0;
     game.lastRewardAt= cloudData.lastRewardAt|| 0;
-    selectedAvatar   = cloudData.avatar      || "🧑";
-    tempAvatar       = selectedAvatar;
+    { const _s=cloudData.avatar; const _gp=getGooglePhotoURL();
+    selectedAvatar=(!_s||_s==="🧑")?(_gp||"🧑"):_s; tempAvatar=selectedAvatar; }
     game.shields     = cloudData.shields     || 0;
     game.streakDays  = cloudData.streakDays  || 0;
     game.lastPlayDate= cloudData.lastPlayDate|| null;
@@ -2461,8 +2509,8 @@ async function loadProgress(){
     game.lastDeathTime = localData.lastDeathTime || null;
     game.badges      = localData.badges      || 0;
     game.lastRewardAt= localData.lastRewardAt|| 0;
-    selectedAvatar   = localData.avatar      || "🧑";
-    tempAvatar       = selectedAvatar;
+    { const _s=localData.avatar; const _gp=getGooglePhotoURL();
+    selectedAvatar=(!_s||_s==="🧑")?(_gp||"🧑"):_s; tempAvatar=selectedAvatar; }
     game.shields     = localData.shields     || 0;
     game.streakDays  = localData.streakDays  || 0;
     game.lastPlayDate= localData.lastPlayDate|| null;
@@ -2486,8 +2534,8 @@ async function loadProgress(){
     game.lastDeathTime = newerSource.lastDeathTime || null;
     game.badges        = newerSource.badges        || 0;
     game.lastRewardAt  = newerSource.lastRewardAt  || 0;
-    selectedAvatar     = newerSource.avatar        || "🧑";
-    tempAvatar         = selectedAvatar;
+    selectedAvatar     = (()=>{ const _s=newerSource.avatar; const _gp=getGooglePhotoURL(); return(!_s||_s==="🧑")?(_gp||"🧑"):_s; })();
+    tempAvatar = selectedAvatar;
     game.shields       = newerSource.shields       || 0;
     game.streakDays    = newerSource.streakDays    || 0;
     game.lastPlayDate  = newerSource.lastPlayDate  || null;
@@ -2775,6 +2823,45 @@ window.declinePrivacy = function(){
   }
 };
 
+// ══════════════════════════════════════════════════════════════════
+//  SISTEMA DE AVATAR CON FOTO GOOGLE
+// ══════════════════════════════════════════════════════════════════
+
+function avatarIsPhoto(){
+  return selectedAvatar && selectedAvatar.startsWith('http');
+}
+
+function getGooglePhotoURL(){
+  try{
+    const u = game.user || (typeof auth !== 'undefined' ? auth.currentUser : null);
+    return (u && !u.isAnonymous && u.photoURL) ? u.photoURL : null;
+  }catch(e){ return null; }
+}
+
+function setAvatarEl(el){
+  if(!el) return;
+  const photo = avatarIsPhoto() ? selectedAvatar : null;
+  if(photo){
+    el.classList.add('has-photo');
+    el.innerHTML = `<img src="${photo}" alt="avatar"
+      onerror="this.parentElement.classList.remove('has-photo');this.parentElement.textContent='🧑';">`;
+  } else {
+    el.classList.remove('has-photo');
+    el.textContent = selectedAvatar || '🧑';
+  }
+}
+
+function getAvatarHTML(avatarVal, sizePx){
+  sizePx = sizePx || 28;
+  if(avatarVal && avatarVal.startsWith('http')){
+    return `<img src="${avatarVal}" alt="av"
+      style="width:${sizePx}px;height:${sizePx}px;border-radius:50%;object-fit:cover;vertical-align:middle;"
+      onerror="this.outerHTML='🧑'">`;
+  }
+  return `<span style="font-size:${Math.round(sizePx*.85)}px">${avatarVal||'🧑'}</span>`;
+}
+
+
 async function saveProgress(){if(!game.user)return;const payload={
     level:game.level, stars:game.stars, lives:game.lives,
     lastDeathTime:game.lastDeathTime, badges:game.badges,
@@ -2837,6 +2924,15 @@ function triggerLevel5Blast(level){
 
 function initGameUI(){
   document.getElementById('hud-avatar').onclick = openAvatarPicker;
+  // Auto-migrar foto Google si el avatar es el default
+  const _gp = getGooglePhotoURL();
+  if(_gp && !avatarIsPhoto()){
+    if(!selectedAvatar || selectedAvatar === '🧑'){
+      selectedAvatar = _gp; tempAvatar = _gp;
+      saveProgress();
+    }
+  }
+  setAvatarEl(document.getElementById('hud-avatar'));
   applyLang();
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('game-container').style.display='block';
@@ -3162,13 +3258,13 @@ function buildRankItem(p,idx,isMe,maxL,showL=false,promoCut=0){
     lineClass = idx < promoCut ? ' above-line' : ' below-line';
   }
   item.className=`ritem${isMe?' me':''}${lineClass}`;
-  item.innerHTML=`<div style="font-size:1.4rem;width:32px;text-align:center">${medal}</div><div style="font-size:1.3rem;margin-right:6px;flex-shrink:0">${p.avatar||'🧑'}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;color:#1e293b;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">${p.displayName||'Jugador'}${isMe?' <span style="color:#0ea5e9">(Tú)</span>':''}${lb}</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${p.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:${Math.round((p.level/maxL)*100)}%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${p.stars||0} pts</span></div>`;
+  item.innerHTML=`<div style="font-size:1.4rem;width:32px;text-align:center">${medal}</div><div style="margin-right:6px;flex-shrink:0;display:flex;align-items:center">${getAvatarHTML(p.avatar,26)}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700;color:#1e293b;font-size:.85rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:140px">${p.displayName||'Jugador'}${isMe?' <span style="color:#0ea5e9">(Tú)</span>':''}${lb}</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${p.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:${Math.round((p.level/maxL)*100)}%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${p.stars||0} pts</span></div>`;
   return item;
 }
 function buildErrFallback(el){el.innerHTML=`<div style="text-align:center;padding:1rem"><p style="color:#94a3b8;font-size:.85rem;margin-bottom:.5rem">Sin conexión o sin datos.</p><div class="ritem me"><div style="font-size:1.4rem;width:32px;text-align:center">🏆</div><div style="font-size:1.3rem;margin-right:6px">${selectedAvatar}</div><div style="flex:1"><div style="display:flex;justify-content:space-between"><span style="font-weight:700;color:#1e293b;font-size:.85rem">Tú (local)</span><span style="font-size:.75rem;font-weight:700;color:#0284c7">Nv.${game.level}</span></div><div class="rbar" style="margin-top:4px"><div class="rbar-fill" style="width:100%"></div></div><span style="font-size:10px;color:#94a3b8">⭐ ${game.stars} pts</span></div></div></div>`;}
 window.switchRankTab=function(tab){document.getElementById('tab-global').classList.toggle('active',tab==='global');document.getElementById('tab-liga').classList.toggle('active',tab==='liga');document.getElementById('panel-global').style.display=tab==='global'?'':'none';document.getElementById('panel-liga').style.display=tab==='liga'?'':'none';if(tab==='liga')loadLigaData();};
 async function loadGlobalRanking(){const list=document.getElementById('ranking-list');list.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';try{let pl=[];try{const q=query(collection(db,`fatlin_ranking_${APP_ID}`),orderBy('level','desc'),limit(25));const s=await getDocs(q);s.forEach(d=>pl.push({id:d.id,...d.data()}));}catch(e){const s=await getDocs(collection(db,`fatlin_ranking_${APP_ID}`));s.forEach(d=>pl.push({id:d.id,...d.data()}));pl.sort((a,b)=>(b.level||0)-(a.level||0)||(b.stars||0)-(a.stars||0));pl=pl.slice(0,25);}if(!pl.length){list.innerHTML='<p style="text-align:center;color:#94a3b8;padding:2rem;font-size:.85rem">¡Sé el primero!</p>';return;}list.innerHTML='';const ml=Math.max(...pl.map(p=>p.level||1));pl.forEach((p,i)=>{const isMe=game.user&&p.id===game.user.uid;if(i===4&&pl.length>5){const d=document.createElement('div');d.className='rdiv';list.appendChild(d);}list.appendChild(buildRankItem(p,i,isMe,ml,true));});const inL=pl.some(p=>game.user&&p.id===game.user.uid);if(!inL&&game.user){const sep=document.createElement('p');sep.style.cssText='font-size:10px;color:#94a3b8;text-align:center;margin:.5rem 0;font-weight:700;text-transform:uppercase;letter-spacing:.1em';sep.innerText='— Tu posición —';list.appendChild(sep);list.appendChild(buildRankItem({id:game.user.uid,displayName:game.user.displayName||game.user.email?.split('@')[0]||'Tú',level:game.level,stars:game.stars,avatar:selectedAvatar},999,true,ml,false));}}catch(e){buildErrFallback(list);}}
-async function loadLigaData(){document.getElementById('liga-week-lbl').innerText=getWeekLabel();document.getElementById('liga-cnt').innerText=getWeekCountdown();const t5=document.getElementById('liga-top5'),fu=document.getElementById('liga-full');t5.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';fu.innerHTML='';try{const ws=getWeekStart();let pl=[];try{const q=query(collection(db,`fatlin_weekly_${APP_ID}`),orderBy('stars','desc'),limit(50));const s=await getDocs(q);s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}catch(e){const s=await getDocs(collection(db,`fatlin_weekly_${APP_ID}`));s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}pl.sort((a,b)=>(b.stars||0)-(a.stars||0)||(b.level||0)-(a.level||0));pl=pl.slice(0,25);if(!pl.length){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Nadie ha jugado.</p>';fu.innerHTML='';return;}t5.innerHTML='';const medals=['🥇','🥈','🥉','🏅','🏅'];pl.slice(0,5).forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1)';item.innerHTML=`<span style="font-size:1.3rem;width:28px;text-align:center">${medals[i]}</span><span style="font-size:1.2rem">${p.avatar||'🧑'}</span><div style="flex:1;min-width:0"><p style="color:white;font-weight:700;font-size:.85rem;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.displayName||'Jugador'}${isMe?' (Tú)':''}</p><p style="color:rgba(255,255,255,.6);font-size:.7rem;margin:0">⭐ ${p.stars||0} pts · Nv.${p.level}</p></div>`;t5.appendChild(item);});fu.innerHTML='';const ms=Math.max(...pl.map(p=>p.stars||1));
+async function loadLigaData(){document.getElementById('liga-week-lbl').innerText=getWeekLabel();document.getElementById('liga-cnt').innerText=getWeekCountdown();const t5=document.getElementById('liga-top5'),fu=document.getElementById('liga-full');t5.innerHTML='<div class="ldots"><span></span><span></span><span></span></div>';fu.innerHTML='';try{const ws=getWeekStart();let pl=[];try{const q=query(collection(db,`fatlin_weekly_${APP_ID}`),orderBy('stars','desc'),limit(50));const s=await getDocs(q);s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}catch(e){const s=await getDocs(collection(db,`fatlin_weekly_${APP_ID}`));s.forEach(d=>{const dat=d.data();if(dat.weekStart===ws)pl.push({id:d.id,...dat});});}pl.sort((a,b)=>(b.stars||0)-(a.stars||0)||(b.level||0)-(a.level||0));pl=pl.slice(0,25);if(!pl.length){t5.innerHTML='<p style="color:rgba(186,230,253,.7);font-size:.8rem;text-align:center">Nadie ha jugado.</p>';fu.innerHTML='';return;}t5.innerHTML='';const medals=['🥇','🥈','🥉','🏅','🏅'];pl.slice(0,5).forEach((p,i)=>{const isMe=game.user&&p.uid===game.user.uid;const item=document.createElement('div');item.style.cssText='display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.1)';item.innerHTML=`<span style="font-size:1.3rem;width:28px;text-align:center">${medals[i]}</span><span style="display:inline-flex;align-items:center">${getAvatarHTML(p.avatar,22)}</span><div style="flex:1;min-width:0"><p style="color:white;font-weight:700;font-size:.85rem;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.displayName||'Jugador'}${isMe?' (Tú)':''}</p><p style="color:rgba(255,255,255,.6);font-size:.7rem;margin:0">⭐ ${p.stars||0} pts · Nv.${p.level}</p></div>`;t5.appendChild(item);});fu.innerHTML='';const ms=Math.max(...pl.map(p=>p.stars||1));
   // ── Calcular corte de ascenso para la liga actual ──
   const ligaActual = (typeof LIGAS !== 'undefined') ? (LIGAS[(game.ligaLevel||1)-1] || LIGAS[0]) : null;
   const promoCut = ligaActual ? ligaActual.promoCut : 5;
@@ -3221,7 +3317,7 @@ setInterval(()=>{const el=document.getElementById('liga-cnt');if(el&&document.ge
 document.getElementById('btn-ranking').onclick=async()=>{document.getElementById('modal-ranking').classList.add('active');document.getElementById('tab-global').classList.add('active');document.getElementById('tab-liga').classList.remove('active');document.getElementById('panel-global').style.display='';document.getElementById('panel-liga').style.display='none';await loadGlobalRanking();};
 document.getElementById('btn-close-ranking').onclick=()=>document.getElementById('modal-ranking').classList.remove('active');
 
-function openAccountModal(){document.getElementById('acc-name').innerText=game.user?.displayName||game.user?.email?.split('@')[0]||'Invitado';document.getElementById('acc-email').innerText=game.user?.email||(game.user?.isAnonymous?'Sesión anónima':'—');document.getElementById('acc-level').innerText=game.level;document.getElementById('acc-stars').innerText=game.stars;document.getElementById('acc-badges').innerText=game.badges;document.getElementById('acc-av').innerText=selectedAvatar;document.getElementById('modal-account').classList.add('active');}
+function openAccountModal(){document.getElementById('acc-name').innerText=game.user?.displayName||game.user?.email?.split('@')[0]||'Invitado';document.getElementById('acc-email').innerText=game.user?.email||(game.user?.isAnonymous?'Sesión anónima':'—');document.getElementById('acc-level').innerText=game.level;document.getElementById('acc-stars').innerText=game.stars;document.getElementById('acc-badges').innerText=game.badges;setAvatarEl(document.getElementById('acc-av'));document.getElementById('modal-account').classList.add('active');}
 document.getElementById('btn-account').onclick=openAccountModal;
 document.getElementById('btn-close-account').onclick=()=>document.getElementById('modal-account').classList.remove('active');
 document.getElementById('btn-chgav').onclick=()=>{document.getElementById('modal-account').classList.remove('active');openAvatarPicker();};
@@ -3232,7 +3328,7 @@ document.getElementById('btn-new-acc').onclick=()=>{try{signOut(auth).catch(()=>
 window.openLogros = function openLogros(){
   console.log('[Logros] game:', game?.level, 'badges:', game?.badges, 'diplomas:', game?.diplomasEarned);
   // Datos del usuario
-  document.getElementById('logros-avatar').textContent = selectedAvatar || '🧑';
+  setAvatarEl(document.getElementById('logros-avatar'));
   document.getElementById('logros-name').textContent = game.user?.displayName || game.user?.email?.split('@')[0] || 'Usuario';
   document.getElementById('logros-level').textContent = 'Nivel ' + game.level + ' · ' + game.stars + ' ⭐';
 
@@ -3287,8 +3383,47 @@ window.openLogros = function openLogros(){
   document.getElementById('modal-logros').classList.add('active');
 }
 
-window.openAvatarPicker = function openAvatarPicker(){const g=document.getElementById('av-grid');g.innerHTML='';tempAvatar=selectedAvatar;AVATARS.forEach(av=>{const b=document.createElement('div');b.className=`avopt${av===selectedAvatar?' selected':''}`;b.innerText=av;b.onclick=()=>{document.querySelectorAll('.avopt').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');tempAvatar=av;};g.appendChild(b);});document.getElementById('modal-avatar').classList.add('active');}
-document.getElementById('btn-confirm-av').onclick=()=>{selectedAvatar=tempAvatar;document.getElementById('hud-avatar').innerText=selectedAvatar;document.getElementById('modal-avatar').classList.remove('active');saveProgress();updateHUD();};
+window.openAvatarPicker = function openAvatarPicker(){
+  const g = document.getElementById('av-grid');
+  g.innerHTML = '';
+  tempAvatar = selectedAvatar;
+
+  // ── Opción foto de Google (solo si está disponible) ──
+  const gPhoto = getGooglePhotoURL();
+  if(gPhoto){
+    const gRow = document.createElement('div');
+    gRow.className = 'av-google-opt' + (selectedAvatar === gPhoto ? ' selected' : '');
+    gRow.innerHTML = `
+      <img src="${gPhoto}" alt="Foto Google"
+        onerror="this.parentElement.style.display='none'">
+      <div class="av-google-opt-info">
+        <div class="av-google-opt-label">📷 Usar foto de Google</div>
+        <div class="av-google-opt-sub">Tu foto de perfil actual</div>
+      </div>`;
+    gRow.onclick = () => {
+      document.querySelectorAll('.avopt, .av-google-opt').forEach(x=>x.classList.remove('selected'));
+      gRow.classList.add('selected');
+      tempAvatar = gPhoto;
+    };
+    g.appendChild(gRow);
+  }
+
+  // ── Emojis disponibles ──
+  AVATARS.forEach(av => {
+    const b = document.createElement('div');
+    b.className = `avopt${av === selectedAvatar ? ' selected' : ''}`;
+    b.textContent = av;
+    b.onclick = () => {
+      document.querySelectorAll('.avopt, .av-google-opt').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+      tempAvatar = av;
+    };
+    g.appendChild(b);
+  });
+
+  document.getElementById('modal-avatar').classList.add('active');
+}
+document.getElementById('btn-confirm-av').onclick=()=>{selectedAvatar=tempAvatar;setAvatarEl(document.getElementById('hud-avatar'));document.getElementById('modal-avatar').classList.remove('active');saveProgress();updateHUD();};
 
 function updateHUD(){
   const isGuest = game.user?.isAnonymous;
@@ -3299,7 +3434,7 @@ function updateHUD(){
   document.getElementById('stat-lives').innerText = isGala ? '∞' : game.lives;
   document.getElementById('stat-level').innerText = `Nv.${game.level}`;
   document.getElementById('stat-user').innerText = game.user?.displayName||game.user?.email?.split('@')[0]||"Invitado";
-  document.getElementById('hud-avatar').innerText = selectedAvatar;
+  setAvatarEl(document.getElementById('hud-avatar'));
 
   // Escudos: ocultos para invitados
   const shEl = document.getElementById('stat-shields');
