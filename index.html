@@ -178,6 +178,27 @@
         .opt.correct { background:#f0fdf4!important;border-color:#22c55e!important;color:#15803d!important; }
         .opt.wrong   { background:#fef2f2!important;border-color:#ef4444!important;color:#dc2626!important; }
 
+        /* MATCH — relacionar columnas */
+        .match-wrap { display:flex;flex-direction:column;gap:8px;padding:2px 0; }
+        .match-cols { display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start; }
+        .match-col-lbl { font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;text-align:center;margin-bottom:4px; }
+        .match-left-item { background:#f8fafc;border:2px solid #e2e8f0;border-radius:1rem;padding:.65rem .8rem;font-size:.82rem;font-weight:600;color:#334155;text-align:center;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;user-select:none; }
+        .match-left-item:hover { border-color:#0ea5e9;background:#f0f9ff; }
+        .match-left-item.selected { border-color:#0284c7;background:#eff6ff;color:#0369a1;transform:scale(1.03); }
+        .match-left-item.matched  { border-color:#22c55e;background:#f0fdf4;color:#15803d;cursor:default;pointer-events:none; }
+        .match-left-item.wrong-m  { border-color:#ef4444;background:#fef2f2;color:#dc2626; }
+        .match-right-item { background:#f8fafc;border:2px dashed #e2e8f0;border-radius:1rem;padding:.65rem .8rem;font-size:.82rem;font-weight:600;color:#334155;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;user-select:none; }
+        .match-right-item:hover { border-color:#a78bfa;background:#faf5ff; }
+        .match-right-item.paired  { border-color:#22c55e;background:#f0fdf4;color:#15803d;cursor:default;pointer-events:none; }
+        .match-right-item.wrong-m { border-color:#ef4444;background:#fef2f2;color:#dc2626; }
+        .match-hint { font-size:.68rem;color:#94a3b8;text-align:center;font-weight:600;margin-bottom:4px; }
+        .match-progress { font-size:.68rem;color:#0284c7;text-align:center;font-weight:700;margin-top:4px; }
+
+        /* CASE — caso práctico */
+        .case-scenario { background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #bae6fd;border-radius:1.25rem;padding:.9rem 1rem;margin-bottom:.9rem;font-size:.82rem;color:#0c4a6e;line-height:1.6;font-weight:500; }
+        .case-scenario strong { color:#075985;font-weight:800; }
+        .case-label { font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#0284c7;margin-bottom:.5rem; }
+
         /* FEEDBACK */
         #feedback-float { position:absolute;left:1rem;right:1rem;bottom:-1rem;background:rgba(239,68,68,.97);padding:1rem;border-radius:1.25rem;color:white;text-align:center;opacity:0;transition:transform .35s cubic-bezier(.175,.885,.32,1.275),opacity .35s;z-index:100;pointer-events:none; }
         #feedback-float.active { transform:translateY(-20px);opacity:1; }
@@ -2639,30 +2660,36 @@ async function generateQuestionsWithClaude(level) {
     const expert = isExpertLevel(level);
     const seed = _promptSeed(level);
 
-    // Distribución forzada: 5 mc + 4 tf + 3 fw = 12 preguntas
+    // Distribución forzada: 4 mc + 3 tf + 3 fw + 1 match + 1 case = 12 preguntas
     const fwExamples = `{"type":"fw","q":"La metodología ___ fue creada por FATLA para mejorar la educación virtual","a":"PACIE","j":"PACIE es la metodología desarrollada por FATLA para entornos virtuales.","source":"fatla.org"},{"type":"fw","q":"La fase ___ de PACIE define objetivos y estándares académicos","a":"Alcance","j":"El Alcance establece las metas del proceso educativo en PACIE.","source":"pacie.education"}`;
+    const matchExample = `{"type":"match","q":"Relaciona cada fase de PACIE con su descripción principal","pairs":[{"l":"Presencia","r":"Imagen y motivación del aula"},{"l":"Alcance","r":"Objetivos y estándares"},{"l":"Capacitación","r":"Formación docente tecnológica"},{"l":"Interacción","r":"Aprendizaje colaborativo"}],"a":"match","j":"Las 4 primeras fases de PACIE y sus propósitos principales.","source":"fatla.org"}`;
+    const caseExample = `{"type":"case","q":"¿Qué fase de PACIE está fallando?","scenario":"Una docente diseñó un aula virtual con colores apagados y sin presentación motivadora. Los estudiantes ingresan una vez y no regresan.","a":"Presencia","o":["Presencia","Alcance","Capacitación","Interacción"],"j":"Presencia trata la imagen, motivación visual y el impacto inicial que retiene al estudiante.","source":"fatla.org"}`;
 
     const systemPrompt = expert
       ? `Eres un evaluador experto Master en Metodología PACIE. Fuentes oficiales por área — FATLA: ${PACIE_SOURCE_GROUPS.fatla.urls[0]}, PACIE: ${PACIE_SOURCE_GROUPS.pacie.urls[0]}, ASOMTV: ${PACIE_SOURCE_GROUPS.asomtv.urls[0]}. Usa web_search para consultar CADA área. SEED: ${seed}. RESPONDE SOLO JSON VÁLIDO sin markdown.`
       : `Eres experto en PACIE/FATLA. Debes consultar obligatoriamente estas 3 fuentes usando web_search: ${sourcesStr}. SEED: ${seed}. RESPONDE SOLO JSON VÁLIDO sin markdown ni backticks.`;
 
     const userPrompt = expert
-      ? `Nivel EXPERTO sobre "${topic}". Genera 12 preguntas (5 mc + 4 tf + 3 fw) para nivel ${level}. SEED:${seed}.
-REGLAS fw (fill-word): La pregunta tiene ___ donde va la palabra clave. Solo UNA palabra como respuesta. Sin tildes obligatorias.
+      ? `Nivel EXPERTO sobre "${topic}". Genera 12 preguntas (4 mc + 3 tf + 3 fw + 1 match + 1 case) para nivel ${level}. SEED:${seed}.
+REGLAS fw: pregunta con ___ donde va UNA palabra clave PACIE. Sin tildes obligatorias.
 REGLAS mc: escenarios reales 2-3 líneas, distractores técnicamente plausibles.
-DISTRIBUCIÓN OBLIGATORIA: exactamente 5 tipo mc, 4 tipo tf, 3 tipo fw.
-RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ es la primera fase de PACIE","a":"Presencia","j":"...","source":"fatla.org"}]}`
+REGLAS match: pares concepto↔descripción, exactamente 4 pares, "a":"match". Ej: ${matchExample}
+REGLAS case: escenario de aula virtual 2-3 líneas + pregunta + 4 opciones mc. Ej: ${caseExample}
+DISTRIBUCIÓN OBLIGATORIA: exactamente 4 mc, 3 tf, 3 fw, 1 match, 1 case.
+RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ es la primera fase de PACIE","a":"Presencia","j":"...","source":"fatla.org"},${matchExample},${caseExample}]}`
       : `Busca "${topic}" consultando OBLIGATORIAMENTE las 3 fuentes (FATLA, PACIE, ASOMTV). Genera 12 preguntas VARIADAS para nivel ${level}. SEED:${seed}.
-DISTRIBUCIÓN OBLIGATORIA: exactamente 5 tipo mc, 4 tipo tf, 3 tipo fw.
+DISTRIBUCIÓN OBLIGATORIA: exactamente 4 mc, 3 tf, 3 fw, 1 match, 1 case.
 REGLAS fw: pregunta con ___ donde va UNA palabra clave PACIE. Sin tildes obligatorias. Ej: ${fwExamples}
 REGLAS mc: 4 opciones, respuesta en opciones, distractores plausibles.
 REGLAS tf: a es "Verdadero" o "Falso".
-RESPONDE SOLO: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ define los objetivos en PACIE","a":"Alcance","j":"...","source":"pacie.education"}]}`;
+REGLAS match: relacionar 4 pares concepto↔descripción PACIE. Campo "pairs":[{"l":"...","r":"..."}], "a":"match". Ej: ${matchExample}
+REGLAS case: escenario de situación real en aula virtual + pregunta + 4 opciones. Campos: "scenario","q","a","o". Ej: ${caseExample}
+RESPONDE SOLO: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ define los objetivos en PACIE","a":"Alcance","j":"...","source":"pacie.education"},${matchExample},${caseExample}]}`;
 
     const isProxy = !CLAUDE_ENDPOINT.includes('anthropic.com');
     const bodyPayload = {
         model: "claude-sonnet-4-20250514",
-        max_tokens: 2500,
+        max_tokens: 3200,
         system: systemPrompt,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: [{ role: "user", content: userPrompt }]
@@ -2715,6 +2742,8 @@ RESPONDE SOLO: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","
         if(q.type === 'mc') return q.o && Array.isArray(q.o) && q.o.includes(q.a);
         if(q.type === 'tf') return ['Verdadero','Falso','True','False'].includes(q.a);
         if(q.type === 'fw') return typeof q.a === 'string' && q.a.trim().length > 0 && q.q.includes('___');
+        if(q.type === 'match') return Array.isArray(q.pairs) && q.pairs.length >= 3 && q.pairs.every(p => p.l && p.r);
+        if(q.type === 'case') return q.scenario && q.o && Array.isArray(q.o) && q.o.includes(q.a);
         return false;
     });
 
@@ -2723,8 +2752,15 @@ RESPONDE SOLO: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","
     // Garantizar al menos 1 de cada tipo si la IA no cumplió distribución
     const hasFW = valid.some(q => q.type === 'fw');
     if(!hasFW) {
-        // Agregar fw de fallback para garantizar el tipo
         valid.push(...FALLBACK_FW_QUESTIONS.slice(0, 2));
+    }
+    const hasMATCH = valid.some(q => q.type === 'match');
+    if(!hasMATCH) {
+        valid.push(FALLBACK_MATCH_QUESTIONS[Math.floor(Math.random()*FALLBACK_MATCH_QUESTIONS.length)]);
+    }
+    const hasCASE = valid.some(q => q.type === 'case');
+    if(!hasCASE) {
+        valid.push(FALLBACK_CASE_QUESTIONS[Math.floor(Math.random()*FALLBACK_CASE_QUESTIONS.length)]);
     }
 
     return valid;
@@ -2746,7 +2782,45 @@ const FALLBACK_FW_QUESTIONS = [
   {type:"fw",q:"Los LMS son plataformas usadas en la fase ___ de PACIE",a:"E-learning",j:"E-learning en PACIE incorpora el uso maduro de plataformas LMS.",source:"asomtv.org"},
 ];
 
-const FALLBACK_QUESTIONS = [
+// ── BANCO FALLBACK MATCH (relacionar columnas) ───────────────────
+const FALLBACK_MATCH_QUESTIONS = [
+  {type:"match",q:"Relaciona cada fase de PACIE con su función principal",
+   pairs:[{l:"Presencia",r:"Imagen y motivación del aula"},{l:"Alcance",r:"Objetivos y estándares"},{l:"Capacitación",r:"Formación docente tecnológica"},{l:"Interacción",r:"Aprendizaje colaborativo"}],
+   a:"match",j:"Las 4 primeras fases de PACIE: Presencia=imagen, Alcance=objetivos, Capacitación=formación, Interacción=colaboración.",source:"fatla.org"},
+  {type:"match",q:"Relaciona cada sigla de PACIE con su significado",
+   pairs:[{l:"P",r:"Presencia"},{l:"A",r:"Alcance"},{l:"C",r:"Capacitación"},{l:"I",r:"Interacción"}],
+   a:"match",j:"PACIE: Presencia, Alcance, Capacitación, Interacción, E-learning.",source:"pacie.education"},
+  {type:"match",q:"Relaciona cada organización con su rol en PACIE",
+   pairs:[{l:"FATLA",r:"Creó la metodología PACIE"},{l:"ASOMTV",r:"Avala los certificados"},{l:"Pedro Camacho",r:"Autor de PACIE"},{l:"PACIE",r:"Metodología para e-learning"}],
+   a:"match",j:"FATLA creó PACIE, ASOMTV la avala, Pedro Camacho la diseñó.",source:"asomtv.org"},
+  {type:"match",q:"Relaciona cada fase PACIE con el recurso principal que utiliza",
+   pairs:[{l:"Presencia",r:"Diseño visual motivador"},{l:"Interacción",r:"Foros y wikis colaborativos"},{l:"E-learning",r:"Plataformas LMS maduras"},{l:"Alcance",r:"Competencias y resultados"}],
+   a:"match",j:"Cada fase de PACIE emplea recursos pedagógicos específicos.",source:"pacie.education"},
+];
+
+// ── BANCO FALLBACK CASE (casos prácticos) ────────────────────────
+const FALLBACK_CASE_QUESTIONS = [
+  {type:"case",q:"¿Qué fase de PACIE está descuidada en este caso?",
+   scenario:"Un docente publicó el contenido del curso pero los estudiantes no participan en los foros ni trabajan en equipo. Las actividades son todas individuales y no hay espacios de debate.",
+   a:"Interacción",o:["Presencia","Alcance","Capacitación","Interacción"],
+   j:"La Interacción en PACIE promueve el aprendizaje colaborativo mediante foros, wikis y trabajos grupales.",source:"pacie.education"},
+  {type:"case",q:"¿Cuál es el problema según la metodología PACIE?",
+   scenario:"Una institución tiene un aula virtual tecnológicamente avanzada, pero los docentes no saben manejar las herramientas LMS ni diseñar actividades virtuales efectivas.",
+   a:"Capacitación",o:["Presencia","Alcance","Capacitación","E-learning"],
+   j:"La Capacitación en PACIE forma al docente en competencias tecnológicas y pedagógicas para el entorno virtual.",source:"fatla.org"},
+  {type:"case",q:"¿Qué fase de PACIE se está aplicando correctamente?",
+   scenario:"La coordinadora académica revisó los objetivos del curso, definió las competencias esperadas y estableció los estándares de evaluación antes de iniciar el semestre virtual.",
+   a:"Alcance",o:["Presencia","Alcance","Interacción","E-learning"],
+   j:"El Alcance en PACIE define los objetivos, estándares y competencias que guían todo el proceso educativo.",source:"pacie.education"},
+  {type:"case",q:"¿Qué fase de PACIE debe mejorar esta institución?",
+   scenario:"Los estudiantes reportan que el aula virtual se ve descuidada, sin colores institucionales, sin bienvenida y con una estructura confusa. La deserción en las primeras semanas es alta.",
+   a:"Presencia",o:["Presencia","Alcance","Capacitación","Interacción"],
+   j:"La Presencia en PACIE trabaja la imagen institucional, la motivación visual y el impacto inicial del aula virtual.",source:"fatla.org"},
+  {type:"case",q:"¿Qué nivel de madurez PACIE describe esta situación?",
+   scenario:"El programa académico lleva 3 años usando un LMS de forma avanzada. Los docentes diseñan objetos de aprendizaje reutilizables, evalúan en línea y la comunidad virtual es autónoma.",
+   a:"E-learning",o:["Presencia","Capacitación","Interacción","E-learning"],
+   j:"E-learning es la fase final de PACIE donde se logra la madurez pedagógica virtual con uso experto de plataformas LMS.",source:"asomtv.org"},
+];
     {type:"mc",q:"¿Qué significa la P en la metodología PACIE?",a:"Presencia",o:["Presencia","Proceso","Planificación","Pedagógico"],j:"La P de PACIE corresponde a Presencia, primera fase del modelo.",source:"fatla.org"},
     {type:"mc",q:"¿Cuántas fases tiene la metodología PACIE?",a:"5 fases",o:["3 fases","5 fases","7 fases","4 fases"],j:"PACIE: Presencia, Alcance, Capacitación, Interacción y E-learning.",source:"fatla.org"},
     {type:"mc",q:"¿En qué país fue creada la metodología PACIE?",a:"Ecuador",o:["México","Ecuador","Colombia","Argentina"],j:"PACIE fue desarrollada en Ecuador por Pedro Camacho de FATLA.",source:"pacie.education"},
@@ -3614,10 +3688,126 @@ function renderOptions(){
   if(tb) {
     if(isTF)  { tb.style.display='block'; tb.textContent='✔ Verdadero / Falso'; tb.style.background='#eff6ff'; tb.style.color='#1d4ed8'; }
     else if(isFW) { tb.style.display='block'; tb.textContent='✏️ Completa la palabra'; tb.style.background='#fefce8'; tb.style.color='#a16207'; }
+    else if(game.currentQ.type==='match') { tb.style.display='block'; tb.textContent='🔗 Relaciona columnas'; tb.style.background='#f5f3ff'; tb.style.color='#6d28d9'; }
+    else if(game.currentQ.type==='case')  { tb.style.display='block'; tb.textContent='🧩 Caso práctico'; tb.style.background='#fff7ed'; tb.style.color='#9a3412'; }
     else      { tb.style.display='none'; }
   }
 
-  if(isFW) {
+  if(game.currentQ.type === 'match') {
+    // ── MATCH: relacionar columnas ────────────────────────────────
+    const pairs = [...game.currentQ.pairs];
+    // Mezclar lado derecho
+    const rightShuffled = [...pairs.map(p=>p.r)].sort(()=>Math.random()-.5);
+    let selectedLeft = null;   // índice del par seleccionado en izquierda
+    let matched = 0;           // cuántos pares correctos lleva
+    const totalPairs = pairs.length;
+    const matchState = pairs.map(()=>({done:false}));
+
+    const wrap = document.createElement('div');
+    wrap.className = 'match-wrap';
+
+    const hint = document.createElement('p');
+    hint.className = 'match-hint';
+    hint.textContent = '👆 Selecciona un concepto de la izquierda, luego su par de la derecha';
+    wrap.appendChild(hint);
+
+    const cols = document.createElement('div');
+    cols.className = 'match-cols';
+
+    // Columna izquierda
+    const colL = document.createElement('div');
+    const lblL = document.createElement('div'); lblL.className='match-col-lbl'; lblL.textContent='Concepto'; colL.appendChild(lblL);
+    const leftBtns = pairs.map((p, i) => {
+      const b = document.createElement('div');
+      b.className = 'match-left-item';
+      b.textContent = p.l;
+      b.dataset.idx = i;
+      b.onclick = () => {
+        if(game.isProcessing || matchState[i].done) return;
+        leftBtns.forEach(x => x.classList.remove('selected'));
+        b.classList.add('selected');
+        selectedLeft = i;
+      };
+      colL.appendChild(b);
+      return b;
+    });
+
+    // Columna derecha (mezclada)
+    const colR = document.createElement('div');
+    const lblR = document.createElement('div'); lblR.className='match-col-lbl'; lblR.textContent='Descripción'; colR.appendChild(lblR);
+    rightShuffled.forEach((rText, ri) => {
+      const b = document.createElement('div');
+      b.className = 'match-right-item';
+      b.textContent = rText;
+      b.onclick = () => {
+        if(game.isProcessing || selectedLeft === null) return;
+        // Buscar si este rText es el correcto para selectedLeft
+        const correctR = pairs[selectedLeft].r;
+        const leftBtn = leftBtns[selectedLeft];
+        if(rText === correctR) {
+          // Correcto
+          leftBtn.classList.remove('selected'); leftBtn.classList.add('matched');
+          b.classList.add('paired');
+          matchState[selectedLeft].done = true;
+          selectedLeft = null;
+          matched++;
+          prog.textContent = `✓ ${matched} / ${totalPairs} emparejados`;
+          if(matched === totalPairs) {
+            // ¡Todos correctos! — manejar como respuesta correcta
+            setTimeout(()=>handleCorrect({ classList:{ add:()=>{}, remove:()=>{} } }), 400);
+          }
+        } else {
+          // Incorrecto — shake visual
+          leftBtn.classList.add('wrong-m'); b.classList.add('wrong-m');
+          setTimeout(()=>{ leftBtn.classList.remove('wrong-m','selected'); b.classList.remove('wrong-m'); selectedLeft=null; }, 800);
+          handleWrong({ classList:{ add:()=>{}, remove:()=>{} } });
+        }
+      };
+      colR.appendChild(b);
+    });
+
+    cols.appendChild(colL); cols.appendChild(colR);
+    wrap.appendChild(cols);
+
+    const prog = document.createElement('p');
+    prog.className = 'match-progress';
+    prog.textContent = `0 / ${totalPairs} emparejados`;
+    wrap.appendChild(prog);
+
+    c.appendChild(wrap);
+
+  } else if(game.currentQ.type === 'case') {
+    // ── CASE: caso práctico ────────────────────────────────────────
+    const wrapper = document.createElement('div');
+
+    // Escenario del caso
+    const caseLbl = document.createElement('p');
+    caseLbl.className = 'case-label';
+    caseLbl.textContent = '📋 Situación';
+    wrapper.appendChild(caseLbl);
+
+    const scenario = document.createElement('div');
+    scenario.className = 'case-scenario';
+    scenario.innerHTML = game.currentQ.scenario || '';
+    wrapper.appendChild(scenario);
+
+    // Opciones como mc normal
+    const opts = [...game.currentQ.o].sort(()=>Math.random()-.5);
+    opts.forEach((opt,idx) => {
+      const b = document.createElement('button');
+      b.className = 'opt';
+      b.style.animationDelay = `${idx*60}ms`;
+      b.textContent = opt;
+      b.onclick = () => {
+        if(game.isProcessing) return;
+        opt === game.currentQ.a ? handleCorrect(b) : handleWrong(b);
+      };
+      wrapper.appendChild(b);
+    });
+
+    c.appendChild(wrapper);
+
+  } else if(isFW) {
     // ── Render campo de texto libre ──────────────────────────────
     const wrapper = document.createElement('div');
     wrapper.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:4px 0';
@@ -3684,7 +3874,7 @@ function renderOptions(){
     setTimeout(() => inp.focus(), 150);
 
   } else {
-    // ── mc y tf — igual que antes ────────────────────────────────
+    // ── mc y tf ────────────────────────────────────────────────
     const opts = isTF ? [...game.currentQ.o] : [...game.currentQ.o].sort(()=>Math.random()-.5);
     opts.forEach((opt,idx) => {
       const b = document.createElement('button');
@@ -3717,12 +3907,14 @@ function handleWrongFW(inp, typed) {
 }
 
 function handleCorrect(btn){
-  // Feedback visual para fw (input de texto)
+  // Feedback visual por tipo
   if(game.currentQ.type === 'fw') {
     const fwInp = document.getElementById('fw-input');
     if(fwInp) { fwInp.classList.add('correct-fw'); fwInp.value = '✓ ' + game.currentQ.a; }
+  } else if(game.currentQ.type === 'match') {
+    // match: ya marcó visualmente en el render, solo continúa flujo
   } else {
-    btn.classList.add('correct','cglow');
+    if(btn && btn.classList) btn.classList.add('correct','cglow');
   }
   game.correctCount++;game.consecutiveErrors=0;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){
   game.level++;
@@ -3730,12 +3922,15 @@ function handleCorrect(btn){
 }
 
 function handleWrong(btn){
-  btn.classList.add('wrong');game.isProcessing=true;
+  if(btn && btn.classList) btn.classList.add('wrong');
+  // Para match: solo penalizar vidas y mostrar feedback, sin bloquear las opciones
+  const isMatch = game.currentQ && game.currentQ.type === 'match';
+  game.isProcessing = isMatch ? false : true;  // match sigue siendo interactivo
   game.consecutiveErrors = (game.consecutiveErrors||0) + 1;
   const penaltyReset = game.consecutiveErrors >= 2;
   mascotSetState('sad', 700); resetMascotIdleTimer();
   const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
-  if(!isGala) game.lives--;if(!game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});
+  if(!isGala) game.lives--;if(!game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');if(!isMatch){document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});}
   const penaltyMsg = penaltyReset && game.correctCount > 0 ? (currentLang==='en'?'⚠️ 2 errors in a row — progress reset!':'⚠️ 2 errores seguidos — ¡progreso reiniciado!') : '';
   document.getElementById('feedback-text').innerText = (penaltyMsg ? penaltyMsg + ' · ' : '') + game.currentQ.j;
   document.getElementById('feedback-float').classList.add('active');const fill=document.getElementById('cfill');fill.style.transition='none';fill.style.width='100%';requestAnimationFrame(()=>{fill.style.transition='width 2.5s linear';fill.style.width='0%';});setTimeout(()=>{document.getElementById('feedback-float').classList.remove('active');card.classList.remove('shake');
@@ -3894,7 +4089,7 @@ window.openLogros = function openLogros(){
           <div class="diploma-title">${d.title}</div>
           <div class="diploma-sub">${d.sub}</div>
         </div>
-        <button onclick="document.getElementById('modal-logros').classList.remove('active');setTimeout(()=>generateDiploma(${d.min}),200);"
+        <button onclick="document.getElementById('modal-logros').classList.remove('active');document.getElementById('modal-challenge').classList.remove('active');game.isProcessing=false;setTimeout(()=>generateDiploma(${d.min}),380);"
           style="background:#0284c7;color:white;border:none;border-radius:10px;padding:5px 10px;font-size:.7rem;font-weight:700;cursor:pointer;flex-shrink:0;">
           🖨️ Ver
         </button>`;
@@ -4137,12 +4332,17 @@ function generateDiploma(completedLevel){
 
   // ── Datos según tier ──
   const tierData = {
-    50:  { label:'🥉 BRONCE · FUNDAMENTOS',  cycles:1, modules:10,  questions:'≥200',  cyclePcts:[100,0,0,0,0],    sideTier:'🥉 BRONCE · FUNDAMENTOS PACIE',   certTitle:'Certificado Fundamentos PACIE',   chipText:'🥉 Bronce · 50 Niveles · 10 Módulos · 2 Ciclos' },
-    100: { label:'🥈 PLATA · PRACTICANTE',   cycles:2, modules:20,  questions:'≥400',  cyclePcts:[100,100,0,0,0],  sideTier:'🥈 PLATA · PRACTICANTE PACIE',    certTitle:'Certificado Practicante PACIE',   chipText:'🥈 Plata · 100 Niveles · 20 Módulos · 4 Ciclos' },
-    150: { label:'🥇 ORO · EXPERTO',         cycles:3, modules:30,  questions:'≥600',  cyclePcts:[100,100,100,0,0],sideTier:'🥇 ORO · EXPERTO PACIE',           certTitle:'Certificado Experto PACIE',       chipText:'🥇 Oro · 150 Niveles · 30 Módulos · 6 Ciclos' },
-    200: { label:'✦ PLATINO · MÁSTER',        cycles:4, modules:40,  questions:'≥800',  cyclePcts:[100,100,100,100,0],sideTier:'✦ PLATINO · MÁSTER PACIE',      certTitle:'Certificado Máster PACIE',        chipText:'✦ Platino · 200 Niveles · 40 Módulos · 8 Ciclos' },
-    250: { label:'💎 DIAMANTE · MENTOR',      cycles:5, modules:50,  questions:'≥1000', cyclePcts:[100,100,100,100,100],sideTier:'💎 DIAMANTE · MENTOR PACIE',   certTitle:'Certificado Mentor PACIE',        chipText:'💎 Diamante · 250 Niveles · 50 Módulos · 10 Ciclos' },
-    300: { label:'🔴 GEMA ROJA · GRAN MAESTRO',cycles:6,modules:60,  questions:'≥1200', cyclePcts:[100,100,100,100,100],sideTier:'🔴 GRAN MAESTRO PACIE',        certTitle:'Certificado Gran Maestro PACIE',  chipText:'🔴 Gema Roja · 300 Niveles · 60 Módulos · 12 Ciclos' },
+    50:  { label:'🥉 BRONCE · FUNDAMENTOS',       cycles:1,  modules:10,  questions:'≥200',  cyclePcts:[100,0,0,0,0,0],           sideTier:'🥉 BRONCE · FUNDAMENTOS PACIE',        certTitle:'Certificado Fundamentos PACIE',       chipText:'🥉 Bronce · 50 Niveles · 10 Módulos · 2 Ciclos' },
+    100: { label:'🥈 PLATA · PRACTICANTE',        cycles:2,  modules:20,  questions:'≥400',  cyclePcts:[100,100,0,0,0,0],         sideTier:'🥈 PLATA · PRACTICANTE PACIE',         certTitle:'Certificado Practicante PACIE',       chipText:'🥈 Plata · 100 Niveles · 20 Módulos · 4 Ciclos' },
+    150: { label:'🥇 ORO · EXPERTO',              cycles:3,  modules:30,  questions:'≥600',  cyclePcts:[100,100,100,0,0,0],       sideTier:'🥇 ORO · EXPERTO PACIE',               certTitle:'Certificado Experto PACIE',           chipText:'🥇 Oro · 150 Niveles · 30 Módulos · 6 Ciclos' },
+    200: { label:'✦ PLATINO · MÁSTER',            cycles:4,  modules:40,  questions:'≥800',  cyclePcts:[100,100,100,100,0,0],     sideTier:'✦ PLATINO · MÁSTER PACIE',             certTitle:'Certificado Máster PACIE',            chipText:'✦ Platino · 200 Niveles · 40 Módulos · 8 Ciclos' },
+    250: { label:'💎 DIAMANTE · MENTOR',          cycles:5,  modules:50,  questions:'≥1000', cyclePcts:[100,100,100,100,100,0],   sideTier:'💎 DIAMANTE · MENTOR PACIE',           certTitle:'Certificado Mentor PACIE',            chipText:'💎 Diamante · 250 Niveles · 50 Módulos · 10 Ciclos' },
+    300: { label:'🔴 GEMA ROJA · GRAN MAESTRO',   cycles:6,  modules:60,  questions:'≥1200', cyclePcts:[100,100,100,100,100,100], sideTier:'🔴 GRAN MAESTRO PACIE',                certTitle:'Certificado Gran Maestro PACIE',      chipText:'🔴 Gema Roja · 300 Niveles · 60 Módulos · 12 Ciclos' },
+    350: { label:'💚 GEMA VERDE · EMINENCIA',     cycles:7,  modules:70,  questions:'≥1400', cyclePcts:[100,100,100,100,100,100], sideTier:'💚 GEMA VERDE · EMINENCIA PACIE',      certTitle:'Certificado Eminencia PACIE',         chipText:'💚 Gema Verde · 350 Niveles · 70 Módulos · 14 Ciclos' },
+    400: { label:'💜 PÚRPURA · SABIO',            cycles:8,  modules:80,  questions:'≥1600', cyclePcts:[100,100,100,100,100,100], sideTier:'💜 PÚRPURA · SABIO PACIE',             certTitle:'Certificado Sabio PACIE',             chipText:'💜 Púrpura · 400 Niveles · 80 Módulos · 16 Ciclos' },
+    450: { label:'⚙️ TITANIO · TITÁN',            cycles:9,  modules:90,  questions:'≥1800', cyclePcts:[100,100,100,100,100,100], sideTier:'⚙️ TITANIO · TITÁN PACIE',            certTitle:'Certificado Titán PACIE',             chipText:'⚙️ Titanio · 450 Niveles · 90 Módulos · 18 Ciclos' },
+    500: { label:'🔷 ZAFIRO · LEYENDA',           cycles:10, modules:100, questions:'≥2000', cyclePcts:[100,100,100,100,100,100], sideTier:'🔷 ZAFIRO · LEYENDA PACIE',            certTitle:'Certificado Leyenda Zafiro PACIE',    chipText:'🔷 Zafiro · 500 Niveles · 100 Módulos · 20 Ciclos' },
+    550: { label:'☢️ URANIO · LEYENDA ABSOLUTA',  cycles:11, modules:110, questions:'≥2200', cyclePcts:[100,100,100,100,100,100], sideTier:'☢️ URANIO · LEYENDA ABSOLUTA PACIE',  certTitle:'Certificado Leyenda Absoluta PACIE',  chipText:'☢️ Uranio · 550 Niveles · 110 Módulos · 22 Ciclos' },
   };
   const td = tierData[completedLevel] || tierData[250];
 
