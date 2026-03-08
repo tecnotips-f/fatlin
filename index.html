@@ -445,7 +445,7 @@
             content:'PACIE';
             position:absolute;top:50%;left:36%;
             transform:translate(-50%,-50%) rotate(-10deg);
-            font-family:Georgia,serif;font-size:9rem;font-weight:900;
+            font-family:'Playfair Display',Georgia,serif;font-size:9rem;font-weight:900;
             color:rgba(0,80,180,.025);pointer-events:none;
             letter-spacing:.12em;z-index:0;white-space:nowrap;
         }
@@ -467,23 +467,23 @@
         .cer-head { display:flex;align-items:flex-start;gap:1.2%; }
         .cer-head-text { flex:1; }
         .cer-issuer {
-            font-size:.42rem;font-weight:700;letter-spacing:.18em;
-            text-transform:uppercase;color:#4a6080;margin-bottom:2px;
+            font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.16em;
+            text-transform:uppercase;color:#4a6080;margin-bottom:3px;
         }
         .cer-title {
-            font-family:Georgia,serif;font-size:1.25rem;font-weight:900;
+            font-family:'Playfair Display',Georgia,serif;font-size:1.55rem;font-weight:900;
             color:#080f20;line-height:1.1;
         }
         .cer-subtitle {
-            font-size:.43rem;letter-spacing:.14em;
-            text-transform:uppercase;color:#4a6080;margin-top:3px;
+            font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.13em;
+            text-transform:uppercase;color:#4a6080;margin-top:4px;
         }
         .cer-chip {
             display:inline-flex;align-items:center;gap:4px;
             margin-top:5px;padding:2px 10px;
             background:linear-gradient(135deg,rgba(0,180,255,.1),rgba(0,80,200,.06));
             border:1px solid rgba(0,130,255,.28);border-radius:20px;
-            font-size:.44rem;font-weight:800;letter-spacing:.07em;
+            font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;letter-spacing:.07em;
             text-transform:uppercase;color:#0055a0;
         }
         .cer-rule {
@@ -503,19 +503,19 @@
             background:linear-gradient(135deg,rgba(0,80,180,.04),rgba(0,120,255,.02));
             border-radius:10px;border:1px solid rgba(0,100,200,.1);
         }
-        .cer-certify-lbl { font-size:.65rem;color:#4a6080;margin-bottom:4px;font-style:italic; }
+        .cer-certify-lbl { font-family:'Source Serif 4',Georgia,serif;font-size:.82rem;color:#4a6080;margin-bottom:5px;font-style:italic; }
         .cer-graduate-name {
-            font-family:Georgia,serif;font-size:1.75rem;font-weight:900;
-            color:#080f20;line-height:1.1;display:block;
+            font-family:'Playfair Display',Georgia,serif;font-size:2.1rem;font-weight:900;
+            color:#080f20;line-height:1.1;display:block;letter-spacing:.01em;
         }
         .cer-name-role {
-            font-size:.6rem;color:#4a6080;margin-top:4px;
+            font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#4a6080;margin-top:5px;
             letter-spacing:.09em;text-transform:uppercase;font-weight:600;
         }
 
         /* Logro */
         .cer-achievement {
-            font-size:.73rem;color:#253040;line-height:1.6;text-align:justify;padding:2px 0;
+            font-family:'Source Serif 4',Georgia,serif;font-size:.88rem;color:#253040;line-height:1.65;text-align:justify;padding:2px 0;
         }
         .cer-achievement strong { color:#003a80;font-weight:700; }
 
@@ -524,7 +524,7 @@
             display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;
         }
         .cer-contents-lbl {
-            font-size:.52rem;font-weight:800;letter-spacing:.13em;
+            font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:800;letter-spacing:.13em;
             text-transform:uppercase;color:#4a6080;
             display:flex;align-items:center;gap:5px;
         }
@@ -533,8 +533,8 @@
             background:linear-gradient(180deg,#00c8ff,#0055a0);border-radius:2px;
         }
         .cer-contents-badge {
-            font-size:.52rem;font-weight:700;background:#dbeafe;color:#1e40af;
-            border:1px solid #bfdbfe;border-radius:20px;padding:2px 8px;
+            font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;background:#dbeafe;color:#1e40af;
+            border:1px solid #bfdbfe;border-radius:20px;padding:2px 9px;
         }
         .cer-topics-grid {
             display:grid;grid-template-columns:1fr 1fr;gap:1px 10px;
@@ -545,16 +545,16 @@
         }
         .cer-topic-row:nth-last-child(-n+2){border-bottom:none;}
         .cer-topic-check {
-            width:13px;height:13px;flex-shrink:0;
+            width:15px;height:15px;flex-shrink:0;
             background:#dcfce7;border:1px solid #86efac;border-radius:3px;
             display:flex;align-items:center;justify-content:center;
-            font-size:7px;color:#16a34a;font-weight:900;
+            font-size:9px;color:#16a34a;font-weight:900;
         }
         .cer-topic-num {
-            font-family:monospace;font-size:.5rem;font-weight:700;
-            color:#90aac8;flex-shrink:0;width:16px;
+            font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;
+            color:#90aac8;flex-shrink:0;width:20px;
         }
-        .cer-topic-name { font-size:.68rem;font-weight:600;color:#0d1e36;line-height:1.3;flex:1; }
+        .cer-topic-name { font-family:'Source Serif 4',Georgia,serif;font-size:.84rem;font-weight:600;color:#0d1e36;line-height:1.35;flex:1; }
 
         /* Pie */
         .cer-foot {
@@ -573,18 +573,18 @@
             justify-content:center;box-shadow:0 2px 8px rgba(0,40,100,.1);
         }
         .cer-org-img img { width:100%;height:100%;object-fit:contain;padding:3px; }
-        .cer-org-name { font-size:.58rem;font-weight:800;color:#0d1e36;letter-spacing:.04em;text-transform:uppercase; }
-        .cer-org-sub  { font-size:.5rem;color:#4a6080;letter-spacing:.06em;text-transform:uppercase; }
+        .cer-org-name { font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800;color:#0d1e36;letter-spacing:.04em;text-transform:uppercase; }
+        .cer-org-sub  { font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#4a6080;letter-spacing:.06em;text-transform:uppercase; }
         .cer-org-verify { font-size:.42rem;color:#0284c7;letter-spacing:.04em;margin-top:1px;opacity:.7; }
         a.cer-org:hover .cer-org-verify { opacity:1; }
         .cer-org-div  { width:1px;height:28px;align-self:center;background:linear-gradient(180deg,transparent,#b0c8e8,transparent); }
         .cer-meta { display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0; }
-        .cer-date     { font-size:.58rem;font-weight:700;color:#0d1e36; }
-        .cer-date-sub { font-size:.43rem;color:#4a6080; }
+        .cer-date     { font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#0d1e36; }
+        .cer-date-sub { font-family:'JetBrains Mono',monospace;font-size:.56rem;color:#4a6080; }
         .cer-sha {
-            font-family:monospace;font-size:.46rem;font-weight:700;
+            font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;
             color:#003880;background:#dbeafe;border:1px solid #bfdbfe;
-            border-radius:4px;padding:2px 7px;letter-spacing:.04em;margin-top:2px;
+            border-radius:4px;padding:3px 8px;letter-spacing:.04em;margin-top:3px;
         }
 
         /* ── COLUMNA DERECHA ── */
@@ -595,14 +595,14 @@
             position:relative;z-index:1;
         }
         .cer-side-tier {
-            font-size:.44rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
-            padding:3px 12px;border-radius:20px;
+            font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+            padding:4px 14px;border-radius:20px;
             background:linear-gradient(135deg,#003880,#001840);color:#67b8f0;
             box-shadow:0 3px 12px rgba(0,50,140,.4);text-align:center;
         }
         .cer-scan-lbl {
-            font-size:.44rem;font-weight:600;letter-spacing:.1em;
-            text-transform:uppercase;color:#9ca3af;text-align:center;line-height:1.5;
+            font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;letter-spacing:.09em;
+            text-transform:uppercase;color:#9ca3af;text-align:center;line-height:1.6;
         }
         .cer-qr-box {
             background:white;border:2px solid #b0c8e8;border-radius:9px;padding:6px;
@@ -610,13 +610,13 @@
             flex-shrink:0;box-shadow:0 4px 16px rgba(0,50,120,.1);
         }
         .cer-id-box {
-            font-family:monospace;font-size:.4rem;color:#4a6080;
+            font-family:'JetBrains Mono',monospace;font-size:.56rem;color:#4a6080;
             text-align:center;word-break:break-all;
             background:rgba(0,50,100,.03);border:1px solid rgba(0,70,150,.1);
-            border-radius:6px;padding:4px 6px;line-height:1.65;width:100%;
+            border-radius:6px;padding:5px 7px;line-height:1.65;width:100%;
         }
         .cer-id-box strong {
-            display:block;font-size:.36rem;color:#9ca3af;
+            display:block;font-family:'JetBrains Mono',monospace;font-size:.5rem;color:#9ca3af;
             font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;
         }
         .cer-stats { width:100%;display:flex;flex-direction:column;gap:3px; }
@@ -624,19 +624,19 @@
             display:flex;justify-content:space-between;align-items:center;
             padding:3px 7px;background:white;border:1px solid #d8e8f8;border-radius:6px;
         }
-        .cer-stat-lbl { font-size:.42rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em; }
-        .cer-stat-val { font-size:.56rem;font-weight:800;color:#080f20;font-family:monospace; }
+        .cer-stat-lbl { font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em; }
+        .cer-stat-val { font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;color:#080f20; }
         .cer-cycle { width:100%;background:rgba(0,60,140,.03);border:1px solid rgba(0,80,180,.1);border-radius:8px;padding:5px 8px; }
-        .cer-cycle-hdr { font-size:.4rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#4a6080;margin-bottom:4px;text-align:center; }
+        .cer-cycle-hdr { font-family:'JetBrains Mono',monospace;font-size:.54rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#4a6080;margin-bottom:5px;text-align:center; }
         .cer-cycle-rows { display:flex;flex-direction:column;gap:3px; }
         .cer-cycle-row { display:flex;align-items:center;gap:4px; }
-        .cer-cycle-lbl { font-family:monospace;font-size:.38rem;font-weight:700;color:#9ca3af;width:26px;flex-shrink:0; }
+        .cer-cycle-lbl { font-family:'JetBrains Mono',monospace;font-size:.54rem;font-weight:700;color:#9ca3af;width:30px;flex-shrink:0; }
         .cer-cycle-track { flex:1;height:5px;background:#e4edf8;border-radius:3px;overflow:hidden; }
         .cer-cycle-fill { height:100%;border-radius:3px; }
-        .cer-cycle-pct { font-family:monospace;font-size:.38rem;font-weight:700;color:#374151;width:24px;text-align:right; }
+        .cer-cycle-pct { font-family:'JetBrains Mono',monospace;font-size:.54rem;font-weight:700;color:#374151;width:28px;text-align:right; }
         .cer-valid {
             display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;
-            background:#f0fdf4;border:1px solid #86efac;font-size:.46rem;font-weight:700;color:#15803d;
+            font-family:'JetBrains Mono',monospace;background:#f0fdf4;border:1px solid #86efac;font-size:.62rem;font-weight:700;color:#15803d;
         }
         .cer-vdot { width:6px;height:6px;border-radius:50%;background:#16a34a;flex-shrink:0;animation:certPulse 2s ease-in-out infinite; }
         @keyframes certPulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}50%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
@@ -1206,6 +1206,8 @@
         }
 
         </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -4428,17 +4430,17 @@ function generateDiploma(completedLevel){
 
   // ── Datos según tier ──
   const tierData = {
-    50:  { label:'🥉 BRONCE · FUNDAMENTOS',       cycles:1,  modules:10,  questions:'≥200',  cyclePcts:[100,0,0,0,0,0],           sideTier:'🥉 BRONCE · FUNDAMENTOS PACIE',        certTitle:'Certificado Fundamentos PACIE',       chipText:'🥉 Bronce · 50 Niveles · 10 Módulos · 2 Ciclos' },
-    100: { label:'🥈 PLATA · PRACTICANTE',        cycles:2,  modules:20,  questions:'≥400',  cyclePcts:[100,100,0,0,0,0],         sideTier:'🥈 PLATA · PRACTICANTE PACIE',         certTitle:'Certificado Practicante PACIE',       chipText:'🥈 Plata · 100 Niveles · 20 Módulos · 4 Ciclos' },
-    150: { label:'🥇 ORO · EXPERTO',              cycles:3,  modules:30,  questions:'≥600',  cyclePcts:[100,100,100,0,0,0],       sideTier:'🥇 ORO · EXPERTO PACIE',               certTitle:'Certificado Experto PACIE',           chipText:'🥇 Oro · 150 Niveles · 30 Módulos · 6 Ciclos' },
-    200: { label:'✦ PLATINO · MÁSTER',            cycles:4,  modules:40,  questions:'≥800',  cyclePcts:[100,100,100,100,0,0],     sideTier:'✦ PLATINO · MÁSTER PACIE',             certTitle:'Certificado Máster PACIE',            chipText:'✦ Platino · 200 Niveles · 40 Módulos · 8 Ciclos' },
-    250: { label:'💎 DIAMANTE · MENTOR',          cycles:5,  modules:50,  questions:'≥1000', cyclePcts:[100,100,100,100,100,0],   sideTier:'💎 DIAMANTE · MENTOR PACIE',           certTitle:'Certificado Mentor PACIE',            chipText:'💎 Diamante · 250 Niveles · 50 Módulos · 10 Ciclos' },
-    300: { label:'🔴 GEMA ROJA · GRAN MAESTRO',   cycles:6,  modules:60,  questions:'≥1200', cyclePcts:[100,100,100,100,100,100], sideTier:'🔴 GRAN MAESTRO PACIE',                certTitle:'Certificado Gran Maestro PACIE',      chipText:'🔴 Gema Roja · 300 Niveles · 60 Módulos · 12 Ciclos' },
-    350: { label:'💚 GEMA VERDE · EMINENCIA',     cycles:7,  modules:70,  questions:'≥1400', cyclePcts:[100,100,100,100,100,100], sideTier:'💚 GEMA VERDE · EMINENCIA PACIE',      certTitle:'Certificado Eminencia PACIE',         chipText:'💚 Gema Verde · 350 Niveles · 70 Módulos · 14 Ciclos' },
-    400: { label:'💜 PÚRPURA · SABIO',            cycles:8,  modules:80,  questions:'≥1600', cyclePcts:[100,100,100,100,100,100], sideTier:'💜 PÚRPURA · SABIO PACIE',             certTitle:'Certificado Sabio PACIE',             chipText:'💜 Púrpura · 400 Niveles · 80 Módulos · 16 Ciclos' },
-    450: { label:'⚙️ TITANIO · TITÁN',            cycles:9,  modules:90,  questions:'≥1800', cyclePcts:[100,100,100,100,100,100], sideTier:'⚙️ TITANIO · TITÁN PACIE',            certTitle:'Certificado Titán PACIE',             chipText:'⚙️ Titanio · 450 Niveles · 90 Módulos · 18 Ciclos' },
-    500: { label:'🔷 ZAFIRO · LEYENDA',           cycles:10, modules:100, questions:'≥2000', cyclePcts:[100,100,100,100,100,100], sideTier:'🔷 ZAFIRO · LEYENDA PACIE',            certTitle:'Certificado Leyenda Zafiro PACIE',    chipText:'🔷 Zafiro · 500 Niveles · 100 Módulos · 20 Ciclos' },
-    550: { label:'☢️ URANIO · LEYENDA ABSOLUTA',  cycles:11, modules:110, questions:'≥2200', cyclePcts:[100,100,100,100,100,100], sideTier:'☢️ URANIO · LEYENDA ABSOLUTA PACIE',  certTitle:'Certificado Leyenda Absoluta PACIE',  chipText:'☢️ Uranio · 550 Niveles · 110 Módulos · 22 Ciclos' },
+    50:  { label:'🥉 BRONCE · FUNDAMENTOS',       cycles:2,  modules:10,  questions:'≥250',  cyclePcts:[100,100],                                                                       sideTier:'🥉 BRONCE · FUNDAMENTOS PACIE',        certTitle:'Certificado Fundamentos PACIE',       chipText:'🥉 Bronce · 50 Niveles · 10 Módulos · 2 Ciclos' },
+    100: { label:'🥈 PLATA · PRACTICANTE',        cycles:4,  modules:20,  questions:'≥500',  cyclePcts:[100,100,100,100],                                                               sideTier:'🥈 PLATA · PRACTICANTE PACIE',         certTitle:'Certificado Practicante PACIE',       chipText:'🥈 Plata · 100 Niveles · 20 Módulos · 4 Ciclos' },
+    150: { label:'🥇 ORO · EXPERTO',              cycles:6,  modules:30,  questions:'≥750',  cyclePcts:[100,100,100,100,100,100],                                                       sideTier:'🥇 ORO · EXPERTO PACIE',               certTitle:'Certificado Experto PACIE',           chipText:'🥇 Oro · 150 Niveles · 30 Módulos · 6 Ciclos' },
+    200: { label:'✦ PLATINO · MÁSTER',            cycles:8,  modules:40,  questions:'≥1000', cyclePcts:[100,100,100,100,100,100,100,100],                                               sideTier:'✦ PLATINO · MÁSTER PACIE',             certTitle:'Certificado Máster PACIE',            chipText:'✦ Platino · 200 Niveles · 40 Módulos · 8 Ciclos' },
+    250: { label:'💎 DIAMANTE · MENTOR',          cycles:10, modules:50,  questions:'≥1250', cyclePcts:[100,100,100,100,100,100,100,100,100,100],                                       sideTier:'💎 DIAMANTE · MENTOR PACIE',           certTitle:'Certificado Mentor PACIE',            chipText:'💎 Diamante · 250 Niveles · 50 Módulos · 10 Ciclos' },
+    300: { label:'🔴 GEMA ROJA · GRAN MAESTRO',   cycles:12, modules:60,  questions:'≥1500', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100],                               sideTier:'🔴 GRAN MAESTRO PACIE',                certTitle:'Certificado Gran Maestro PACIE',      chipText:'🔴 Gema Roja · 300 Niveles · 60 Módulos · 12 Ciclos' },
+    350: { label:'💚 GEMA VERDE · EMINENCIA',     cycles:14, modules:70,  questions:'≥1750', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100,100,100],                       sideTier:'💚 GEMA VERDE · EMINENCIA PACIE',      certTitle:'Certificado Eminencia PACIE',         chipText:'💚 Gema Verde · 350 Niveles · 70 Módulos · 14 Ciclos' },
+    400: { label:'💜 PÚRPURA · SABIO',            cycles:16, modules:80,  questions:'≥2000', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],               sideTier:'💜 PÚRPURA · SABIO PACIE',             certTitle:'Certificado Sabio PACIE',             chipText:'💜 Púrpura · 400 Niveles · 80 Módulos · 16 Ciclos' },
+    450: { label:'⚙️ TITANIO · TITÁN',            cycles:18, modules:90,  questions:'≥2250', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],       sideTier:'⚙️ TITANIO · TITÁN PACIE',            certTitle:'Certificado Titán PACIE',             chipText:'⚙️ Titanio · 450 Niveles · 90 Módulos · 18 Ciclos' },
+    500: { label:'🔷 ZAFIRO · LEYENDA',           cycles:20, modules:100, questions:'≥2500', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100], sideTier:'🔷 ZAFIRO · LEYENDA PACIE',            certTitle:'Certificado Leyenda Zafiro PACIE',    chipText:'🔷 Zafiro · 500 Niveles · 100 Módulos · 20 Ciclos' },
+    550: { label:'☢️ URANIO · LEYENDA ABSOLUTA',  cycles:22, modules:110, questions:'≥2750', cyclePcts:[100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100], sideTier:'☢️ URANIO · LEYENDA ABSOLUTA PACIE',  certTitle:'Certificado Leyenda Absoluta PACIE',  chipText:'☢️ Uranio · 550 Niveles · 110 Módulos · 22 Ciclos' },
   };
   const td = tierData[completedLevel] || tierData[250];
 
@@ -4488,31 +4490,58 @@ function generateDiploma(completedLevel){
    correctas consecutivas por nivel, validado por FATLA, PACIE y ASOMTV.`;
 
   // ── Temas por tier (hasta 12 mostrados en 2 columnas) ──
+  // 22 temas únicos — 2 por nivel de certificación (1 tema por ciclo completado)
   const ALL_TOPICS = [
-    'Fundamentos y filosofía completa de PACIE',
-    'Fase Presencia: imagen, motivación y entornos',
-    'Fase Alcance: objetivos, estándares y competencias',
-    'Fase Capacitación: formación y tecnología docente',
-    'Fase Interacción: aprendizaje colaborativo y LMS',
-    'Fase E-learning: LMS, madurez y ecosistemas',
-    'Origen PACIE: Pedro Camacho, FATLA e historia',
-    'Educación virtual vs. presencial: modelos comparados',
-    'Herramientas tecnológicas e integración pedagógica',
-    'Evaluación, roles tutor–estudiante y gestión aula',
-    'Proyectos FATLA–ASOMTV: implementación real',
-    'Integración total PACIE: liderazgo y mentoría',
+    'Fundamentos y filosofía de la Metodología PACIE',                              // C·I
+    'Origen PACIE: Pedro Camacho, FATLA y contexto latinoamericano',                // C·II
+    'Fase Presencia: imagen institucional, motivación y entornos virtuales',        // C·III
+    'Fase Alcance: objetivos de aprendizaje, estándares y competencias',            // C·IV
+    'Fase Capacitación: formación docente y competencias tecnológicas',             // C·V
+    'Fase Interacción: aprendizaje colaborativo, foros y comunidades LMS',          // C·VI
+    'Fase E-learning: plataformas LMS, madurez pedagógica y sostenibilidad',        // C·VII
+    'Educación virtual vs. presencial: paradigmas y modelos comparados',            // C·VIII
+    'Herramientas tecnológicas: integración pedagógica y entornos digitales',       // C·IX
+    'Evaluación continua: roles tutor–estudiante y gestión del aula virtual',       // C·X
+    'Diseño instruccional avanzado: estrategias PACIE y objetos de aprendizaje',    // C·XI
+    'Gestión de proyectos educativos virtuales: planificación y seguimiento',       // C·XII
+    'Innovación pedagógica: gamificación, microlearning y aprendizaje adaptativo',  // C·XIII
+    'Proyectos FATLA–ASOMTV: casos de implementación real y análisis crítico',      // C·XIV
+    'Liderazgo educativo digital: gestión de comunidades virtuales de práctica',    // C·XV
+    'Investigación aplicada en entornos e-learning: metodología y métricas',        // C·XVI
+    'Ecosistemas de aprendizaje: integración PACIE con IA y analítica educativa',   // C·XVII
+    'Modelos de calidad en educación virtual: estándares internacionales PACIE',    // C·XVIII
+    'Mentoría y transferencia del conocimiento PACIE: formación de formadores',     // C·XIX
+    'Políticas institucionales de e-learning: normativa, accesibilidad y equidad',  // C·XX
+    'Visión estratégica PACIE: transformación digital e impacto socioeducativo',    // C·XXI
+    'Integración total PACIE: liderazgo, acreditación y legado en educación virtual', // C·XXII
   ];
-  const topicsCount = Math.min(12, Math.max(6, Math.ceil(completedLevel / 25)));
+  const topicsCount = Math.min(22, Math.max(2, td.cycles));
   const topics = ALL_TOPICS.slice(0, topicsCount);
 
-  // ── Ciclos ──
+  // ── Ciclos — 22 colores únicos ──
   const cycleColors = [
     'linear-gradient(90deg,#f59e0b,#d97706)',
     'linear-gradient(90deg,#3b82f6,#1d4ed8)',
     'linear-gradient(90deg,#a855f7,#7e22ce)',
     'linear-gradient(90deg,#0ea5e9,#0369a1)',
-    'linear-gradient(90deg,#06b6d4,#0891b2)',
     'linear-gradient(90deg,#10b981,#047857)',
+    'linear-gradient(90deg,#f43f5e,#be123c)',
+    'linear-gradient(90deg,#fb923c,#c2410c)',
+    'linear-gradient(90deg,#06b6d4,#0e7490)',
+    'linear-gradient(90deg,#84cc16,#4d7c0f)',
+    'linear-gradient(90deg,#e879f9,#a21caf)',
+    'linear-gradient(90deg,#38bdf8,#0284c7)',
+    'linear-gradient(90deg,#fbbf24,#b45309)',
+    'linear-gradient(90deg,#34d399,#065f46)',
+    'linear-gradient(90deg,#818cf8,#4338ca)',
+    'linear-gradient(90deg,#f87171,#991b1b)',
+    'linear-gradient(90deg,#a3e635,#3f6212)',
+    'linear-gradient(90deg,#67e8f9,#0e7490)',
+    'linear-gradient(90deg,#fda4af,#9f1239)',
+    'linear-gradient(90deg,#c4b5fd,#5b21b6)',
+    'linear-gradient(90deg,#6ee7b7,#064e3b)',
+    'linear-gradient(90deg,#fcd34d,#92400e)',
+    'linear-gradient(90deg,#7dd3fc,#1e3a8a)',
   ];
 
   // ══ Rellenar DOM ══
@@ -4551,13 +4580,19 @@ function generateDiploma(completedLevel){
   const cycleRows = document.getElementById('dip-cycle-rows');
   if(cycleRows){
     cycleRows.innerHTML = '';
-    const cycleLabels = ['C·I','C·II','C·III','C·IV','C·V','C·VI'];
+    const cycleLabels = ['C·I','C·II','C·III','C·IV','C·V','C·VI','C·VII','C·VIII','C·IX','C·X','C·XI','C·XII','C·XIII','C·XIV','C·XV','C·XVI','C·XVII','C·XVIII','C·XIX','C·XX','C·XXI','C·XXII'];
+    const cc = td.cyclePcts.length;
+    const barH  = cc<=6?5 : cc<=10?4 : cc<=16?3 : 2;
+    const rGap  = cc<=8?3 : cc<=14?2 : 1;
+    const lbSz  = cc<=8?'.54rem' : cc<=14?'.44rem' : '.36rem';
+    const pcSz  = cc<=8?'.54rem' : cc<=14?'.44rem' : '.36rem';
+    cycleRows.style.gap = rGap + 'px';
     td.cyclePcts.forEach((pct, i) => {
       const row = document.createElement('div');
       row.className = 'cer-cycle-row';
-      row.innerHTML = `<span class="cer-cycle-lbl">${cycleLabels[i]||('C·'+(i+1))}</span>
-        <div class="cer-cycle-track"><div class="cer-cycle-fill" style="background:${cycleColors[i]||cycleColors[0]};width:${pct}%"></div></div>
-        <span class="cer-cycle-pct">${pct}%</span>`;
+      row.innerHTML = `<span class="cer-cycle-lbl" style="font-size:${lbSz};width:${cc>14?'32px':'30px'}">${cycleLabels[i]||('C·'+(i+1))}</span>
+        <div class="cer-cycle-track" style="height:${barH}px"><div class="cer-cycle-fill" style="background:${cycleColors[i]||cycleColors[0]};width:${pct}%"></div></div>
+        <span class="cer-cycle-pct" style="font-size:${pcSz}">${pct}%</span>`;
       cycleRows.appendChild(row);
     });
   }
