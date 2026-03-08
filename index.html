@@ -614,6 +614,15 @@
         .cer-vdot { width:6px;height:6px;border-radius:50%;background:#16a34a;flex-shrink:0;animation:certPulse 2s ease-in-out infinite; }
         @keyframes certPulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.5)}50%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
 
+        /* FW — fill-word input */
+        #fw-input:focus { border-color:var(--primary)!important; box-shadow:0 0 0 4px rgba(14,165,233,.12)!important; }
+        #fw-input:disabled { opacity:.7; cursor:not-allowed; }
+        #fw-input.correct-fw { border-color:#22c55e!important; background:#f0fdf4!important; color:#15803d!important; }
+        #fw-input.wrong-fw   { border-color:#ef4444!important; background:#fef2f2!important; color:#dc2626!important; }
+
+        /* Badge tipo pregunta */
+        #q-type-badge { display:none;text-align:center;margin-bottom:.35rem;padding:3px 12px;border-radius:20px;font-size:.65rem;font-weight:700;letter-spacing:.05em; }
+
         /* Botones acción */
         .diploma-actions {
             display:flex;gap:.75rem;width:100%;max-width:1024px;
@@ -835,28 +844,6 @@
         }
         body.gala-mode .hud-lang-opt.active { color:var(--gala-gold); }
 
-        /* ═══════ MODAL INVITADO — LÍMITE 3 NIVELES ═══════ */
-        #modal-guest-limit {
-            position:fixed;inset:0;background:rgba(8,47,73,.95);
-            backdrop-filter:blur(14px);z-index:6000;
-            display:none;align-items:center;justify-content:center;padding:20px;
-        }
-        #modal-guest-limit.active { display:flex;animation:fadeIn .25s ease; }
-        .guest-limit-card {
-            background:white;border-radius:2.5rem;padding:2.5rem 2rem;
-            max-width:400px;width:100%;text-align:center;
-            box-shadow:0 40px 100px rgba(0,0,0,.6);
-            animation:cardIn .4s cubic-bezier(.34,1.56,.64,1);
-        }
-        .guest-limit-icon { font-size:3.5rem;margin-bottom:.75rem;display:block; }
-        .guest-limit-title { font-size:1.4rem;font-weight:800;color:#1e293b;margin-bottom:.5rem; }
-        .guest-limit-msg { font-size:.88rem;color:#64748b;line-height:1.6;margin-bottom:.25rem; }
-        .guest-limit-warn {
-            background:#fef2f2;border:1px solid #fecaca;border-radius:1rem;
-            padding:.75rem 1rem;margin:1rem 0;
-            font-size:.8rem;font-weight:600;color:#dc2626;
-        }
-    
         /* ── ONBOARDING ─────────────────────────────────────── */
         #modal-onboarding{position:fixed;inset:0;background:rgba(5,20,45,.97);backdrop-filter:blur(16px);z-index:7000;display:none;align-items:center;justify-content:center;padding:20px;}
         #modal-onboarding.active{display:flex;animation:fadeIn .3s ease;}
@@ -1252,7 +1239,6 @@
         <div id="auth-main">
             <button id="btn-google" class="abtn google"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>Continuar con Google</button>
             <button id="btn-show-email" class="abtn email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Correo electrónico</button>
-            <button id="btn-guest" class="abtn guest"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Entrar como Invitado</button>
         </div>
         <div id="auth-email" style="display:none">
             <input type="email" id="inp-email" class="ifield" placeholder="Correo">
@@ -2077,7 +2063,7 @@ window.splashChooseLang = function(lang) {
 ═══════════════════════════════════════════════════════════════ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, getDocs, collection, query, orderBy, limit, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = { apiKey:"AIzaSyAByrBFOD9-Ji93nT3s31As_xN0tWS5_QE", authDomain:"fatlin.firebaseapp.com", projectId:"fatlin", storageBucket:"fatlin.appspot.com", messagingSenderId:"88080333098", appId:"1:88080333098:web:6a981dfc448b9ea670c653" };
@@ -2305,7 +2291,6 @@ function applyLang(){
   [
     ['btn-google',     'btn_google'],
     ['btn-show-email', 'btn_email'],
-    ['btn-guest',      'btn_guest'],
     ['btn-login',      'btn_login'],
     ['btn-back',       'btn_back'],
     ['btn-logout',     'logout'],
@@ -2370,25 +2355,90 @@ try { enableIndexedDbPersistence(db); } catch(e) {}
 // El proxy valida el token Firebase antes de llamar a Anthropic.
 const CLAUDE_ENDPOINT = 'https://us-central1-fatlin.cloudfunctions.net/claudeProxy';
 
-const PACIE_SOURCES = [
-    "https://www.fatla.org",
-    "https://www.pacie.education/portal/",
-    "https://www.asomtv.org",
-    "https://www.pacie.education/portal/mod/page/view.php?id=10",
-    "https://www.pacie.education/portal/mod/page/view.php?id=16",
-    "https://www.pacie.education/portal/mod/page/view.php?id=24",
-    "https://www.pacie.education/portal/mod/page/view.php?id=25",
-    "https://www.pacie.education/portal/mod/page/view.php?id=23",
-    "https://www.pacie.education/portal/mod/page/view.php?id=17",
-    "https://licencia.asomtv.org/mod/page/view.php?id=51",
-    "https://licencia.asomtv.org/mod/page/view.php?id=5",
-    "https://licencia.asomtv.org/mod/page/view.php?id=50",
-    "https://licencia.asomtv.org/mod/page/view.php?id=5",
-    "https://licencia.asomtv.org/mod/page/view.php?id=4",
-    "https://becas.fatla.org/mod/page/view.php?id=33",
-    "https://becas.fatla.org/mod/page/view.php?id=34",
-    "https://becas.fatla.org/mod/page/view.php?id=3"
-];
+// ── FUENTES PRIMARIAS ORGANIZADAS POR ÁREA ───────────────────────
+// Cada área tiene fallback garantizado. Sin duplicados.
+const PACIE_SOURCE_GROUPS = {
+  fatla: {
+    label: "FATLA",
+    root: "https://www.fatla.org",
+    urls: [
+      "https://www.fatla.org",
+      "https://becas.fatla.org/mod/page/view.php?id=33",
+      "https://becas.fatla.org/mod/page/view.php?id=34",
+      "https://becas.fatla.org/mod/page/view.php?id=3"
+    ]
+  },
+  pacie: {
+    label: "PACIE Education",
+    root: "https://www.pacie.education/portal/",
+    urls: [
+      "https://www.pacie.education/portal/",
+      "https://www.pacie.education/portal/mod/page/view.php?id=10",
+      "https://www.pacie.education/portal/mod/page/view.php?id=16",
+      "https://www.pacie.education/portal/mod/page/view.php?id=24",
+      "https://www.pacie.education/portal/mod/page/view.php?id=25",
+      "https://www.pacie.education/portal/mod/page/view.php?id=23",
+      "https://www.pacie.education/portal/mod/page/view.php?id=17"
+    ]
+  },
+  asomtv: {
+    label: "ASOMTV",
+    root: "https://www.asomtv.org",
+    urls: [
+      "https://www.asomtv.org",
+      "https://licencia.asomtv.org/mod/page/view.php?id=51",
+      "https://licencia.asomtv.org/mod/page/view.php?id=50",
+      "https://licencia.asomtv.org/mod/page/view.php?id=4",
+      "https://licencia.asomtv.org/mod/page/view.php?id=5"
+    ]
+  }
+};
+
+// Estado de salud de las fuentes (se actualiza en cada generación)
+const _sourceHealth = { fatla: true, pacie: true, asomtv: true };
+const _sourceHealthKey = 'fatlin_source_health';
+
+// Cargar estado previo del localStorage
+try {
+  const saved = JSON.parse(localStorage.getItem(_sourceHealthKey) || '{}');
+  // Solo usar si tiene menos de 1 hora de antigüedad
+  if(saved._ts && Date.now() - saved._ts < 3600000) {
+    Object.assign(_sourceHealth, { fatla: saved.fatla??true, pacie: saved.pacie??true, asomtv: saved.asomtv??true });
+  }
+} catch(e) {}
+
+// Construir string de fuentes garantizando al menos 1 URL activa por área
+function buildSourcesString() {
+  const parts = [];
+  for(const [area, group] of Object.entries(PACIE_SOURCE_GROUPS)) {
+    const active = _sourceHealth[area];
+    const url = active ? group.urls.join(', ') : group.root; // fallback a root si área caída
+    parts.push(`[${group.label}]: ${url}`);
+  }
+  return parts.join(' | ');
+}
+
+// Lista plana para compatibilidad (usada en badges de fuente)
+const PACIE_SOURCES = Object.values(PACIE_SOURCE_GROUPS).flatMap(g => g.urls);
+
+// Registrar fallo de fuente
+function _markSourceFailed(area) {
+  if(area in _sourceHealth) {
+    _sourceHealth[area] = false;
+    console.warn(`[Sources] Área ${area} marcada como no disponible`);
+    try {
+      localStorage.setItem(_sourceHealthKey, JSON.stringify({..._sourceHealth, _ts: Date.now()}));
+    } catch(e) {}
+  }
+}
+
+// Restaurar salud de fuentes (llamar al inicio de cada sesión)
+function _resetSourceHealth() {
+  _sourceHealth.fatla = true;
+  _sourceHealth.pacie = true;
+  _sourceHealth.asomtv = true;
+  try { localStorage.removeItem(_sourceHealthKey); } catch(e) {}
+}
 
 // Temas cíclicos: se rotan infinitamente con profundidad creciente por ciclo
 const PACIE_TOPICS_CYCLE = [
@@ -2585,37 +2635,44 @@ function prefetchAhead(fromLevel, count=3){
 
 async function generateQuestionsWithClaude(level) {
     const topic = getTopicForLevel(level);
-    const sourcesStr = PACIE_SOURCES.join(', ');
+    const sourcesStr = buildSourcesString();
     const expert = isExpertLevel(level);
+    const seed = _promptSeed(level);
+
+    // Distribución forzada: 5 mc + 4 tf + 3 fw = 12 preguntas
+    const fwExamples = `{"type":"fw","q":"La metodología ___ fue creada por FATLA para mejorar la educación virtual","a":"PACIE","j":"PACIE es la metodología desarrollada por FATLA para entornos virtuales.","source":"fatla.org"},{"type":"fw","q":"La fase ___ de PACIE define objetivos y estándares académicos","a":"Alcance","j":"El Alcance establece las metas del proceso educativo en PACIE.","source":"pacie.education"}`;
+
     const systemPrompt = expert
-      ? `Actúa como el Jurado de la Quinta Vergara y experto Master en Metodología PACIE. Evalúas si el usuario merece la Lira de Oro. Fuentes oficiales: ${sourcesStr}. Usa web_search. SESIÓN-SEED: ${_promptSeed(level)} — genera preguntas desde ESTE ÁNGULO específico. RESPONDE SOLO EN JSON VÁLIDO sin markdown ni backticks.`
-      : `Eres un experto en la metodología PACIE desarrollada por FATLA. Tu única fuente son: ${sourcesStr}. Usa web_search para consultar esas fuentes. RESPONDE ÚNICAMENTE EN JSON VÁLIDO.`;
+      ? `Eres un evaluador experto Master en Metodología PACIE. Fuentes oficiales por área — FATLA: ${PACIE_SOURCE_GROUPS.fatla.urls[0]}, PACIE: ${PACIE_SOURCE_GROUPS.pacie.urls[0]}, ASOMTV: ${PACIE_SOURCE_GROUPS.asomtv.urls[0]}. Usa web_search para consultar CADA área. SEED: ${seed}. RESPONDE SOLO JSON VÁLIDO sin markdown.`
+      : `Eres experto en PACIE/FATLA. Debes consultar obligatoriamente estas 3 fuentes usando web_search: ${sourcesStr}. SEED: ${seed}. RESPONDE SOLO JSON VÁLIDO sin markdown ni backticks.`;
+
     const userPrompt = expert
-      ? `Nivel EXPERTO sobre "PACIE aplicado". Genera 12 preguntas de ELITE VARIADAS (7 mc + 5 tf) para nivel ${level}. Tema: ${topic}.
-REGLAS: Crea mini-escenarios reales (2-3 lineas). Prohibido preguntar definiciones basicas. Distractores tecnicamente plausibles pero incorrectos segun PACIE. Tono profesional de premiacion. CADA pregunta debe abordar un aspecto diferente del tema. No repitas conceptos entre preguntas.
-RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"[Escenario real]","a":"...","o":["...","...","...","..."],"j":"Correcto. [explicacion con fase PACIE especifica]","source":"fatla.org"}]}`
-      : `Busca sobre "${topic}" en las fuentes FATLA/PACIE. Genera 12 preguntas VARIADAS (7 mc + 5 tf) para nivel ${level}. SESIÓN ${_promptSeed(level)}. REGLA CRÍTICA: cada pregunta debe abordar un ÁNGULO ÚNICO y DIFERENTE del tema — prohibido repetir el mismo concepto aunque sea con diferente redacción. Las opciones incorrectas (distractores) deben ser plausibles pero claramente incorrectas según PACIE.
-RESPONDE SOLO con: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"}]}
-Reglas: en mc "a" debe estar en "o"; en tf "a" es "Verdadero" o "Falso".`;
+      ? `Nivel EXPERTO sobre "${topic}". Genera 12 preguntas (5 mc + 4 tf + 3 fw) para nivel ${level}. SEED:${seed}.
+REGLAS fw (fill-word): La pregunta tiene ___ donde va la palabra clave. Solo UNA palabra como respuesta. Sin tildes obligatorias.
+REGLAS mc: escenarios reales 2-3 líneas, distractores técnicamente plausibles.
+DISTRIBUCIÓN OBLIGATORIA: exactamente 5 tipo mc, 4 tipo tf, 3 tipo fw.
+RESPONDE SOLO JSON: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ es la primera fase de PACIE","a":"Presencia","j":"...","source":"fatla.org"}]}`
+      : `Busca "${topic}" consultando OBLIGATORIAMENTE las 3 fuentes (FATLA, PACIE, ASOMTV). Genera 12 preguntas VARIADAS para nivel ${level}. SEED:${seed}.
+DISTRIBUCIÓN OBLIGATORIA: exactamente 5 tipo mc, 4 tipo tf, 3 tipo fw.
+REGLAS fw: pregunta con ___ donde va UNA palabra clave PACIE. Sin tildes obligatorias. Ej: ${fwExamples}
+REGLAS mc: 4 opciones, respuesta en opciones, distractores plausibles.
+REGLAS tf: a es "Verdadero" o "Falso".
+RESPONDE SOLO: {"questions":[{"type":"mc","q":"...","a":"...","o":["...","...","...","..."],"j":"...","source":"fatla.org"},{"type":"tf","q":"...","a":"Verdadero","o":["Verdadero","Falso"],"j":"...","source":"pacie.education"},{"type":"fw","q":"La ___ define los objetivos en PACIE","a":"Alcance","j":"...","source":"pacie.education"}]}`;
 
     const isProxy = !CLAUDE_ENDPOINT.includes('anthropic.com');
     const bodyPayload = {
         model: "claude-sonnet-4-20250514",
-        max_tokens: 2000,
+        max_tokens: 2500,
         system: systemPrompt,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
         messages: [{ role: "user", content: userPrompt }]
     };
-    // Obtener token Firebase con reintentos
+
     let firebaseToken = "";
     for(let attempt = 0; attempt < 4; attempt++) {
         try {
             const currentUser = game.user || auth.currentUser;
-            if (currentUser) {
-                firebaseToken = await currentUser.getIdToken();
-                break;
-            }
-            // Esperar y reintentar
+            if (currentUser) { firebaseToken = await currentUser.getIdToken(); break; }
             await new Promise(r => setTimeout(r, 1500));
         } catch(tokenErr) {
             console.warn('[claudeProxy] token attempt', attempt, ':', tokenErr.message);
@@ -2623,22 +2680,71 @@ Reglas: en mc "a" debe estar en "o"; en tf "a" es "Verdadero" o "Falso".`;
         }
     }
     if (!firebaseToken) throw new Error('No Firebase token tras 4 intentos');
+
     const fetchOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firebaseToken}` },
         body: JSON.stringify(bodyPayload)
     };
+
     const response = await fetch(CLAUDE_ENDPOINT, fetchOptions);
     if (!response.ok) throw new Error(`API error: ${response.status}`);
     const data = await response.json();
     const fullText = data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+
+    // Detectar si alguna fuente por área fue mencionada (para marcar salud)
+    const textLow = fullText.toLowerCase();
+    if(!textLow.includes('fatla')) _markSourceFailed('fatla');
+    if(!textLow.includes('pacie')) _markSourceFailed('pacie');
+    if(!textLow.includes('asomtv')) _markSourceFailed('asomtv');
+
     let parsed;
-    try { const clean=fullText.replace(/```json|```/g,"").trim(); const m=clean.match(/\{[\s\S]*\}/); if(!m) throw new Error("No JSON"); parsed=JSON.parse(m[0]); } catch(e){ throw new Error("Parse error: "+e.message); }
-    if(!parsed.questions||!Array.isArray(parsed.questions)||!parsed.questions.length) throw new Error("Invalid structure");
-    const valid=parsed.questions.filter(q=>{if(!q.q||!q.a||!q.o||!Array.isArray(q.o))return false;if(q.type==='mc'&&!q.o.includes(q.a))return false;if(q.type==='tf'&&!['Verdadero','Falso','True','False'].includes(q.a))return false;return true;});
-    if(valid.length<5) throw new Error("Too few valid questions");
+    try {
+        const clean = fullText.replace(/```json|```/g,"").trim();
+        const m = clean.match(/\{[\s\S]*\}/);
+        if(!m) throw new Error("No JSON");
+        parsed = JSON.parse(m[0]);
+    } catch(e) { throw new Error("Parse error: "+e.message); }
+
+    if(!parsed.questions||!Array.isArray(parsed.questions)||!parsed.questions.length)
+        throw new Error("Invalid structure");
+
+    // Validar cada tipo correctamente
+    const valid = parsed.questions.filter(q => {
+        if(!q.q || !q.a) return false;
+        if(q.type === 'mc') return q.o && Array.isArray(q.o) && q.o.includes(q.a);
+        if(q.type === 'tf') return ['Verdadero','Falso','True','False'].includes(q.a);
+        if(q.type === 'fw') return typeof q.a === 'string' && q.a.trim().length > 0 && q.q.includes('___');
+        return false;
+    });
+
+    if(valid.length < 5) throw new Error("Too few valid questions");
+
+    // Garantizar al menos 1 de cada tipo si la IA no cumplió distribución
+    const hasFW = valid.some(q => q.type === 'fw');
+    if(!hasFW) {
+        // Agregar fw de fallback para garantizar el tipo
+        valid.push(...FALLBACK_FW_QUESTIONS.slice(0, 2));
+    }
+
     return valid;
 }
+
+// ── BANCO FALLBACK PALABRAS OCULTAS (fw) ─────────────────────────
+const FALLBACK_FW_QUESTIONS = [
+  {type:"fw",q:"La metodología ___ fue creada por FATLA para la educación virtual latinoamericana",a:"PACIE",j:"PACIE es la metodología desarrollada por FATLA para entornos virtuales.",source:"fatla.org"},
+  {type:"fw",q:"La primera fase de PACIE se llama ___ y trata la imagen del aula virtual",a:"Presencia",j:"Presencia es la primera fase de PACIE, enfocada en la motivación visual.",source:"fatla.org"},
+  {type:"fw",q:"La fase ___ de PACIE establece los objetivos y estándares del proceso educativo",a:"Alcance",j:"Alcance define las competencias y metas académicas en PACIE.",source:"pacie.education"},
+  {type:"fw",q:"___ es la organización que desarrolló la metodología PACIE en Ecuador",a:"FATLA",j:"FATLA (Fundación Latinoamérica) creó PACIE en Ecuador.",source:"fatla.org"},
+  {type:"fw",q:"La fase de ___ en PACIE prepara al docente en competencias tecnológicas y pedagógicas",a:"Capacitacion",j:"Capacitación forma al docente en herramientas y metodología virtual.",source:"pacie.education"},
+  {type:"fw",q:"La fase ___ de PACIE promueve el aprendizaje colaborativo mediante foros y wikis",a:"Interaccion",j:"Interacción fomenta el trabajo grupal y colaborativo en PACIE.",source:"pacie.education"},
+  {type:"fw",q:"La última fase de PACIE se llama ___ y logra la madurez pedagógica virtual",a:"E-learning",j:"E-learning es la quinta fase de PACIE donde se alcanza la madurez virtual.",source:"fatla.org"},
+  {type:"fw",q:"___ y ASOMTV avalan los certificados emitidos por Fatlin AI",a:"FATLA",j:"FATLA y ASOMTV son las organizaciones que validan los diplomas de Fatlin AI.",source:"asomtv.org"},
+  {type:"fw",q:"En PACIE la sigla C corresponde a la fase de ___",a:"Capacitacion",j:"La C de PACIE es Capacitación, preparación del docente virtual.",source:"fatla.org"},
+  {type:"fw",q:"Pedro ___ fue el creador de la metodología PACIE dentro de FATLA",a:"Camacho",j:"Pedro Camacho es el creador de la metodología PACIE en FATLA.",source:"pacie.education"},
+  {type:"fw",q:"PACIE se diseñó específicamente para entornos de ___ a distancia",a:"aprendizaje",j:"PACIE es exclusivamente para educación virtual y aprendizaje a distancia.",source:"fatla.org"},
+  {type:"fw",q:"Los LMS son plataformas usadas en la fase ___ de PACIE",a:"E-learning",j:"E-learning en PACIE incorpora el uso maduro de plataformas LMS.",source:"asomtv.org"},
+];
 
 const FALLBACK_QUESTIONS = [
     {type:"mc",q:"¿Qué significa la P en la metodología PACIE?",a:"Presencia",o:["Presencia","Proceso","Planificación","Pedagógico"],j:"La P de PACIE corresponde a Presencia, primera fase del modelo.",source:"fatla.org"},
@@ -2655,6 +2761,7 @@ const FALLBACK_QUESTIONS = [
     {type:"tf",q:"PACIE puede aplicarse tanto en educación presencial como virtual.",a:"Falso",o:["Verdadero","Falso"],j:"PACIE es una metodología diseñada específicamente para entornos virtuales de aprendizaje.",source:"pacie.education"},
     {type:"mc",q:"¿Cuál es el último nivel de la metodología PACIE?",a:"E-learning",o:["Interacción","E-learning","Evaluación","Capacitación"],j:"E-learning es la quinta y última fase de PACIE, donde se logra la madurez pedagógica virtual.",source:"fatla.org"},
     {type:"tf",q:"La fase de Capacitación en PACIE incluye el manejo de herramientas tecnológicas.",a:"Verdadero",o:["Verdadero","Falso"],j:"Capacitación abarca el dominio técnico y pedagógico necesario para el entorno virtual.",source:"fatla.org"},
+    ...FALLBACK_FW_QUESTIONS.slice(0, 6),
 ];
 
 const AVATARS=["🦁","🐯","🦊","🐺","🦅","🦋","🐬","🦄","🐉","🤖","👨‍🚀","🧙","🧜","🥷","🧑‍💻","🦸","🧚","🦩","🐸","🎭"];
@@ -2730,6 +2837,7 @@ onAuthStateChanged(auth, async(user) => {
 
   if(user){
     game.user = user;
+    _resetSourceHealth(); // Restaurar salud de fuentes al inicio de sesión
     // Mostrar spinner de carga en splash (reabrir brevemente)
     const splashEl = document.getElementById('splash');
     const lsEl = document.getElementById('lang-splash');
@@ -2987,7 +3095,7 @@ window.obFinish = function(){
 //  DETECTOR DE CRUCE DE LÍNEA DE ASCENSO
 // ══════════════════════════════════════════════════════════════════
 async function checkRankCruce(){
-  if(!game.user || game.user.isAnonymous) return;
+  if(!game.user) return;
   try {
     const ws = getWeekStart();
     const ligaActual = (typeof LIGAS !== 'undefined') ? (LIGAS[(game.ligaLevel||1)-1] || LIGAS[0]) : null;
@@ -3136,7 +3244,7 @@ function avatarIsPhoto(){
 function getGooglePhotoURL(){
   try{
     const u = game.user || (typeof auth !== 'undefined' ? auth.currentUser : null);
-    return (u && !u.isAnonymous && u.photoURL) ? u.photoURL : null;
+    return (u && u.photoURL) ? u.photoURL : null;
   }catch(e){ return null; }
 }
 
@@ -3495,18 +3603,131 @@ function showNextQuestion(){
   }
   game.qIndex++;const area=document.getElementById('question-area');area.style.opacity='0';area.style.transform='translateY(8px)';requestAnimationFrame(()=>{document.getElementById('txt-q').innerText=game.currentQ.q;document.getElementById('source-badge').innerText=game.currentQ.source?`📚 Fuente: ${game.currentQ.source}`:'';const tb=document.getElementById('q-type-badge');tb.style.display=game.currentQ.type==='tf'?'block':'none';renderOptions();area.style.transition='opacity .25s ease, transform .25s ease';area.style.opacity='1';area.style.transform='translateY(0)';updateProgressUI();});}
 
-function renderOptions(){const c=document.getElementById('opts-container');c.innerHTML='';const isTF=game.currentQ.type==='tf';const opts=isTF?[...game.currentQ.o]:[...game.currentQ.o].sort(()=>Math.random()-.5);opts.forEach((opt,idx)=>{const b=document.createElement('button');b.className=`opt${isTF?' vf':''}`;b.style.animationDelay=`${idx*60}ms`;b.textContent=isTF?(opt==='Verdadero'?t('tf_true'):t('tf_false')):opt;b.onclick=()=>{if(game.isProcessing)return;opt===game.currentQ.a?handleCorrect(b):handleWrong(b);};c.appendChild(b);});}
+function renderOptions(){
+  const c = document.getElementById('opts-container');
+  c.innerHTML = '';
+  const isTF = game.currentQ.type === 'tf';
+  const isFW = game.currentQ.type === 'fw';
 
-function handleCorrect(btn){btn.classList.add('correct','cglow');game.correctCount++;game.consecutiveErrors=0;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){
+  // Badge de tipo visible
+  const tb = document.getElementById('q-type-badge');
+  if(tb) {
+    if(isTF)  { tb.style.display='block'; tb.textContent='✔ Verdadero / Falso'; tb.style.background='#eff6ff'; tb.style.color='#1d4ed8'; }
+    else if(isFW) { tb.style.display='block'; tb.textContent='✏️ Completa la palabra'; tb.style.background='#fefce8'; tb.style.color='#a16207'; }
+    else      { tb.style.display='none'; }
+  }
+
+  if(isFW) {
+    // ── Render campo de texto libre ──────────────────────────────
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:flex;flex-direction:column;gap:10px;padding:4px 0';
+
+    const hint = document.createElement('p');
+    hint.style.cssText = 'font-size:.75rem;color:#64748b;text-align:center;font-weight:600;margin:0';
+    hint.textContent = '👆 Escribe la palabra que falta en el espacio ___';
+    wrapper.appendChild(hint);
+
+    const inputRow = document.createElement('div');
+    inputRow.style.cssText = 'display:flex;gap:8px;align-items:center';
+
+    const inp = document.createElement('input');
+    inp.id = 'fw-input';
+    inp.type = 'text';
+    inp.placeholder = 'Escribe aquí...';
+    inp.autocomplete = 'off';
+    inp.autocorrect = 'off';
+    inp.spellcheck = false;
+    inp.style.cssText = `
+      flex:1;padding:.85rem 1rem;border-radius:1.25rem;border:2px solid #e2e8f0;
+      font-family:'Inter',sans-serif;font-size:1rem;font-weight:600;outline:none;
+      transition:border-color .2s,box-shadow .2s;background:#f8fafc;color:#1e293b;
+    `;
+    inp.onfocus = () => { inp.style.borderColor='#0ea5e9'; inp.style.boxShadow='0 0 0 4px rgba(14,165,233,.12)'; };
+    inp.onblur  = () => { inp.style.borderColor='#e2e8f0'; inp.style.boxShadow='none'; };
+
+    const sendBtn = document.createElement('button');
+    sendBtn.textContent = '✓';
+    sendBtn.style.cssText = `
+      width:48px;height:48px;border-radius:50%;border:none;background:#0284c7;color:white;
+      font-size:1.3rem;font-weight:700;cursor:pointer;flex-shrink:0;
+      transition:transform .15s,background .15s;
+    `;
+    sendBtn.onmouseenter = () => sendBtn.style.background = '#0369a1';
+    sendBtn.onmouseleave = () => sendBtn.style.background = '#0284c7';
+
+    const checkFW = () => {
+      if(game.isProcessing) return;
+      const raw = inp.value.trim();
+      if(!raw) { inp.style.borderColor='#ef4444'; setTimeout(()=>inp.style.borderColor='#e2e8f0',800); return; }
+      inp.disabled = true;
+      sendBtn.disabled = true;
+      _normStr(raw) === _normStr(game.currentQ.a)
+        ? handleCorrect(inp)
+        : handleWrongFW(inp, raw);
+    };
+
+    sendBtn.onclick = checkFW;
+    inp.onkeydown = (e) => { if(e.key === 'Enter') checkFW(); };
+
+    inputRow.appendChild(inp);
+    inputRow.appendChild(sendBtn);
+    wrapper.appendChild(inputRow);
+
+    // Pista: mostrar longitud de la palabra
+    const clue = document.createElement('p');
+    const ansLen = game.currentQ.a.replace(/[áéíóúàèìòùäëïöü]/gi, 'x').length;
+    clue.style.cssText = 'font-size:.68rem;color:#94a3b8;text-align:center;margin:0;font-weight:600';
+    clue.textContent = `Pista: la respuesta tiene ${ansLen} letra${ansLen!==1?'s':''}`;
+    wrapper.appendChild(clue);
+
+    c.appendChild(wrapper);
+    setTimeout(() => inp.focus(), 150);
+
+  } else {
+    // ── mc y tf — igual que antes ────────────────────────────────
+    const opts = isTF ? [...game.currentQ.o] : [...game.currentQ.o].sort(()=>Math.random()-.5);
+    opts.forEach((opt,idx) => {
+      const b = document.createElement('button');
+      b.className = `opt${isTF?' vf':''}`;
+      b.style.animationDelay = `${idx*60}ms`;
+      b.textContent = isTF ? (opt==='Verdadero'?t('tf_true'):t('tf_false')) : opt;
+      b.onclick = () => {
+        if(game.isProcessing) return;
+        opt === game.currentQ.a ? handleCorrect(b) : handleWrong(b);
+      };
+      c.appendChild(b);
+    });
+  }
+}
+
+// Normalizar string: quita tildes, diéresis, mayúsculas, espacios extra
+function _normStr(s){
+  return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+}
+
+// handleWrong para fw: muestra respuesta correcta en el input
+function handleWrongFW(inp, typed) {
+  if(inp) {
+    inp.classList.add('wrong-fw');
+    inp.value = typed + '  ✗  Respuesta: ' + game.currentQ.a;
+  }
+  // Botón falso para reutilizar handleWrong sin afectar DOM de opciones
+  const fakeBtn = { classList: { add: ()=>{}, remove: ()=>{} } };
+  handleWrong(fakeBtn);
+}
+
+function handleCorrect(btn){
+  // Feedback visual para fw (input de texto)
+  if(game.currentQ.type === 'fw') {
+    const fwInp = document.getElementById('fw-input');
+    if(fwInp) { fwInp.classList.add('correct-fw'); fwInp.value = '✓ ' + game.currentQ.a; }
+  } else {
+    btn.classList.add('correct','cglow');
+  }
+  game.correctCount++;game.consecutiveErrors=0;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){
   game.level++;
-    // ── Límite de invitado: máximo 3 niveles ──────────────────
-    if(game.user?.isAnonymous && game.level > 3){
-      playBell();
-      document.getElementById('modal-challenge').classList.remove('active');
-      setTimeout(()=>showGuestLimitModal(), 400);
-      return;
-    }
-    playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/10)*10;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%10===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}}
+    playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/10)*10;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%10===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}
+}
 
 function handleWrong(btn){
   btn.classList.add('wrong');game.isProcessing=true;
@@ -3619,7 +3840,7 @@ setInterval(()=>{const el=document.getElementById('liga-cnt');if(el&&document.ge
 document.getElementById('btn-ranking').onclick=async()=>{document.getElementById('modal-ranking').classList.add('active');document.getElementById('tab-global').classList.add('active');document.getElementById('tab-liga').classList.remove('active');document.getElementById('panel-global').style.display='';document.getElementById('panel-liga').style.display='none';await loadGlobalRanking();};
 document.getElementById('btn-close-ranking').onclick=()=>document.getElementById('modal-ranking').classList.remove('active');
 
-function openAccountModal(){document.getElementById('acc-name').innerText=game.user?.displayName||game.user?.email?.split('@')[0]||'Invitado';document.getElementById('acc-email').innerText=game.user?.email||(game.user?.isAnonymous?'Sesión anónima':'—');document.getElementById('acc-level').innerText=game.level;document.getElementById('acc-stars').innerText=game.stars;document.getElementById('acc-badges').innerText=game.badges;setAvatarEl(document.getElementById('acc-av'));document.getElementById('modal-account').classList.add('active');}
+function openAccountModal(){document.getElementById('acc-name').innerText=game.user?.displayName||game.user?.email?.split('@')[0]||'Usuario';document.getElementById('acc-email').innerText=game.user?.email||'—';document.getElementById('acc-level').innerText=game.level;document.getElementById('acc-stars').innerText=game.stars;document.getElementById('acc-badges').innerText=game.badges;setAvatarEl(document.getElementById('acc-av'));document.getElementById('modal-account').classList.add('active');}
 document.getElementById('btn-account').onclick=openAccountModal;
 document.getElementById('btn-close-account').onclick=()=>document.getElementById('modal-account').classList.remove('active');
 document.getElementById('btn-chgav').onclick=()=>{document.getElementById('modal-account').classList.remove('active');openAvatarPicker();};
@@ -3730,30 +3951,28 @@ window.openAvatarPicker = function openAvatarPicker(){
 document.getElementById('btn-confirm-av').onclick=()=>{selectedAvatar=tempAvatar;setAvatarEl(document.getElementById('hud-avatar'));document.getElementById('modal-avatar').classList.remove('active');saveProgress();updateHUD();};
 
 function updateHUD(){
-  const isGuest = game.user?.isAnonymous;
-  // Invitados nunca tienen Gala, escudos ni racha
-  const isGala = !isGuest && game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
 
   document.getElementById('stat-stars').innerText = game.stars;
   document.getElementById('stat-lives').innerText = isGala ? '∞' : game.lives;
   document.getElementById('stat-level').innerText = `Nv.${game.level}`;
-  document.getElementById('stat-user').innerText = game.user?.displayName||game.user?.email?.split('@')[0]||"Invitado";
+  document.getElementById('stat-user').innerText = game.user?.displayName||game.user?.email?.split('@')[0]||'Usuario';
   setAvatarEl(document.getElementById('hud-avatar'));
 
-  // Escudos: ocultos para invitados
+  // Escudos
   const shEl = document.getElementById('stat-shields');
-  shEl.classList.toggle('visible', !isGuest && game.shields > 0);
+  shEl.classList.toggle('visible', game.shields > 0);
   document.getElementById('stat-shields-count').innerText = game.shields;
 
-  // Racha: oculta para invitados
+  // Racha
   const stEl = document.getElementById('stat-streak');
-  stEl.classList.toggle('visible', !isGuest && game.streakDays > 1);
+  stEl.classList.toggle('visible', game.streakDays > 1);
   document.getElementById('stat-streak-count').innerText = `${game.streakDays}d`;
 
-  // Gala: oculto para invitados
+  // Gala
   document.body.classList.toggle('gala-mode', !!isGala);
   const galaBadge = document.getElementById('gala-badge');
-  if(galaBadge) galaBadge.style.display = isGuest ? 'none' : '';
+  if(galaBadge) galaBadge.style.display = '';
   if(isGala){
     const rem = game.infiniteLivesUntil - Date.now();
     const h = Math.floor(rem/3600000), m = Math.floor((rem%3600000)/60000);
@@ -3761,14 +3980,14 @@ function updateHUD(){
   }
   updateGalaStars(!!isGala);
 
-  // Botón tienda: oculto para invitados
+  // Botón tienda
   const shopBtn = document.getElementById('btn-shop');
-  if(shopBtn) shopBtn.style.display = isGuest ? 'none' : '';
+  if(shopBtn) shopBtn.style.display = '';
 
-  // Divisores de escudos/racha/gala: ocultos para invitados
+  // Divisores
   ['hdiv-streak','hdiv-gala'].forEach(id=>{
     const el = document.getElementById(id);
-    if(el) el.style.display = isGuest ? 'none' : '';
+    if(el) el.style.display = '';
   });
 
   updateProgressUI();
@@ -3803,7 +4022,6 @@ document.getElementById('btn-eye').onclick=()=>{eyeVisible=!eyeVisible;const i=d
 document.getElementById('btn-show-email').onclick=()=>{document.getElementById('auth-main').style.display='none';document.getElementById('auth-email').style.display='block';};
 document.getElementById('btn-back').onclick=()=>{document.getElementById('auth-email').style.display='none';document.getElementById('auth-main').style.display='block';};
 document.getElementById('btn-google').onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){showError("Error al iniciar sesión con Google");}};
-document.getElementById('btn-guest').onclick=async()=>{try{await signInAnonymously(auth);}catch(e){showError("Error al iniciar como invitado");}};
 document.getElementById('btn-login').onclick=async()=>{const email=document.getElementById('inp-email').value.trim(),pass=document.getElementById('inp-pass').value,rem=document.getElementById('chk-rem').checked;if(!email||pass.length<6){showError("Correo inválido o contraseña < 6 chars.");return;}if(rem){localStorage.setItem('fatlin_rem_email',email);localStorage.setItem('fatlin_rem_pass',pass);}else{localStorage.removeItem('fatlin_rem_email');localStorage.removeItem('fatlin_rem_pass');}try{await signInWithEmailAndPassword(auth,email,pass);}catch(e){try{await createUserWithEmailAndPassword(auth,email,pass);}catch(err){showError("Error al registrar o iniciar sesión.");}}};
 
 function getTodayStart(){const n=new Date();n.setHours(0,0,0,0);return n.getTime();}
@@ -3928,12 +4146,44 @@ function generateDiploma(completedLevel){
   };
   const td = tierData[completedLevel] || tierData[250];
 
-  // ── Generar ID único ──
+  // ── Generar ID único DETERMINISTA (mismo usuario+nivel = mismo ID siempre) ──
   const shortName = name.split(' ').map(w=>w[0]).join('').toUpperCase().substring(0,4);
   const year = new Date().getFullYear();
-  const rand = Math.random().toString(36).substring(2,7).toUpperCase();
   const tierInitial = (tier.label.match(/[A-Z]/g)||['X'])[0];
+  // Hash FNV-32 sobre uid+nivel+año → siempre el mismo resultado para el mismo usuario
+  const seedStr = `${game.user.uid}-${completedLevel}-${year}`;
+  let _h = 2166136261;
+  for(let i = 0; i < seedStr.length; i++){ _h ^= seedStr.charCodeAt(i); _h = Math.imul(_h, 16777619) >>> 0; }
+  const rand = _h.toString(36).substring(0,5).toUpperCase();
   const certId = `FATLIN-${year}-${shortName}${completedLevel}${tierInitial}-${rand}`;
+
+  // ── Persistir diploma en Firebase (colección pública + perfil privado) ──
+  (async () => {
+    try {
+      // 1. Colección pública — cualquiera puede leer para verificar
+      await setDoc(doc(db, `fatlin_diplomas_${APP_ID}`, certId), {
+        certId,
+        level:       completedLevel,
+        tier:        td.label,
+        tierTitle:   td.certTitle,
+        userName:    name,
+        userUid:     game.user.uid,
+        issuedAt:    Date.now(),
+        issuedAtStr: date,
+        valid:       true
+      });
+      // 2. Colección privada del usuario — historial completo
+      await setDoc(doc(db, `artifacts/${APP_ID}/users/${game.user.uid}/diplomas/${certId}`), {
+        certId,
+        level:    completedLevel,
+        tier:     td.label,
+        issuedAt: Date.now(),
+        valid:    true
+      });
+    } catch(e) {
+      console.warn('[Diploma] No se pudo persistir en Firebase:', e);
+    }
+  })();
 
   // ── Texto del logro ──
   const achievementText = `Ha completado <strong>${completedLevel} niveles de evaluación continua con Inteligencia Artificial</strong>
@@ -4020,7 +4270,7 @@ function generateDiploma(completedLevel){
   const qrContainer = document.getElementById('dip-qr-container');
   if(qrContainer){
     qrContainer.innerHTML = '';
-    const verifyUrl = `https://fatlin.web.app/verify?id=${certId}`;
+    const verifyUrl = `https://fatlin.web.app/verify.html?id=${certId}`;
     try {
       if(window.QRCode){
         new QRCode(qrContainer, {
@@ -4048,97 +4298,54 @@ function generateDiploma(completedLevel){
 }
 
 document.getElementById('btn-dip-close').onclick = () => document.getElementById('modal-diploma').classList.remove('active');
-document.getElementById('btn-dip-print').onclick = async () => {
+document.getElementById('btn-dip-print').onclick = () => {
   const btn = document.getElementById('btn-dip-print');
   btn.disabled = true;
-  btn.innerText = currentLang === 'en' ? '⏳ Generating PDF...' : '⏳ Generando PDF...';
 
   try {
-    // Cargar librerías si no están cargadas
-    if (!window.html2canvas) {
-      await new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-        s.onload = res; s.onerror = rej;
-        document.head.appendChild(s);
-      });
-    }
-    if (!window.jspdf) {
-      await new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        s.onload = res; s.onerror = rej;
-        document.head.appendChild(s);
-      });
-    }
-
     const el = document.getElementById('diploma-content');
-    // Asegurar que el elemento sea visible y tenga buen tamaño para captura
-    const origDisplay = el.style.display;
-    el.style.display = 'block';
+    // Extraer SOLO las reglas CSS del certificado
+    const diplomaCSS = Array.from(document.styleSheets)
+      .flatMap(ss => { try { return Array.from(ss.cssRules).map(r => r.cssText); } catch(e) { return []; } })
+      .filter(r => /diploma|cert-|cer-|dip-|\.wbtn/.test(r))
+      .join('\n');
 
-    const canvas = await window.html2canvas(el, {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: '#0a1628',
-      logging: false,
-      width: el.scrollWidth,
-      height: el.scrollHeight,
-      windowWidth: el.scrollWidth,
-      windowHeight: el.scrollHeight,
-    });
-
-    el.style.display = origDisplay;
-
-    const imgData = canvas.toDataURL('image/png');
-    const { jsPDF } = window.jspdf;
-    // Tamaño A4 horizontal para mejor presentación del diploma
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-    const pdfW = pdf.internal.pageSize.getWidth();
-    const pdfH = pdf.internal.pageSize.getHeight();
-
-    // Calcular proporción para llenar la página manteniendo aspecto
-    const ratio = Math.min(pdfW / canvas.width, pdfH / canvas.height);
-    const imgW = canvas.width * ratio;
-    const imgH = canvas.height * ratio;
-    const x = (pdfW - imgW) / 2;
-    const y = (pdfH - imgH) / 2;
-
-    pdf.addImage(imgData, 'PNG', x, y, imgW, imgH);
-
-    const name = (game.user?.displayName || game.user?.email?.split('@')[0] || 'estudiante').replace(/[^a-zA-Z0-9]/g, '_');
-    pdf.save(`Certificado_Fatlin_AI_${name}.pdf`);
-  } catch(err) {
-    console.error('PDF error:', err);
-    // Fallback: abrir en ventana nueva para imprimir
-    const el = document.getElementById('diploma-content');
-    const w = window.open('','_blank','width=700,height=600');
-    if(w) {
-      w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Certificado Fatlin AI</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-      <style>
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:Inter,sans-serif;background:#fffbeb;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-        ${Array.from(document.styleSheets).flatMap(ss=>{try{return Array.from(ss.cssRules).map(r=>r.cssText);}catch(e){return [];}}).filter(r=>r.includes('diploma')).join('\n')}
-      </style></head><body>${el.outerHTML}<script>window.onload=()=>setTimeout(()=>window.print(),800)<\/script>
-
-<!-- ── OVERLAY MOMENTO DE CRUCE ─────────────────────────────── -->
-<div id="cruce-overlay">
-  <div class="cruce-line-flash"></div>
-  <div class="cruce-msg">
-    <span class="cruce-icon">🚀</span>
-    <div class="cruce-title" id="cruce-title">¡Cruzaste la Zona de Ascenso!</div>
-    <div class="cruce-sub" id="cruce-sub">Mantén tu posición esta semana<br>para recibir tu diploma el lunes.</div>
-  </div>
-</div>
-
+    const w = window.open('', '_blank', 'width=1100,height=850');
+    if (!w) {
+      showToast('⚠️ Permite ventanas emergentes para imprimir', '#d97706');
+      btn.disabled = false;
+      return;
+    }
+    w.document.write(`<!DOCTYPE html><html lang="es"><head>
+<meta charset="UTF-8">
+<title>Certificado Fatlin AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #0a1628;
+         display: flex; align-items: center; justify-content: center;
+         min-height: 100vh; padding: 0; }
+  #diploma-content { max-width: 1024px; width: 100%; }
+  @media print {
+    body { background: #0a1628 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+  ${diplomaCSS}
+</style>
+</head><body>
+${el.outerHTML}
+<script>
+  document.fonts.ready.then(() => {
+    setTimeout(() => { window.print(); window.onafterprint = () => window.close(); }, 900);
+  });
+<\/script>
 </body></html>`);
-      w.document.close();
-    }
+    w.document.close();
+  } catch(err) {
+    console.error('Print error:', err);
+    showToast('Error al abrir la ventana de impresión', '#dc2626');
   } finally {
-    btn.disabled = false;
-    btn.innerText = t('diploma_print');
+    setTimeout(() => { btn.disabled = false; }, 1500);
   }
 };
 
@@ -4188,42 +4395,9 @@ function isExpertLevel(level){
   return posInCycle >= 49;
 }
 
-// ── Modal de límite para invitados ──────────────────────────────
-function showGuestLimitModal(){
-  const isEn = currentLang === 'en';
-  document.getElementById('guestlimit-title').innerText = isEn ? 'You reached the limit!' : '¡Llegaste al límite!';
-  document.getElementById('guestlimit-msg').innerHTML = isEn
-    ? 'As a guest you can explore up to <strong>3 levels</strong>. Register for free to save your progress and keep learning PACIE without limits.'
-    : 'Como invitado puedes explorar hasta <strong>3 niveles</strong>. Regístrate gratis para guardar tu progreso y seguir aprendiendo PACIE sin límites.';
-  document.getElementById('guestlimit-warn').innerText = isEn
-    ? '⚠️ If you continue as a guest, your current progress will be lost when you close the session.'
-    : '⚠️ Si continúas como invitado, tu progreso actual se perderá al cerrar la sesión.';
-  document.getElementById('modal-guest-limit').classList.add('active');
-  mascotSetState('sad', 800); resetMascotIdleTimer();
-}
-
-document.getElementById('btn-guestlimit-register').onclick = () => {
-  document.getElementById('modal-guest-limit').classList.remove('active');
-  signOut(auth).catch(()=>{}).finally(()=>{ game.user=null; showAuthUI('email'); });
-};
-document.getElementById('btn-guestlimit-google').onclick = () => {
-  document.getElementById('modal-guest-limit').classList.remove('active');
-  signOut(auth).catch(()=>{}).finally(()=>{ game.user=null; signInWithPopup(auth, new GoogleAuthProvider()).catch(()=>{}); });
-};
-document.getElementById('btn-guestlimit-close').onclick = () => {
-  document.getElementById('modal-guest-limit').classList.remove('active');
-  // Mantener en nivel 3, revertir el incremento
-  if(game.user?.isAnonymous && game.level > 3) game.level = 3;
-  game.playingLevel = game.level;
-  game.correctCount = 0; game.consecutiveErrors = 0;
-  updateProgressUI(); renderMap(); centerCamera();
-};
-
 window.onresize=()=>{if(game.user){renderMap();centerCamera();}};
 </script>
-<!-- MODAL LÍMITE INVITADO -->
-
-<div id="modal-rest">
+<!-- ── MODAL DESCANSO ── -->
   <div class="rest-card">
     <div class="rest-emblem-wrap">
       <div class="rest-ring"></div>
@@ -4248,24 +4422,6 @@ window.onresize=()=>{if(game.user){renderMap();centerCamera();}};
     <p class="rest-tip" id="rest-tip">Tu cerebro aprende mejor con pausas cortas. 👀 Aparta la vista de la pantalla unos minutos — ¡vuelve con más energía!</p>
     <button class="rest-btn" onclick="closeRestModal()">✅ Entendido, tomo un descanso</button>
     <button class="rest-btn-skip" onclick="closeRestModal(true)" id="rest-skip-btn">Seguir jugando de todas formas</button>
-  </div>
-</div>
-
-<div id="modal-guest-limit">
-  <div class="guest-limit-card">
-    <span class="guest-limit-icon">🔒</span>
-    <p class="guest-limit-title" id="guestlimit-title">¡Llegaste al límite!</p>
-    <p class="guest-limit-msg" id="guestlimit-msg">Como invitado puedes explorar hasta <strong>3 niveles</strong>. Regístrate gratis para guardar tu progreso y seguir aprendiendo PACIE sin límites.</p>
-    <div class="guest-limit-warn" id="guestlimit-warn">⚠️ Si continúas como invitado, tu progreso actual se perderá al cerrar la sesión.</div>
-    <button id="btn-guestlimit-register" class="wbtn primary" style="margin-bottom:.6rem">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-      Registrarme gratis
-    </button>
-    <button id="btn-guestlimit-google" class="wbtn sky" style="margin-bottom:.6rem">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-      Continuar con Google
-    </button>
-    <button id="btn-guestlimit-close" class="wbtn slate" style="font-size:.8rem">Seguir como invitado (perderé mi progreso)</button>
   </div>
 </div>
 
