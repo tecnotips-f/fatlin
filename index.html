@@ -1547,6 +1547,7 @@
                 <div class="streak-dot" id="sd1"></div>
                 <div class="streak-dot" id="sd2"></div>
                 <div class="streak-dot" id="sd3"></div>
+                <div class="streak-dot" id="sd4"></div>
             </div>
             <div class="hdiv"></div>
             <div class="hstat"><span style="font-size:1rem">🏆</span><span id="stat-level" style="font-weight:700;color:#334155">Nv.1</span></div>
@@ -1649,7 +1650,7 @@
                 <p id="replay-badge" style="font-size:10px;font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.1em;display:none" data-i18n-prefix="replaying">🔄 Repasando nivel <span id="replay-num"></span></p>
             </div>
             <div style="text-align:right">
-                <span id="txt-progress" style="font-size:1.1rem;font-weight:700;color:#1e293b">0/4</span>
+                <span id="txt-progress" style="font-size:1.1rem;font-weight:700;color:#1e293b">0/5</span>
                 <p style="font-size:9px;color:#94a3b8;margin-top:1px" data-i18n="hits_needed">aciertos necesarios</p>
             </div>
         </div>
@@ -1658,6 +1659,7 @@
             <div class="streak-dot" id="cd1" style="width:16px;height:16px"></div>
             <div class="streak-dot" id="cd2" style="width:16px;height:16px"></div>
             <div class="streak-dot" id="cd3" style="width:16px;height:16px"></div>
+            <div class="streak-dot" id="cd4" style="width:16px;height:16px"></div>
         </div>
         <div class="q-counter" id="q-counter" style="font-size:.6rem;font-weight:700;color:rgba(100,116,139,.7);text-align:center;margin-bottom:.25rem;letter-spacing:.08em"></div>
         <div id="q-fresh-badge" style="display:none;text-align:center;margin-bottom:.2rem"><span style="font-size:.58rem;font-weight:700;color:#6ee7b7;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:20px;padding:1px 8px">✨ Nuevas preguntas</span></div>
@@ -2158,7 +2160,7 @@ const LANG = {
     gala_24_desc:    'Vidas infinitas + fondo estelar',
     gala_72_name:    'Modo Gala 72h',
     gala_72_desc:    '¡El mejor valor!',
-    no_lives:        'No tienes vidas. Espera 3 horas por vida.',
+    no_lives:        'Sin vidas. La primera se regenera cuando llegues a 0 · cada 3 horas una vida.',
     no_stars_need:   'Necesitas {N} ⭐ (tienes {M})',
     shield_bought:   '🛡️ {N} escudo{S} comprado{S}. Total: {T}',
     gala_activated:  '✨ ¡Modo Gala activado por {N}h! Vidas infinitas 🚀',
@@ -2253,7 +2255,7 @@ const LANG = {
     gala_24_desc:    'Infinite lives + starry background',
     gala_72_name:    'Gala Mode 72h',
     gala_72_desc:    'Best value!',
-    no_lives:        'No lives left. Wait 3 hours per life.',
+    no_lives:        'No lives left. Regen starts at 0 lives · one life every 3 hours.',
     no_stars_need:   'You need {N} ⭐ (you have {M})',
     shield_bought:   '🛡️ {N} shield{S} purchased. Total: {T}',
     gala_activated:  '✨ Gala Mode activated for {N}h! Infinite lives 🚀',
@@ -2540,7 +2542,8 @@ function savePool(level, questions){
     localStorage.setItem(_poolKey(level), JSON.stringify({
       questions: trimmed,
       updatedAt: Date.now(),
-      totalSeen: (existing?.totalSeen||0)
+      totalSeen: (existing?.totalSeen||0),
+      seenHashes: existing?.seenHashes || []
     }));
     return trimmed;
   }catch(e){ return questions; }
@@ -2553,6 +2556,10 @@ function markPoolSeen(level, hashes){
     if(!raw) return;
     const p = JSON.parse(raw);
     p.totalSeen = (p.totalSeen||0) + hashes.length;
+    // Acumular hashes vistos (máx 200 para no inflar localStorage)
+    const seen = new Set(p.seenHashes || []);
+    hashes.forEach(h => seen.add(h));
+    p.seenHashes = [...seen].slice(-200);
     localStorage.setItem(_poolKey(level), JSON.stringify(p));
   }catch(e){}
 }
@@ -2561,13 +2568,34 @@ function markPoolSeen(level, hashes){
 // Usa un desfase basado en (día del año × nivel) para que el orden
 // cambie cada día aunque las preguntas sean las mismas.
 function selectFromPool(level, pool, sessionSeen){
-  const dayOfYear = Math.floor(Date.now() / 86400000); // días desde epoch
+  const dayOfYear = Math.floor(Date.now() / 86400000);
   const offset    = (dayOfYear * 7 + level * 3) % Math.max(pool.length, 1);
-  // Rotar el pool por el offset diario
-  const rotated = [...pool.slice(offset), ...pool.slice(0, offset)];
-  // Filtrar las ya vistas en esta sesión
-  const unseen  = rotated.filter(q => !sessionSeen.has(_hashQ(q.q)));
-  return unseen.length > 0 ? unseen : rotated; // si todas vistas → reciclar
+  const rotated   = [...pool.slice(offset), ...pool.slice(0, offset)];
+  // Excluir vistas en esta sesión
+  let unseen = rotated.filter(q => !sessionSeen.has(_hashQ(q.q)));
+  // Además excluir vistas en sesiones anteriores (si quedan suficientes)
+  try{
+    const stored = loadPool(level);
+    if(stored?.seenHashes?.length){
+      const prevSeen = new Set(stored.seenHashes);
+      const freshUnseen = unseen.filter(q => !prevSeen.has(_hashQ(q.q)));
+      if(freshUnseen.length >= 4) unseen = freshUnseen; // solo aplicar si quedan ≥4
+    }
+  }catch(e){}
+  // Garantizar siempre 1 match y 1 case en la selección
+  const hasMatch = unseen.some(q => q.type === 'match');
+  const hasCase  = unseen.some(q => q.type === 'case');
+  if(!hasMatch){
+    const m = rotated.find(q => q.type === 'match');
+    if(m) unseen = [m, ...unseen.filter(q => q.type !== 'match')];
+    else  unseen.push(FALLBACK_MATCH_QUESTIONS[level % FALLBACK_MATCH_QUESTIONS.length]);
+  }
+  if(!hasCase){
+    const c = rotated.find(q => q.type === 'case');
+    if(c) unseen = [...unseen, c];
+    else  unseen.push(FALLBACK_CASE_QUESTIONS[level % FALLBACK_CASE_QUESTIONS.length]);
+  }
+  return unseen.length > 0 ? unseen : rotated;
 }
 
 // ── getCachedQuestions: para prefetch rápido ──
@@ -2876,7 +2904,7 @@ let selectedAvatar="🧑",tempAvatar="🧑";
 
 let game=window.game={
   user:null, level:1, playingLevel:1, stars:0, lives:5,
-  lastDeathTime:null, correctCount:0, targetCorrect:4,
+  lastDeathTime:null, correctCount:0, targetCorrect:5,
   consecutiveErrors:0,
   isProcessing:false, currentQ:null, levelQuestions:[], qIndex:0,
   badges:0, lastRewardAt:0,
@@ -2889,7 +2917,7 @@ function showError(msg){const el=document.getElementById('error-msg');el.textCon
 function playBell(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();[[1046.5,0],[1318.5,0],[1568,.15],[2093,.3]].forEach(([f,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(f,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);g.gain.setValueAtTime(.4,ctx.currentTime+d);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d+1.1);o.start(ctx.currentTime+d);o.stop(ctx.currentTime+d+1.1);});}catch(e){}}
 function playClick(ok=true){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(ok?880:280,ctx.currentTime);g.gain.setValueAtTime(.25,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.18);}catch(e){}}
 
-function updateProgressUI(){for(let i=0;i<4;i++){const sd=document.getElementById(`sd${i}`);const cd=document.getElementById(`cd${i}`);if(sd)sd.classList.toggle('filled',i<game.correctCount);if(cd)cd.classList.toggle('filled',i<game.correctCount);}document.getElementById('txt-progress').innerText=`${game.correctCount}/4`;}
+function updateProgressUI(){for(let i=0;i<5;i++){const sd=document.getElementById(`sd${i}`);const cd=document.getElementById(`cd${i}`);if(sd)sd.classList.toggle('filled',i<game.correctCount);if(cd)cd.classList.toggle('filled',i<game.correctCount);}document.getElementById('txt-progress').innerText=`${game.correctCount}/5`;}
 function flashProgressDot(idx){const d=document.getElementById(`cd${idx}`);if(!d)return;d.classList.remove('flash');void d.offsetWidth;d.classList.add('flash');setTimeout(()=>d.classList.remove('flash'),500);}
 
 applyLang();
@@ -2917,6 +2945,20 @@ onAuthStateChanged(auth, async(user) => {
   if(user){
     game.user = user;
     _resetSourceHealth(); // Restaurar salud de fuentes al inicio de sesión
+    // Purgar pools sin match/case (versión anterior del juego)
+    try{
+      Object.keys(localStorage)
+        .filter(k => k.startsWith('fatlin_pool_'))
+        .forEach(k => {
+          try{
+            const p = JSON.parse(localStorage.getItem(k));
+            const qs = p?.questions || [];
+            const hasMatch = qs.some(q => q.type === 'match');
+            const hasCase  = qs.some(q => q.type === 'case');
+            if(!hasMatch || !hasCase) localStorage.removeItem(k);
+          }catch(e){ localStorage.removeItem(k); }
+        });
+    }catch(e){}
     // Mostrar spinner de carga en splash (reabrir brevemente)
     const splashEl = document.getElementById('splash');
     const lsEl = document.getElementById('lang-splash');
@@ -3456,7 +3498,7 @@ function checkLivesRegen(){
   const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
   if(isGala){ document.getElementById('stat-timer').style.display='none'; updateHUD(); return; }
   if(game.lives<5&&game.lastDeathTime){
-    const REGEN_MS = 10*60*60*1000; // 3 horas por vida
+    const REGEN_MS = 3*60*60*1000; // 3 horas por vida
     const elapsed = Date.now()-game.lastDeathTime;
     const livesRegened = Math.floor(elapsed / REGEN_MS);
     if(livesRegened > 0){
@@ -3473,7 +3515,7 @@ function checkLivesRegen(){
   }
   const ti=document.getElementById('stat-timer');
   if(game.lives<5&&game.lastDeathTime){
-    const REGEN_MS = 10*60*60*1000;
+    const REGEN_MS = 3*60*60*1000;
     ti.style.display='inline';
     const r = REGEN_MS - (Date.now()-game.lastDeathTime);
     if(r>0){const m=Math.floor(r/60000),s=Math.floor((r%60000)/1000);ti.innerText=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
@@ -3640,13 +3682,42 @@ function showNextQuestion(){
     );
   }
 
-  // Elegir pregunta no vista
-  const available = game.levelQuestions.filter(q => !game._seenQHashes.has(_hashQ(q.q)));
-  const pool      = available.length > 0 ? available : game.levelQuestions;
-  const pick      = Math.floor(Math.random() * pool.length);
-  game.currentQ   = pool[pick];
+  // ── Elección de pregunta con garantía de tipos match/case ──────
+  // Posición dentro del nivel actual (0-based)
+  const posInLevel = game.correctCount; // cuántos aciertos lleva = posición actual
+
+  // En posición 1 (2do acierto) → forzar MATCH si no se ha visto
+  // En posición 3 (4to acierto / último) → forzar CASE si no se ha visto
+  const needMatch = posInLevel === 1 && !game._seenQHashes.has('__match_shown__');
+  const needCase  = posInLevel === 3 && !game._seenQHashes.has('__case_shown__');
+
+  let available = game.levelQuestions.filter(q => !game._seenQHashes.has(_hashQ(q.q)));
+  if(available.length === 0) available = game.levelQuestions;
+
+  let chosen = null;
+
+  if(needMatch){
+    chosen = available.find(q => q.type === 'match')
+          || game.levelQuestions.find(q => q.type === 'match')
+          || FALLBACK_MATCH_QUESTIONS[game.playingLevel % FALLBACK_MATCH_QUESTIONS.length];
+    game._seenQHashes.add('__match_shown__');
+  } else if(needCase){
+    chosen = available.find(q => q.type === 'case')
+          || game.levelQuestions.find(q => q.type === 'case')
+          || FALLBACK_CASE_QUESTIONS[game.playingLevel % FALLBACK_CASE_QUESTIONS.length];
+    game._seenQHashes.add('__case_shown__');
+  } else {
+    // Excluir match/case del pool aleatorio (ya tienen posición reservada)
+    const nonSpecial = available.filter(q => q.type !== 'match' && q.type !== 'case');
+    const pool = nonSpecial.length > 0 ? nonSpecial : available;
+    chosen = pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  game.currentQ = chosen;
   game._seenQs.add(game.currentQ.q);
-  game._seenQHashes.add(_hashQ(game.currentQ.q));
+  const _qHash = _hashQ(game.currentQ.q);
+  game._seenQHashes.add(_qHash);
+  markPoolSeen(game.playingLevel, [_qHash]);
 
   // ── Actualizar counter de pregunta ───────────────────────────
   const qCountEl = document.getElementById('q-counter');
@@ -3935,7 +4006,7 @@ function handleWrong(btn){
   const penaltyReset = game.consecutiveErrors >= 2;
   mascotSetState('sad', 700); resetMascotIdleTimer();
   const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
-  if(!isGala) game.lives--;if(!game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');if(!isMatch){document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});}
+  if(!isGala) game.lives--;if(game.lives===0 && !game.lastDeathTime)game.lastDeathTime=Date.now();playClick(false);updateHUD();updateProgressUI();saveProgress();const card=document.getElementById('ccard');card.classList.remove('shake');void card.offsetWidth;card.classList.add('shake');if(!isMatch){document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.textContent.includes(game.currentQ.a))b.classList.add('correct');});}
   const penaltyMsg = penaltyReset && game.correctCount > 0 ? (currentLang==='en'?'⚠️ 2 errors in a row — progress reset!':'⚠️ 2 errores seguidos — ¡progreso reiniciado!') : '';
   document.getElementById('feedback-text').innerText = (penaltyMsg ? penaltyMsg + ' · ' : '') + game.currentQ.j;
   document.getElementById('feedback-float').classList.add('active');const fill=document.getElementById('cfill');fill.style.transition='none';fill.style.width='100%';requestAnimationFrame(()=>{fill.style.transition='width 2.5s linear';fill.style.width='0%';});setTimeout(()=>{document.getElementById('feedback-float').classList.remove('active');card.classList.remove('shake');
