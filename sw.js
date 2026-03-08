@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════
-// FATLIN AI — SERVICE WORKER v7.0
+// FATLIN AI — SERVICE WORKER v9.0
 // Estrategia: Cache-first para assets, Network-first
 // para llamadas a API (Firebase / Claude proxy)
 // ═══════════════════════════════════════════════════
 
-const CACHE_NAME = 'fatlin-ai-v61';
-const CACHE_VERSION = '7.1.0';
+const CACHE_NAME = 'fatlin-ai-v64';
+const CACHE_VERSION = '9.0.0';
 
 // Archivos que se cachean al instalar (App Shell)
 const APP_SHELL = [
