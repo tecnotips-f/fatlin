@@ -3680,7 +3680,7 @@ function showNextQuestion(){
     lbl.textContent = labels[diffLevel];
     diffBar.appendChild(lbl);
   }
-  game.qIndex++;const area=document.getElementById('question-area');area.style.opacity='0';area.style.transform='translateY(8px)';requestAnimationFrame(()=>{document.getElementById('txt-q').innerText=game.currentQ.q;document.getElementById('source-badge').innerText=game.currentQ.source?`📚 Fuente: ${game.currentQ.source}`:'';const tb=document.getElementById('q-type-badge');tb.style.display=game.currentQ.type==='tf'?'block':'none';renderOptions();area.style.transition='opacity .25s ease, transform .25s ease';area.style.opacity='1';area.style.transform='translateY(0)';updateProgressUI();});}
+  game.qIndex++;const area=document.getElementById('question-area');area.style.opacity='0';area.style.transform='translateY(8px)';requestAnimationFrame(()=>{document.getElementById('txt-q').innerText=game.currentQ.q;document.getElementById('source-badge').innerText=game.currentQ.source?`📚 Fuente: ${game.currentQ.source}`:'';const tb=document.getElementById('q-type-badge');tb.style.display=(['tf','fw','match','case'].includes(game.currentQ.type))?'block':'none';renderOptions();area.style.transition='opacity .25s ease, transform .25s ease';area.style.opacity='1';area.style.transform='translateY(0)';updateProgressUI();});}
 
 function renderOptions(){
   const c = document.getElementById('opts-container');
@@ -4089,15 +4089,29 @@ window.openLogros = function openLogros(){
     earned.forEach(d => {
       const div = document.createElement('div');
       div.className = 'diploma-item';
-      div.innerHTML = `<span class="diploma-emoji">${d.emoji}</span>
-        <div class="diploma-info">
-          <div class="diploma-title">${d.title}</div>
-          <div class="diploma-sub">${d.sub}</div>
-        </div>
-        <button onclick="document.getElementById('modal-logros').classList.remove('active');document.getElementById('modal-challenge').classList.remove('active');game.isProcessing=false;setTimeout(()=>generateDiploma(${d.min}),380);"
-          style="background:#0284c7;color:white;border:none;border-radius:10px;padding:5px 10px;font-size:.7rem;font-weight:700;cursor:pointer;flex-shrink:0;">
-          🖨️ Ver
-        </button>`;
+
+      const emo = document.createElement('span');
+      emo.className = 'diploma-emoji';
+      emo.textContent = d.emoji;
+
+      const info = document.createElement('div');
+      info.className = 'diploma-info';
+      info.innerHTML = `<div class="diploma-title">${d.title}</div><div class="diploma-sub">${d.sub}</div>`;
+
+      const btn = document.createElement('button');
+      btn.textContent = '🖨️ Ver';
+      btn.style.cssText = 'background:#0284c7;color:white;border:none;border-radius:10px;padding:5px 10px;font-size:.7rem;font-weight:700;cursor:pointer;flex-shrink:0;';
+      const minLevel = d.min;
+      btn.addEventListener('click', function() {
+        document.getElementById('modal-logros').classList.remove('active');
+        document.getElementById('modal-challenge').classList.remove('active');
+        game.isProcessing = false;
+        setTimeout(() => generateDiploma(minLevel), 380);
+      });
+
+      div.appendChild(emo);
+      div.appendChild(info);
+      div.appendChild(btn);
       diplomasList.appendChild(div);
     });
   } else {
