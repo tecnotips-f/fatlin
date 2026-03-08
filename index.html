@@ -563,6 +563,10 @@
         }
         .cer-orgs { display:flex;align-items:flex-end;justify-content:space-between;width:100%; }
         .cer-org { display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center; }
+        a.cer-org { text-decoration:none;cursor:pointer;border-radius:10px;padding:4px;transition:background .18s,transform .18s; }
+        a.cer-org:hover { background:rgba(2,132,199,.08);transform:translateY(-2px); }
+        a.cer-org:hover .cer-org-img { border-color:#0284c7;box-shadow:0 4px 14px rgba(2,132,199,.25); }
+        a.cer-org:hover .cer-org-name { color:#0284c7; }
         .cer-org-img {
             width:48px;height:48px;background:white;border:1.5px solid #b0c8e8;
             border-radius:8px;overflow:hidden;display:flex;align-items:center;
@@ -571,6 +575,8 @@
         .cer-org-img img { width:100%;height:100%;object-fit:contain;padding:3px; }
         .cer-org-name { font-size:.58rem;font-weight:800;color:#0d1e36;letter-spacing:.04em;text-transform:uppercase; }
         .cer-org-sub  { font-size:.5rem;color:#4a6080;letter-spacing:.06em;text-transform:uppercase; }
+        .cer-org-verify { font-size:.42rem;color:#0284c7;letter-spacing:.04em;margin-top:1px;opacity:.7; }
+        a.cer-org:hover .cer-org-verify { opacity:1; }
         .cer-org-div  { width:1px;height:28px;align-self:center;background:linear-gradient(180deg,transparent,#b0c8e8,transparent); }
         .cer-meta { display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0; }
         .cer-date     { font-size:.58rem;font-weight:700;color:#0d1e36; }
@@ -1829,40 +1835,40 @@
        <div class="cer-orgs">
 
         <!-- FATLA -->
-        <div class="cer-org">
+        <a class="cer-org" href="https://www.fatla.org" target="_blank" rel="noopener" title="Visitar FATLA · fatla.org">
          <div class="cer-org-img">
           <img src="https://www.fatla.net/mega/imacorp/2025/logos/planeta-fatla.png"
                onerror="if(this._err)return;this._err=true;var p=this.parentElement;if(p)p.innerHTML='<svg viewBox=\'0 0 100 100\' style=\'width:80%;padding:4px\'><path d=\'M50 88 L82 70 L50 52 L18 70 Z\' fill=\'#0369a1\'/><path d=\'M50 79 L82 61 L50 43 L18 61 Z\' fill=\'#0284c7\'/><path d=\'M50 70 L82 52 L50 34 L18 52 Z\' fill=\'#0ea5e9\'/></svg>'" alt="FATLA">
          </div>
          <span class="cer-org-name">FATLA</span>
          <span class="cer-org-sub">Fundación</span>
-        </div>
+        </a>
         <div class="cer-org-div"></div>
 
         <!-- PACIE -->
-        <div class="cer-org">
+        <a class="cer-org" href="https://www.pacie.education/portal/" target="_blank" rel="noopener" title="Visitar PACIE · pacie.education">
          <div class="cer-org-img">
           <img src="https://www.pacie.education/mega/pacie/logos/pacie-logo-oficial.png"
                onerror="if(this._err)return;this._err=true;var p=this.parentElement;if(p)p.innerHTML='<span style=\'font-size:1.5rem\'>🎓</span>'" alt="PACIE">
          </div>
          <span class="cer-org-name">PACIE</span>
          <span class="cer-org-sub">Metodología</span>
-        </div>
+        </a>
         <div class="cer-org-div"></div>
 
         <!-- ASOMTV -->
-        <div class="cer-org">
+        <a class="cer-org" href="https://www.asomtv.org" target="_blank" rel="noopener" title="Visitar ASOMTV · asomtv.org">
          <div class="cer-org-img">
           <img src="https://asomtv.org/mega/imacorp/2023/images/logo-asomtv.png"
                onerror="if(this._err)return;this._err=true;var p=this.parentElement;if(p)p.innerHTML='<span style=\'font-size:1.5rem\'>🌐</span>'" alt="ASOMTV">
          </div>
          <span class="cer-org-name">ASOMTV</span>
          <span class="cer-org-sub">Asociación</span>
-        </div>
+        </a>
         <div class="cer-org-div"></div>
 
         <!-- Fatlin AI SVG -->
-        <div class="cer-org">
+        <a class="cer-org" href="https://fatlin.web.app" target="_blank" rel="noopener" title="Fatlin AI · fatlin.web.app">
          <div class="cer-org-img" style="background:white;">
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;padding:4px">
            <defs><filter id="flglow2"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
@@ -1876,7 +1882,7 @@
          </div>
          <span class="cer-org-name">Fatlin AI</span>
          <span class="cer-org-sub">Plataforma</span>
-        </div>
+        </a>
 
        </div><!-- /cer-orgs -->
 
