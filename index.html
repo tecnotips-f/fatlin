@@ -1549,7 +1549,7 @@
                 <span id="stat-timer"></span>
             </div>
             <div class="hdiv"></div>
-            <div class="hstat"><span style="font-size:1rem">⭐</span><span id="stat-stars" style="font-weight:700;color:#334155">0</span></div>
+            <div class="hstat"><span style="font-size:1rem">⭐</span><span id="stat-stars" style="font-weight:700;color:#334155">0</span><span id="stat-ftl" style="font-size:.78rem;font-weight:800;color:#d97706;margin-left:4px">🪙 0</span></div>
             <div class="hdiv"></div>
             <div id="streak-bar">
                 <div class="streak-dot" id="sd0"></div>
@@ -1948,39 +1948,40 @@
             <button id="btn-close-shop" style="background:#f1f5f9;border:none;cursor:pointer;padding:8px;border-radius:12px;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         <div style="background:#fef3c7;border-radius:1rem;padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem">
-            <span style="font-size:1.2rem">⭐</span>
-            <span style="font-weight:700;color:#92400e" data-i18n="your_stars">Tus estrellas: </span>
-            <span id="shop-stars" style="font-weight:800;color:#d97706;font-size:1.1rem">0</span>
+            <span style="font-size:1.2rem">🪙</span>
+            <span style="font-weight:700;color:#92400e">Tus FTL: </span>
+            <span id="shop-ftl" style="font-weight:800;color:#d97706;font-size:1.1rem">0</span>
         </div>
-        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">Escudos de Racha</p>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.75rem">❤️ Vidas</p>
+        <div class="shop-item" id="shop-buy-life" onclick="buyLife()">
+            <div style="display:flex;align-items:center;gap:.75rem">
+                <span style="font-size:1.5rem">❤️</span>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">1 Vida</p><p style="font-size:.75rem;color:#64748b">Solo si tienes menos de 5</p></div>
+            </div>
+            <span style="background:#fee2e2;color:#dc2626;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">🪙 100 FTL</span>
+        </div>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin:.75rem 0 .5rem">🛡️ Escudos de Racha</p>
         <div class="shop-item" id="shop-buy-1" onclick="buyShields(1,350)">
             <div style="display:flex;align-items:center;gap:.75rem">
                 <span style="font-size:1.5rem">🛡️</span>
-                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">1 Escudo</p><p style="font-size:.75rem;color:#64748b">Protege tu racha 1 vez</p></div>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">1 Escudo Protector</p><p style="font-size:.75rem;color:#64748b">Protege tu racha 1 vez · máx. 3</p></div>
             </div>
-            <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 350</span>
+            <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">🪙 350 FTL</span>
         </div>
-        <div class="shop-item" id="shop-buy-3" onclick="buyShields(3,1100)">
-            <div style="display:flex;align-items:center;gap:.75rem">
-                <span style="font-size:1.5rem">🛡️🛡️🛡️</span>
-                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">3 Escudos</p><p style="font-size:.75rem;color:#16a34a">¡Ahorra 50 estrellas!</p></div>
-            </div>
-            <span style="background:#f0fdf4;color:#16a34a;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 1100</span>
-        </div>
-        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin:.75rem 0">Modo Gala ✨</p>
+        <p style="font-size:.8rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.1em;margin:.75rem 0 .5rem">✨ Modo Gala</p>
         <div class="shop-item gala-item" id="shop-buy-gala" onclick="buyGala(24,500)">
             <div style="display:flex;align-items:center;gap:.75rem">
                 <span style="font-size:1.5rem">✨</span>
-                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 24h</p><p style="font-size:.75rem;color:#64748b">Vidas infinitas + fondo estelar</p></div>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 24h</p><p style="font-size:.75rem;color:#64748b">Vidas infinitas + fondo estelar · máx. 3</p></div>
             </div>
-            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 500</span>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">🪙 500 FTL</span>
         </div>
         <div class="shop-item gala-item" id="shop-buy-gala2" onclick="buyGala(72,1500)">
             <div style="display:flex;align-items:center;gap:.75rem">
                 <span style="font-size:1.5rem">👑</span>
-                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 72h</p><p style="font-size:.75rem;color:#16a34a">¡El mejor valor!</p></div>
+                <div style="text-align:left"><p style="font-weight:700;color:#1e293b;font-size:.9rem">Modo Gala 72h</p><p style="font-size:.75rem;color:#16a34a">¡El mejor valor! · máx. 3</p></div>
             </div>
-            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">⭐ 1500</span>
+            <span style="background:#fffbeb;color:#d97706;font-weight:700;font-size:.85rem;padding:4px 12px;border-radius:20px">🪙 1500 FTL</span>
         </div>
     </div>
 </div>
@@ -2345,7 +2346,6 @@ function applyLang(){
       if(textNode) textNode.textContent = t(key);
       else el.appendChild(document.createTextNode(t(key)));
     } else {
-      // No destruir SVG ni event listeners — solo cambiar nodo de texto
       const svgEl = el.querySelector('svg');
       if(svgEl){
         let tn = Array.from(el.childNodes).find(n=>n.nodeType===3&&n.textContent.trim());
@@ -2389,7 +2389,6 @@ const APP_ID = 'fatlin-ai-v1';
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Manejar retorno de signInWithRedirect (cuando Google devuelve al usuario)
 getRedirectResult(auth).then(result => {
   if(result && result.user) console.log('[Auth] Redirect OK:', result.user.email);
 }).catch(e => {
@@ -2913,7 +2912,7 @@ const REWARDS=[
 
 // Genera insignia dinámica para niveles 110+
 function getRewardForMilestone(milestone){
-  const idx = Math.floor(milestone / 10) - 1;
+  const idx = Math.floor(milestone / 25) - 1;
   if(idx >= 0 && idx < REWARDS.length) return REWARDS[idx];
   const emojis = ["⚡","🔥","💎","🚀","🌟","👑","🎯","🏆","🎓","🔮"];
   const e = emojis[idx % emojis.length];
@@ -2936,7 +2935,8 @@ let game=window.game={
   badges:0, lastRewardAt:0,
   shields:0, streakDays:0, lastPlayDate:null,
   ligaLevel:1, lastLigaWeek:null, _pendingLigaTip:null, lastRankPos:null,
-  privacyAcceptedAt:null
+  privacyAcceptedAt:null,
+  ftl:0
 };
 
 function showError(msg){const el=document.getElementById('error-msg');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4500);}
@@ -3044,6 +3044,7 @@ async function loadProgress(){
     { const _s=cloudData.avatar; const _gp=getGooglePhotoURL();
     selectedAvatar=(!_s||_s==="🧑")?(_gp||"🧑"):_s; tempAvatar=selectedAvatar; }
     game.shields     = cloudData.shields     || 0;
+    game.ftl         = cloudData.ftl         || 0;
     game.streakDays  = cloudData.streakDays  || 0;
     game.lastPlayDate= cloudData.lastPlayDate|| null;
     game.diplomasEarned = cloudData.diplomasEarned || 0;
@@ -3062,6 +3063,7 @@ async function loadProgress(){
     { const _s=localData.avatar; const _gp=getGooglePhotoURL();
     selectedAvatar=(!_s||_s==="🧑")?(_gp||"🧑"):_s; tempAvatar=selectedAvatar; }
     game.shields     = localData.shields     || 0;
+    game.ftl         = localData.ftl         || 0;
     game.streakDays  = localData.streakDays  || 0;
     game.lastPlayDate= localData.lastPlayDate|| null;
     game.diplomasEarned = localData.diplomasEarned || 0;
@@ -3087,6 +3089,7 @@ async function loadProgress(){
     selectedAvatar     = (()=>{ const _s=newerSource.avatar; const _gp=getGooglePhotoURL(); return(!_s||_s==="🧑")?(_gp||"🧑"):_s; })();
     tempAvatar = selectedAvatar;
     game.shields       = newerSource.shields       || 0;
+    game.ftl           = newerSource.ftl           || 0;
     game.streakDays    = newerSource.streakDays    || 0;
     game.lastPlayDate  = newerSource.lastPlayDate  || null;
     game.diplomasEarned = Math.max(cloudData?.diplomasEarned||0, localData?.diplomasEarned||0);
@@ -3428,6 +3431,7 @@ async function saveProgress(){if(!game.user)return;const payload={
     avatar:selectedAvatar,
     displayName:game.user.displayName||game.user.email?.split('@')[0]||'Invitado',
     shields:game.shields, streakDays:game.streakDays,
+    ftl:game.ftl||0,
     lastPlayDate:game.lastPlayDate, diplomasEarned:game.diplomasEarned,
     infiniteLivesUntil:game.infiniteLivesUntil,
     ligaLevel:game.ligaLevel||1, lastLigaWeek:game.lastLigaWeek||null,
@@ -4022,7 +4026,7 @@ function handleCorrect(btn){
   }
   game.correctCount++;game.consecutiveErrors=0;game.stars+=15;game.isProcessing=true;playClick(true);document.querySelectorAll('.opt').forEach(b=>b.disabled=true);flashProgressDot(game.correctCount-1);updateHUD();updateProgressUI();mascotSetState('cheer',800);resetMascotIdleTimer();if(game.correctCount>=game.targetCorrect){const wasNew=(game.playingLevel===game.level);if(wasNew){
   game.level++;
-    playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/10)*10;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%10===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}
+    game.ftl += 10; playBell();const av=document.getElementById('hud-avatar');av.classList.remove('av-lvl');void av.offsetWidth;av.classList.add('av-lvl');setTimeout(()=>av.classList.remove('av-lvl'),1000);}saveProgress();checkMilestones(game.level);const milestone=Math.floor((game.level-1)/25)*25;const reward=wasNew&&milestone>0&&milestone!==game.lastRewardAt&&(game.level-1)%25===0;setTimeout(()=>{document.getElementById('modal-challenge').classList.remove('active');game.playingLevel=game.level;game.correctCount=0;game.consecutiveErrors=0;updateProgressUI();renderMap();centerCamera();game.isProcessing=false;if(reward){game.lastRewardAt=milestone;game.badges++;saveProgress();setTimeout(()=>showReward(milestone),400);}prefetchAhead(game.level, 2);},900);}else{setTimeout(()=>{game.isProcessing=false;showNextQuestion();},600);}
 }
 
 function handleWrong(btn){
@@ -4075,7 +4079,7 @@ document.getElementById('btn-reward-close').onclick=()=>document.getElementById(
 
 // getWeekStart definida arriba en sistema de ligas (soporta offsetMs)
 function getWeekCountdown(){const n=new Date(),d=n.getUTCDay(),dLeft=d===0?0:7-d;const sun=new Date(n);sun.setUTCDate(n.getUTCDate()+dLeft);sun.setUTCHours(23,59,59,0);const ms=Math.max(0,sun-n),dd=Math.floor(ms/86400000),h=Math.floor((ms%86400000)/3600000),mm=Math.floor((ms%3600000)/60000);return`Termina en ${dd}d ${h}h ${mm}m`;}
-function getWeekLabel(){const ws=new Date(getWeekStart()+'T00:00:00Z'),o={day:'numeric',month:'long'};return`${ws.toLocaleDateString('es-ES',o)} – ${new Date(ws.getTime()+6*86400000).toLocaleDateString('es-ES',o)}`;}
+function getWeekLabel(){const ws=new Date(getWeekStart()+'T12:00:00Z'),o={day:'numeric',month:'long'};return`${ws.toLocaleDateString('es-ES',o)} – ${new Date(ws.getTime()+6*86400000).toLocaleDateString('es-ES',o)}`;}
 function buildRankItem(p,idx,isMe,maxL,showL=false,promoCut=0,showBar=true){
   const medals=['🥇','🥈','🥉'];
   const medal=medals[idx]!=null?medals[idx]:`<span style="font-size:.8rem;color:#94a3b8;font-weight:700">${idx+1}</span>`;
@@ -4274,6 +4278,8 @@ function updateHUD(){
   const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
 
   document.getElementById('stat-stars').innerText = game.stars;
+  const ftlEl = document.getElementById('stat-ftl');
+  if(ftlEl) ftlEl.innerText = '🪙 '+(game.ftl||0);
   document.getElementById('stat-lives').innerText = isGala ? '∞' : game.lives;
   document.getElementById('stat-level').innerText = `Nv.${game.level}`;
   document.getElementById('stat-user').innerText = game.user?.displayName||game.user?.email?.split('@')[0]||'Usuario';
@@ -4384,13 +4390,12 @@ document.getElementById('btn-back').onclick=()=>{document.getElementById('auth-e
       if(e.code==='auth/user-not-found'||e.code==='auth/invalid-credential'||e.code==='auth/user-disabled'){
         try { await createUserWithEmailAndPassword(auth, email, pass); }
         catch(err){
-          console.error('[Create Auth]', err.code);
           const msg = err.code==='auth/email-already-in-use'
             ? (currentLang==='en'?'Wrong password.':'Contraseña incorrecta.')
             : 'Error: '+(err.code||err.message);
           showError(msg);
         }
-      } else if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential'){
+      } else if(e.code==='auth/wrong-password'){
         showError(currentLang==='en'?'Wrong password.':'Contraseña incorrecta.');
       } else if(e.code==='auth/invalid-email'){
         showError(currentLang==='en'?'Invalid email format.':'Formato de correo inválido.');
@@ -4428,7 +4433,7 @@ function showToast(msg, color='#0369a1'){
 function checkMilestones(newLevel){
   const justCompleted = newLevel - 1;
   if(justCompleted > 0 && justCompleted % 5 === 0){
-    setTimeout(()=>triggerLevel5Blast(justCompleted), justCompleted % 10 === 0 ? 300 : 0);
+    setTimeout(()=>triggerLevel5Blast(justCompleted), justCompleted % 25 === 0 ? 300 : 0);
   }
   // Diplomas cada 50 niveles: 50, 100, 150, 200...
   if(justCompleted > 0 && justCompleted % 50 === 0){
@@ -4721,69 +4726,73 @@ document.getElementById('btn-dip-print').onclick = () => {
 
   try {
     const el = document.getElementById('diploma-content');
-    // Extraer SOLO las reglas CSS del certificado
+
+    // Extraer CSS relevante del certificado
     const diplomaCSS = Array.from(document.styleSheets)
       .flatMap(ss => { try { return Array.from(ss.cssRules).map(r => r.cssText); } catch(e) { return []; } })
-      .filter(r => /diploma|cert-|cer-|dip-|\.wbtn/.test(r))
+      .filter(r => /diploma|cert-|cer-|dip-|wbtn|cert-paper|cert-col|cer-head|cer-title|cer-body|cer-foot|cer-id|cer-chip|cer-orgs|cer-org|cer-cycle|cer-contents|cer-seal/.test(r))
       .join('\n');
 
+    // HTML mínimo: solo el diploma, sin overlay, sin min-height, una sola página
     const htmlStr = `<!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certificado Fatlin AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: #0a1628;
-         display: flex; align-items: center; justify-content: center;
-         min-height: 100vh; padding: 0; }
-  #diploma-content { max-width: 1024px; width: 100%; }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; background:#0a1628; }
+  body { display:flex; align-items:flex-start; justify-content:center; }
+  #diploma-content {
+    width:100%; max-width:1024px;
+    aspect-ratio:4/3;
+    background:linear-gradient(145deg,#1a3a6a 0%,#0a1628 40%,#0e2848 100%);
+    border-radius:0; padding:6px; position:relative;
+  }
   @media print {
-    body { background: #0a1628 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    @page { size: A4 landscape; margin: 0; }
+    html, body { height:auto; }
+    body { background:#0a1628 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    @page { size:A4 landscape; margin:0; }
+    #diploma-content { width:100vw; max-width:100vw; border-radius:0; box-shadow:none; }
   }
   ${diplomaCSS}
 </style>
 </head><body>
 ${el.outerHTML}
 <script>
-  document.fonts.ready.then(function() {
-    setTimeout(function() {
+  document.fonts.ready.then(function(){
+    setTimeout(function(){
       window.print();
-      window.onafterprint = function() { window.history.back(); };
-    }, 900);
+      window.onafterprint = function(){ window.close(); };
+    }, 800);
   });
 <\/script>
 </body></html>`;
 
-    // Detectar si es móvil/tablet
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
+    const blobUrl = URL.createObjectURL(blob);
 
     if (isMobile) {
-      // En móvil: usar Blob URL en la misma pestaña para evitar bloqueo de popups
-      const blob = new Blob([htmlStr], { type: 'text/html;charset=utf-8' });
-      const blobUrl = URL.createObjectURL(blob);
-      // Guardar URL anterior para poder volver
+      // Móvil: misma pestaña (popups bloqueados)
       sessionStorage.setItem('fatlin_return', location.href);
       location.href = blobUrl;
-      // Revocar el blob después de navegar (pequeño retraso)
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 30000);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
     } else {
-      // En PC/laptop: abrir en nueva ventana como antes
-      const w = window.open('', '_blank', 'width=1100,height=850');
+      // PC/laptop: ventana nueva
+      const w = window.open(blobUrl, '_blank', 'width=1200,height=900');
       if (!w) {
         showToast('⚠️ Permite ventanas emergentes para imprimir', '#d97706');
         btn.disabled = false;
+        URL.revokeObjectURL(blobUrl);
         return;
       }
-      w.document.write(htmlStr);
-      w.document.close();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
     }
   } catch(err) {
     console.error('Print error:', err);
-    showToast('Error al abrir la ventana de impresión', '#dc2626');
+    showToast('Error al generar el PDF: ' + err.message, '#dc2626');
   } finally {
-    setTimeout(() => { btn.disabled = false; }, 1500);
+    setTimeout(() => { btn.disabled = false; }, 2000);
   }
 }
 document.getElementById('btn-dip-jpg').onclick = async () => {
@@ -4792,8 +4801,11 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
   btn.disabled = true;
   btn.innerHTML = '⏳ Generando...';
 
+  // Clon temporal fuera del modal para que html2canvas lo capture con dimensiones reales
+  let clone = null;
+
   try {
-    // Asegurarse de que html2canvas está cargado
+    // Asegurar html2canvas cargado
     if (typeof html2canvas === 'undefined') {
       await new Promise((res, rej) => {
         const s = document.createElement('script');
@@ -4805,98 +4817,131 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
 
     const el = document.getElementById('diploma-content');
 
-    // Dimensiones objetivo: 1024×768 px
-    const TARGET_W = 1024;
-    const TARGET_H = 768;
+    // Calcular dimensiones reales (el puede estar en modal con overflow hidden)
+    // Usamos 1024px de ancho y aspect-ratio 4:3
+    const RENDER_W = 1024;
+    const RENDER_H = Math.round(RENDER_W * 3 / 4); // 768
 
-    const canvas = await html2canvas(el, {
-      scale: TARGET_W / el.offsetWidth,
-      width:  el.offsetWidth,
-      height: el.offsetHeight,
+    // Crear clon posicionado fuera de la pantalla con dimensiones fijas
+    clone = el.cloneNode(true);
+    clone.style.cssText = `
+      position:fixed; left:-9999px; top:0;
+      width:${RENDER_W}px; height:${RENDER_H}px;
+      max-width:none; aspect-ratio:unset;
+      border-radius:0; z-index:-1; pointer-events:none;
+    `;
+    document.body.appendChild(clone);
+
+    // Esperar un frame para que el browser calcule layout
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    const canvas = await html2canvas(clone, {
+      scale: 2,           // 2x para alta resolución → 2048×1536
+      width:  RENDER_W,
+      height: RENDER_H,
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#0a1628',
       logging: false,
-      imageTimeout: 8000,
-      onclone: (doc) => {
-        // Forzar dimensiones exactas en el clon para mantener aspect ratio
-        const cloneEl = doc.getElementById('diploma-content');
-        if (cloneEl) {
-          cloneEl.style.width  = el.offsetWidth  + 'px';
-          cloneEl.style.height = el.offsetHeight + 'px';
-        }
-      }
+      imageTimeout: 10000,
     });
 
-    // Crear canvas final de 1024×768 con letterbox si es necesario
-    const finalCanvas = document.createElement('canvas');
-    finalCanvas.width  = TARGET_W;
-    finalCanvas.height = TARGET_H;
-    const ctx = finalCanvas.getContext('2d');
-
-    // Fondo oscuro (letterbox)
-    ctx.fillStyle = '#0a1628';
-    ctx.fillRect(0, 0, TARGET_W, TARGET_H);
-
-    // Escalar manteniendo proporción y centrar
-    const srcW = canvas.width, srcH = canvas.height;
-    const ratio = Math.min(TARGET_W / srcW, TARGET_H / srcH);
-    const dw = Math.round(srcW * ratio);
-    const dh = Math.round(srcH * ratio);
-    const dx = Math.round((TARGET_W - dw) / 2);
-    const dy = Math.round((TARGET_H - dh) / 2);
-    ctx.drawImage(canvas, dx, dy, dw, dh);
-
-    // Generar nombre de archivo
+    // Canvas final 1920×1440 (o 2048×1536 directamente del scale:2)
+    // Usar directamente el canvas de html2canvas
     const certId = document.getElementById('dip-cert-id')?.textContent?.trim() || 'diploma';
     const fileName = `Diploma-FatlinAI-${certId}.jpg`;
 
-    // Convertir a JPG y descargar
-    finalCanvas.toBlob((blob) => {
-      if (!blob) { showToast('Error al generar la imagen', '#dc2626'); return; }
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 10000);
-      showToast('✅ Imagen JPG descargada', '#16a34a');
-    }, 'image/jpeg', 0.95);
+    // dataURL directo — más confiable que toBlob en móviles
+    const dataURL = canvas.toDataURL('image/jpeg', 0.95);
+    if(!dataURL || dataURL === 'data:,'){
+      showToast('Error: canvas vacío', '#dc2626'); return;
+    }
+
+    // Descargar
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = fileName;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); }, 500);
+
+    showToast('✅ Imagen JPG descargada · ' + fileName, '#16a34a');
 
   } catch(err) {
     console.error('JPG error:', err);
-    showToast('Error al generar la imagen JPG', '#dc2626');
+    showToast('Error al generar JPG: ' + err.message, '#dc2626');
   } finally {
+    if(clone && clone.parentNode) clone.parentNode.removeChild(clone);
     btn.disabled = false;
     btn.innerHTML = origText;
   }
 };
 
 document.getElementById('btn-shop').onclick = () => {
-  document.getElementById('shop-stars').innerText = game.stars;
+  document.getElementById('shop-ftl').innerText = game.ftl||0;
+  // Deshabilitar botón vida si ya tiene 5
+  const lifeBtn = document.getElementById('shop-buy-life');
+  if(lifeBtn){
+    const full = game.lives >= 5 || (game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now());
+    lifeBtn.style.opacity = full ? '0.4' : '1';
+    lifeBtn.style.pointerEvents = full ? 'none' : '';
+    const hint = lifeBtn.querySelector('p:last-of-type');
+    if(hint) hint.textContent = full ? 'Ya tienes vidas al máximo (5)' : 'Solo si tienes menos de 5';
+  }
+  // Deshabilitar escudo si ya tiene 3
+  const shBtn = document.getElementById('shop-buy-1');
+  if(shBtn){
+    const shFull = game.shields >= 3;
+    shBtn.style.opacity = shFull ? '0.4' : '1';
+    shBtn.style.pointerEvents = shFull ? 'none' : '';
+  }
   document.getElementById('modal-shop').classList.add('active');
 };
 document.getElementById('btn-close-shop').onclick = () => document.getElementById('modal-shop').classList.remove('active');
 
 window.buyShields = function(qty, cost){
-  if(game.stars < cost){ showToast(`Necesitas ${cost} ⭐ (tienes ${game.stars})`,'#dc2626'); return; }
-  game.stars -= cost; game.shields += qty;
+  if(game.shields >= 3){ showToast('🛡️ Ya tienes 3 escudos (máximo)','#7c3aed'); return; }
+  const canBuy = Math.min(qty, 3 - game.shields);
+  const realCost = Math.round(cost * canBuy / qty);
+  if((game.ftl||0) < realCost){ showToast(`Necesitas ${realCost} 🪙 FTL (tienes ${game.ftl||0})`,'#dc2626'); return; }
+  game.ftl -= realCost; game.shields += canBuy;
   saveProgress(); updateHUD();
-  document.getElementById('shop-stars').innerText = game.stars;
-  showToast(`🛡️ ${qty} escudo${qty>1?'s':''} comprado${qty>1?'s':''}. Total: ${game.shields}`,'#7c3aed');
+  document.getElementById('shop-ftl').innerText = game.ftl||0;
+  showToast(`🛡️ ${canBuy} escudo${canBuy>1?'s':''} comprado${canBuy>1?'s':''}. Total: ${game.shields}`,'#7c3aed');
+};
+
+window.buyLife = function(){
+  const isGala = game.infiniteLivesUntil && game.infiniteLivesUntil > Date.now();
+  if(isGala || game.lives >= 5){ showToast('❤️ Ya tienes vidas al máximo','#dc2626'); return; }
+  if((game.ftl||0) < 100){ showToast(`Necesitas 100 🪙 FTL (tienes ${game.ftl||0})`,'#dc2626'); return; }
+  game.ftl -= 100; game.lives = Math.min(5, game.lives + 1);
+  saveProgress(); updateHUD();
+  document.getElementById('shop-ftl').innerText = game.ftl||0;
+  // Actualizar estado del botón vida en tienda
+  const lifeBtn = document.getElementById('shop-buy-life');
+  if(lifeBtn){
+    const full = game.lives >= 5;
+    lifeBtn.style.opacity = full ? '0.4' : '1';
+    lifeBtn.style.pointerEvents = full ? 'none' : '';
+    const hint = lifeBtn.querySelector('p:last-of-type');
+    if(hint) hint.textContent = full ? 'Ya tienes vidas al máximo (5)' : 'Solo si tienes menos de 5';
+  }
+  showToast(`❤️ +1 vida · Total: ${game.lives}`,'#dc2626');
 };
 
 window.buyGala = function(hours, cost){
-  if(game.stars < cost){ showToast(`Necesitas ${cost} ⭐ (tienes ${game.stars})`,'#dc2626'); return; }
-  game.stars -= cost;
+  // Máximo 3 compras de gala acumuladas (72h max por bloque = 216h tope)
+  const maxGalaMs = 3 * 72 * 3600000;
   const now = Date.now();
   const base = (game.infiniteLivesUntil && game.infiniteLivesUntil > now) ? game.infiniteLivesUntil : now;
+  if(base - now >= maxGalaMs){ showToast('✨ Ya tienes el máximo de Gala acumulado (3 bloques)','#d97706'); return; }
+  if((game.ftl||0) < cost){ showToast(`Necesitas ${cost} 🪙 FTL (tienes ${game.ftl||0})`,'#dc2626'); return; }
+  game.ftl -= cost;
   game.infiniteLivesUntil = base + hours * 3600000;
   game.lives = 5;
   saveProgress(); updateHUD();
-  document.getElementById('shop-stars').innerText = game.stars;
+  document.getElementById('shop-ftl').innerText = game.ftl||0;
   document.getElementById('modal-shop').classList.remove('active');
   showToast(t('gala_activated',{N:hours}),'#d97706');
   mascotSetState('gala');
