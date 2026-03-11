@@ -5,7 +5,7 @@
 // ═══════════════════════════════════════════════════
 
 const CACHE_NAME = 'fatlin-ai-v64';
-const CACHE_VERSION = '9.0.0';
+const CACHE_VERSION = '10.3.0';
 
 // Archivos que se cachean al instalar (App Shell)
 const APP_SHELL = [
@@ -146,3 +146,4 @@ self.addEventListener('message', (event) => {
     event.source.postMessage({ type: 'VERSION', version: CACHE_VERSION });
   }
 });
+
