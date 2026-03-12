@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <!-- ═══════════════════════════════════════════
-         PWA — METAETIQUETAS ESENCIALES
+         PWA — METAETIQUETAS ESENCIALES index73
     ═══════════════════════════════════════════ -->
     <title>Fatlin AI - Adventure</title>
     <meta name="description" content="Aprende la metodología PACIE jugando. Preguntas generadas con IA desde fuentes oficiales de FATLA.">
@@ -4807,38 +4807,52 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
   const qrContainer = document.getElementById('dip-qr-container');
   const sealWrap    = document.getElementById('dip-seal-wrap');
 
-  // Backups para restaurar
-  let qrBackup = null, sealBackup = null, orgImgBackups = [];
+  let qrBackup = null, sealBackup = null;
   let origStyle = '', origParent = null, origNext = null;
 
-  // SVGs inline para los logos externos (sin dependencia de red)
-  const ORG_SVGS = {
-    FATLA: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:80%;padding:4px">
-      <circle cx="50" cy="50" r="46" fill="#e0f2fe"/>
-      <path d="M50 88 L82 70 L50 52 L18 70 Z" fill="#0369a1"/>
-      <path d="M50 79 L82 61 L50 43 L18 61 Z" fill="#0284c7"/>
-      <path d="M50 70 L82 52 L50 34 L18 52 Z" fill="#0ea5e9"/>
-      <path d="M50 61 L82 43 L50 25 L18 43 Z" fill="#38bdf8"/>
-      <path d="M50 52 L70 42 L50 32 L30 42 Z" fill="#7dd3fc"/>
-      <circle cx="50" cy="42" r="5" fill="white"/>
-    </svg>`,
-    PACIE: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:80%;padding:4px">
-      <circle cx="50" cy="50" r="46" fill="#f0fdf4"/>
-      <rect x="18" y="30" width="64" height="8" rx="4" fill="#16a34a"/>
-      <rect x="18" y="46" width="48" height="8" rx="4" fill="#22c55e"/>
-      <rect x="18" y="62" width="56" height="8" rx="4" fill="#4ade80"/>
-      <circle cx="72" cy="34" r="10" fill="#15803d"/>
-      <text x="72" y="39" text-anchor="middle" fill="white" font-size="12" font-weight="bold">P</text>
-    </svg>`,
-    ASOMTV: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:80%;padding:4px">
-      <circle cx="50" cy="50" r="46" fill="#fef3c7"/>
-      <rect x="20" y="28" width="60" height="40" rx="5" fill="#d97706"/>
-      <rect x="24" y="32" width="52" height="32" rx="3" fill="#1e293b"/>
-      <polygon points="42,40 42,56 60,48" fill="#fbbf24"/>
-      <rect x="38" y="70" width="24" height="5" rx="2" fill="#d97706"/>
-      <rect x="44" y="68" width="12" height="4" rx="1" fill="#92400e"/>
-    </svg>`,
-  };
+  // Datos de cada organización: selector, nombre, url, src original
+  const ORG_DATA = [
+    { name: 'FATLA',    url: 'fatla.org',             src: 'https://www.fatla.net/mega/imacorp/2025/logos/planeta-fatla.png' },
+    { name: 'PACIE',    url: 'pacie.education',        src: 'https://www.pacie.education/mega/pacie/logos/pacie-logo-oficial.png' },
+    { name: 'ASOMTV',   url: 'asomtv.org',             src: 'https://asomtv.org/mega/imacorp/2023/images/logo-asomtv.png' },
+    { name: 'Fatlin AI',url: 'fatlin.web.app',         src: null }, // SVG inline
+  ];
+
+  // Backup de cada .cer-org-img para restaurar
+  const orgBackups = [];
+
+  // Convierte URL → base64 dataURL via proxy
+  async function imgToBase64(src) {
+    const proxy = 'https://corsproxy.io/?' + encodeURIComponent(src);
+    const res = await fetch(proxy, { signal: AbortSignal.timeout(7000) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const buf  = await res.arrayBuffer();
+    const arr  = new Uint8Array(buf);
+    let bin = ''; arr.forEach(b => bin += String.fromCharCode(b));
+    const ext = src.endsWith('.svg') ? 'svg+xml' : 'png';
+    return 'data:image/' + ext + ';base64,' + btoa(bin);
+  }
+
+  // Fallback visual: cuadro con nombre + URL cuando imagen no carga
+  function makeFallbackBox(name, url) {
+    const box = document.createElement('div');
+    box.style.cssText = [
+      'width:48px', 'height:48px', 'background:#f0f6ff',
+      'border:1.5px solid #b0c8e8', 'border-radius:8px',
+      'display:flex', 'flex-direction:column',
+      'align-items:center', 'justify-content:center',
+      'padding:3px', 'box-sizing:border-box',
+    ].join(';');
+    const nameEl = document.createElement('span');
+    nameEl.style.cssText = 'font-size:7px;font-weight:800;color:#0d1e36;text-align:center;line-height:1.1;font-family:Arial,sans-serif;';
+    nameEl.textContent = name;
+    const urlEl = document.createElement('span');
+    urlEl.style.cssText = 'font-size:5.5px;color:#0284c7;text-align:center;line-height:1.2;margin-top:2px;font-family:Arial,sans-serif;word-break:break-all;';
+    urlEl.textContent = url;
+    box.appendChild(nameEl);
+    box.appendChild(urlEl);
+    return box;
+  }
 
   try {
     // ── 1. Cargar html2canvas ──────────────────────────────────────
@@ -4851,27 +4865,73 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
       });
     }
 
-    // ── 2. Reemplazar imágenes externas con SVGs inline ────────────
-    const orgImgs = el.querySelectorAll('.cer-org-img img');
-    orgImgs.forEach((img, i) => {
-      const src = img.getAttribute('src') || '';
-      const container = img.parentElement;
-      const orgName = container?.nextElementSibling?.textContent?.trim() || '';
-      orgImgBackups.push({ container, original: container.innerHTML, idx: i });
+    // ── 2. Procesar logos — proxy o fallback ───────────────────────
+    btn.innerHTML = '⏳ Cargando logos...';
 
-      let svgKey = null;
-      if (src.includes('fatla') || orgName.includes('FATLA'))   svgKey = 'FATLA';
-      if (src.includes('pacie') || orgName.includes('PACIE'))   svgKey = 'PACIE';
-      if (src.includes('asomtv') || orgName.includes('ASOMTV')) svgKey = 'ASOMTV';
+    // Encontrar cada .cer-org-img dentro del diploma
+    const orgImgDivs = Array.from(el.querySelectorAll('.cer-org-img'));
 
-      if (svgKey) container.innerHTML = ORG_SVGS[svgKey];
-      // Fatlin AI ya es SVG inline — no necesita cambio
-    });
+    for (let i = 0; i < orgImgDivs.length; i++) {
+      const div  = orgImgDivs[i];
+      const data = ORG_DATA[i];
+      if (!data) continue;
 
-    // ── 3. Convertir QR canvas → img dataURL (evita taint) ────────
+      // Guardar HTML original para restaurar
+      orgBackups.push({ div, html: div.innerHTML });
+
+      let success = false;
+
+      if (data.src) {
+        // Tiene imagen externa — intentar proxy
+        try {
+          const b64 = await imgToBase64(data.src);
+          const img = new Image();
+          img.src = b64;
+          img.style.cssText = 'width:100%;height:100%;object-fit:contain;padding:3px;';
+          div.innerHTML = '';
+          div.appendChild(img);
+          await new Promise(r => { img.onload = r; img.onerror = r; setTimeout(r, 1500); });
+          success = img.complete && img.naturalWidth > 0;
+        } catch(e) {
+          console.warn('[JPG] Proxy falló para', data.name, e.message);
+        }
+      } else {
+        // Fatlin AI: SVG inline → convertir a img estática sin padding extra
+        try {
+          const svgEl = div.querySelector('svg');
+          if (svgEl) {
+            const clone = svgEl.cloneNode(true);
+            clone.querySelectorAll('animate,animateTransform').forEach(a => a.remove());
+            // Quitar padding del estilo del SVG para que llene el cuadro completo
+            clone.style.cssText = 'width:100%;height:100%;padding:2px;display:block;';
+            clone.setAttribute('width', '48');
+            clone.setAttribute('height', '48');
+            const xml = new XMLSerializer().serializeToString(clone);
+            const img = new Image();
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(xml);
+            img.style.cssText = 'width:100%;height:100%;display:block;object-fit:contain;';
+            div.style.padding = '0';
+            div.innerHTML = '';
+            div.appendChild(img);
+            await new Promise(r => { img.onload = r; img.onerror = r; setTimeout(r, 600); });
+            success = true;
+          }
+        } catch(e) {
+          console.warn('[JPG] SVG Fatlin falló', e.message);
+        }
+      }
+
+      // Si falló cualquier imagen → fallback con nombre + URL
+      if (!success) {
+        div.innerHTML = '';
+        div.appendChild(makeFallbackBox(data.name, data.url));
+      }
+    }
+
+    // ── 3. QR canvas → img dataURL ────────────────────────────────
     if (qrContainer) {
-      const qrCanvas = qrContainer.querySelector('canvas');
       qrBackup = qrContainer.innerHTML;
+      const qrCanvas = qrContainer.querySelector('canvas');
       if (qrCanvas) {
         try {
           const du = qrCanvas.toDataURL('image/png');
@@ -4880,13 +4940,11 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
           img.style.cssText = 'width:110px;height:110px;display:block;';
           qrContainer.innerHTML = '';
           qrContainer.appendChild(img);
-        } catch(e) {
-          qrContainer.style.visibility = 'hidden';
-        }
+        } catch(e) { qrContainer.style.visibility = 'hidden'; }
       }
     }
 
-    // ── 4. Convertir SVG animado del sello → img estática ─────────
+    // ── 4. Sello SVG animado → img estática ───────────────────────
     if (sealWrap) {
       sealBackup = sealWrap.innerHTML;
       const svgEl = sealWrap.querySelector('svg');
@@ -4905,7 +4963,7 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
 
     btn.innerHTML = '⏳ Renderizando...';
 
-    // ── 5. Mover elemento a posición visible para captura ─────────
+    // ── 5. Mover elemento al body con dimensiones fijas ────────────
     const W = el.offsetWidth  || 1024;
     const H = el.offsetHeight || 768;
     origStyle  = el.getAttribute('style') || '';
@@ -4935,24 +4993,22 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
       logging: false, imageTimeout: 15000,
     });
 
-    // ── 6. Restaurar TODO inmediatamente ──────────────────────────
+    // ── 6. Restaurar todo ─────────────────────────────────────────
     if (origNext) origParent.insertBefore(el, origNext);
     else origParent.appendChild(el);
     el.setAttribute('style', origStyle);
     origParent = null;
 
-    if (qrBackup !== null)   { qrContainer.innerHTML = qrBackup; qrBackup = null; }
-    if (sealBackup !== null) { sealWrap.innerHTML = sealBackup; sealBackup = null; }
-    orgImgBackups.forEach(b => { b.container.innerHTML = b.original; });
-    orgImgBackups = [];
+    if (qrBackup !== null)   { qrContainer.innerHTML = qrBackup;  qrBackup = null; }
+    if (sealBackup !== null) { sealWrap.innerHTML = sealBackup;    sealBackup = null; }
+    orgBackups.forEach(b => { b.div.innerHTML = b.html; });
 
-    // Validar canvas
     const pd = canvas.getContext('2d').getImageData(canvas.width/2, canvas.height/2, 1, 1).data;
-    if (pd[3] === 0) throw new Error('Canvas transparente — sin contenido visible');
+    if (pd[3] === 0) throw new Error('Canvas vacío');
 
     btn.innerHTML = '⏳ Convirtiendo...';
 
-    // ── 7. Canvas → Blob JPEG ─────────────────────────────────────
+    // ── 7. Canvas → JPEG ──────────────────────────────────────────
     const blob = await new Promise((res, rej) => {
       canvas.toBlob(b => {
         if (b && b.size > 20000) res(b);
@@ -4960,9 +5016,7 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
       }, 'image/jpeg', 0.95);
     });
 
-    btn.innerHTML = '⏳ Abriendo...';
-
-    // ── 8. Guardar imagen ─────────────────────────────────────────
+    btn.innerHTML = '⏳ Guardando...';
     const url = URL.createObjectURL(blob);
     const isIOS     = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     const isAndroid = /Android/.test(navigator.userAgent);
@@ -4972,32 +5026,30 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
       setTimeout(() => URL.revokeObjectURL(url), 300000);
       showToast('📱 Mantén pulsada la imagen → Guardar', '#0284c7');
     } else if (window.showSaveFilePicker) {
-      // Chrome/Edge: diálogo nativo "Guardar como"
       try {
         const fh = await window.showSaveFilePicker({
           suggestedName: fileName,
           types: [{ description: 'Imagen JPEG', accept: { 'image/jpeg': ['.jpg'] } }],
         });
-        const w = await fh.createWritable();
-        await w.write(blob); await w.close();
+        const w = await fh.createWritable(); await w.write(blob); await w.close();
         URL.revokeObjectURL(url);
         showToast('✅ ' + fileName + ' guardado', '#16a34a');
       } catch(e) {
-        if (e.name === 'AbortError') { URL.revokeObjectURL(url); showToast('Cancelado', '#6b7280'); }
-        else { window.open(url, '_blank'); setTimeout(() => URL.revokeObjectURL(url), 120000); showToast('🖼️ Clic derecho → Guardar imagen como...', '#0369a1'); }
+        if (e.name === 'AbortError') { URL.revokeObjectURL(url); showToast('Cancelado', '#6b7280'); return; }
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 120000);
+        showToast('🖼️ Clic derecho → Guardar imagen como...', '#0369a1');
       }
     } else {
-      // Firefox y otros: abrir en nueva pestaña
       window.open(url, '_blank');
       setTimeout(() => URL.revokeObjectURL(url), 120000);
-      showToast('🖼️ Clic derecho sobre la imagen → Guardar imagen como...', '#0369a1');
+      showToast('🖼️ Clic derecho → Guardar imagen como...', '#0369a1');
     }
 
   } catch(err) {
     console.error('[JPG]', err);
     showToast('Error: ' + (err.message || String(err)), '#dc2626');
   } finally {
-    // Restaurar si algo falló antes del restore manual
     if (origParent !== null) {
       try {
         if (origNext) origParent.insertBefore(el, origNext);
@@ -5007,7 +5059,7 @@ document.getElementById('btn-dip-jpg').onclick = async () => {
     }
     if (qrBackup !== null && qrContainer)   qrContainer.innerHTML = qrBackup;
     if (sealBackup !== null && sealWrap)     sealWrap.innerHTML = sealBackup;
-    orgImgBackups.forEach(b => { try { b.container.innerHTML = b.original; } catch(e) {} });
+    orgBackups.forEach(b => { try { b.div.innerHTML = b.html; } catch(e) {} });
     btn.disabled = false;
     btn.innerHTML = origText;
   }
