@@ -1,0 +1,58 @@
+{
+  "name": "Fatlin AI - Tecnopedagogia",
+  "short_name": "Fatlin AI",
+  "description": "Aprende la Metodología PACIE jugando. Preguntas generadas con IA desde fuentes oficiales de FATLA.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0c4a6e",
+  "theme_color": "#0ea5e9",
+  "lang": "es",
+  "scope": "/",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "icons/icon-48.png",  "sizes": "48x48",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-72.png",  "sizes": "72x72",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-96.png",  "sizes": "96x96",   "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshot-narrow.png",
+      "sizes": "540x960",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mapa de niveles Fatlin AI — móvil"
+    },
+    {
+      "src": "icons/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Mapa de niveles Fatlin AI — escritorio"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Jugar ahora",
+      "short_name": "Jugar",
+      "description": "Ir directamente al juego",
+      "url": "/",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Verificar Diploma",
+      "short_name": "Diploma",
+      "description": "Verificar un certificado emitido",
+      "url": "/verify-pending.html",
+      "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
+  "prefer_related_applications": false
+}
